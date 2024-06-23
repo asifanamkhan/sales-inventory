@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
 Livewire::setUpdateRoute(function ($handle) {
-    return Route::post('/sale-inventory/livewire/update', $handle);
+    return Route::post('/sales-inventory/livewire/update', $handle);
 });
 
 require __DIR__ . '/auth.php';
