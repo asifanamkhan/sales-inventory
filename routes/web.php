@@ -9,6 +9,8 @@ use App\Livewire\Dashboard\Admin\User\User;
 use App\Livewire\Dashboard\Admin\User\UserCreate;
 use App\Livewire\Dashboard\Hrm\Branch\Branch;
 use App\Livewire\Dashboard\Hrm\Customer\Customer;
+use App\Livewire\Dashboard\Hrm\Customer\CustomerCreate;
+use App\Livewire\Dashboard\Hrm\Customer\CustomerEdit;
 use App\Livewire\Dashboard\Hrm\Department\Department;
 use App\Livewire\Dashboard\Hrm\Designation\Designation;
 use App\Livewire\Dashboard\Hrm\Employee\Employee;
@@ -53,6 +55,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('supplier/{supplier_id}/edit', SupplierEdit::class)->name('supplier-edit');
 
     Route::get('customer', Customer::class)->name('customer');
+    Route::get('customer-create', CustomerCreate::class)->name('customer-create');
+    Route::get('customer/{customer_id}/edit', CustomerEdit::class)->name('customer-edit');
+
 
 
 });

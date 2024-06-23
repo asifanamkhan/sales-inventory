@@ -15,9 +15,10 @@
         </nav>
     </div>
     <div class="card p-4">
-        @include('livewire.dashboard.hrm.supplier.supplier-form')
+        @include('livewire.dashboard.hrm.customer.customer-form')
         <div class="mt-4 d-flex justify-content-center">
             <button wire:click.='update' class="btn btn-primary">Update</button>
         </div>
     </div>
 </div>
+

@@ -5,33 +5,92 @@ namespace App\Livewire\Dashboard\Hrm\Supplier;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Validator;
+use Livewire\Attributes\On;
 
 class SupplierEdit extends Component
 {
     use WithFileUploads;
-    // public $photo,$p_name,$phone,$email,$status,$p_type,$comp_id,$county_name,
-    //        $party_bank_code,$party_bank_name,$party_bank_br_name,$party_bank_account_no,
-    //        $p_opbal,$contact_person,$web,$address;
 
     public $supplier_id;
     public $editForm = true;
+    public $supplier_categories, $supplier_types, $p_category, $p_type;
     public $state = [];
+
+    public function update()
+    {
+        $this->state['p_type'] = $this->p_type;
+        $this->state['p_catagory'] = $this->p_category;
+        Validator::make($this->state, [
+            'p_name' => 'required',
+            'phone' => 'required',
+            'email' => 'email|nullable',
+            'status' => 'required|numeric',
+            'p_type' => 'required',
+        ])->validate();
+
+        if (@$this->state['photo']) {
+            $this->state['photo'] = $this->state['photo']->store('upload');
+        } else {
+            $this->state['photo'] = $this->state['old_photo'];
+        }
+
+        unset($this->state['old_photo']);
+
+
+        DB::table('INV_SUPPLIER_INFO')
+            ->where('p_code', $this->supplier_id)
+            ->update($this->state);
+
+        session()->flash('status', 'Supplier information updated successfully.');
+
+        $this->state['old_photo'] = $this->state['photo'];
+        $this->state['photo'] = '';
+    }
+
+    #[On('supplier_type_change')]
+    public function supplier_type_change($id)
+    {
+        $this->p_type = $id;
+    }
+
+    #[On('supplier_category_change')]
+    public function supplier_category_change($id)
+    {
+        $this->p_category = $id;
+    }
+
 
     public function mount($supplier_id)
     {
-
         $this->supplier_id = $supplier_id;
         $supplier = (array)DB::table('INV_SUPPLIER_INFO')
             ->where('p_code', $this->supplier_id)
             ->first();
 
+        $this->p_category = $supplier['p_catagory'];
+        $this->p_type = $supplier['p_type'];
+
         $this->state = $supplier;
         $this->state['old_photo'] = $supplier['photo'];
         $this->state['photo'] = '';
-
     }
+
+
+    public function category_type()
+    {
+        $this->supplier_categories = DB::table('INV_SUPPLIER_CATEGORY')
+            ->orderBy('supplier_cat_code', 'DESC')
+            ->get();
+
+        $this->supplier_types = DB::table('INV_SUPPLIER_TYPE')
+            ->orderBy('supplier_type_code', 'DESC')
+            ->get();
+    }
+
     public function render()
     {
+        $this->category_type();
         return view('livewire.dashboard.hrm.supplier.supplier-edit');
     }
 }

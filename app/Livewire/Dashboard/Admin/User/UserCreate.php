@@ -54,9 +54,9 @@ class UserCreate extends Component
             'password' => 'required|min:4|confirmed'
         ]);
 
-        // DB::beginTransaction();
+        DB::beginTransaction();
 
-        // try {
+        try {
 
             $user_id = DB::table('USR_USERS_INFO')->insertGetId([
                 'name' => $this->name,
@@ -78,10 +78,10 @@ class UserCreate extends Component
             session()->flash('status', 'New user created successfully');
 
 
-        // } catch (\Exception $exception) {
-        //     DB::rollback();
-        //     session()->flash('error', $exception);
-        // }
+        } catch (\Exception $exception) {
+            DB::rollback();
+            session()->flash('error', $exception);
+        }
 
     }
 

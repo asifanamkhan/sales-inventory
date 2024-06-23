@@ -64,6 +64,8 @@
         {{ request()->routeIs('supplier-create') ? 'show' : ' ' }}
         {{ request()->routeIs('supplier-edit') ? 'show' : ' ' }}
         {{ request()->routeIs('customer') ? 'show' : ' ' }}
+        {{ request()->routeIs('customer-create') ? 'show' : ' ' }}
+        {{ request()->routeIs('customer-edit') ? 'show' : ' ' }}
 
         " id="HRMSubmenu">
                 <li class="{{ request()->routeIs('branch') ? 'active' : ' ' }}">
@@ -86,7 +88,11 @@
                  ">
                     <a class="list" wire:navigate href="{{ route('supplier') }}">Supplier information</a>
                 </li>
-                <li class="{{ request()->routeIs('customer') ? 'active' : ' ' }}">
+                <li class="
+                {{ request()->routeIs('customer') ? 'active' : ' ' }}
+                {{ request()->routeIs('customer-create') ? 'show' : ' ' }}
+                {{ request()->routeIs('customer-edit') ? 'show' : ' ' }}
+                 ">
                     <a class="list" wire:navigate href="{{ route('customer') }}">Customer information</a>
                 </li>
 
