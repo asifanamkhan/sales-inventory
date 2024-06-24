@@ -18,16 +18,16 @@ class Supplier extends Component
     #[Computed]
     public function resultSupplier()
     {
-        $branchs = DB::table('INV_SUPPLIER_INFO');
+        $suppliers = DB::table('INV_SUPPLIER_INFO');
 
 
         if ($this->search) {
-            $branchs
+            $suppliers
                 ->where(DB::raw('lower(p_name)'), 'like', '%' . strtolower($this->search) . '%')
                 ;
         }
 
-        return $branchs->orderBy('p_code', 'DESC')
+        return $suppliers->orderBy('p_code', 'DESC')
             ->paginate($this->pagination);
     }
 
@@ -36,10 +36,6 @@ class Supplier extends Component
         $this->resetPage();
     }
 
-    #[On('refresh-branches')]
-    public function refreshSupplier(){
-        $this->resultSupplier();
-    }
     public function render()
     {
         return view('livewire.dashboard.hrm.supplier.supplier');

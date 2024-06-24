@@ -1,35 +1,35 @@
-@if (session('status'))
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ session('status') }}
-</div>
-@elseif (session('error'))
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{ session('status') }}
-</div>
-@endif
 <div class="row">
+    @if (session('status'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('status') }}
+    </div>
+    @elseif (session('error'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ session('status') }}
+    </div>
+    @endif
     <div class="col-4" style="border-right: 1px solid rgb(240, 239, 239)">
         <div class="form-group mb-3">
             <div class="text-center mb-3">
                 @if($editForm)
-                    @if (@$state['photo'] && @$state['old_photo'])
-                    <img src="{{ $state['photo']->temporaryUrl() ?? '' }}" alt=""
-                            style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
-                    @elseif(!@$state['photo'] && @$state['old_photo'])
-                    <img src="{{ asset('storage/app/'.$state['old_photo']) }}" alt=""
-                        style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
-                    @else
-                    <img src="{{ asset('public/img/avatar.jpg') }}" alt=""
-                        style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
-                    @endif
+                @if (@$state['photo'])
+                <img src="{{ $state['photo']->temporaryUrl() ?? '' }}" alt=""
+                    style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
+                @elseif(!@$state['photo'] && @$state['old_photo'])
+                <img src="{{ asset('storage/app/'.$state['old_photo']) }}" alt=""
+                    style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
                 @else
-                    @if (@$state['photo'])
-                    <img src="{{ $state['photo']->temporaryUrl() ?? '' }}" alt=""
-                        style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
-                    @else
-                    <img src="{{ asset('public/img/avatar.jpg') }}" alt=""
-                        style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
-                    @endif
+                <img src="{{ asset('public/img/avatar.jpg') }}" alt=""
+                    style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
+                @endif
+                @else
+                @if (@$state['photo'])
+                <img src="{{ $state['photo']->temporaryUrl() ?? '' }}" alt=""
+                    style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
+                @else
+                <img src="{{ asset('public/img/avatar.jpg') }}" alt=""
+                    style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
+                @endif
                 @endif
 
             </div>
@@ -77,18 +77,39 @@
     <div class="col-8">
         <div class="row">
             <div class="col-6">
-                <div class="form-group mb-3">
+                <div class="form-group mb-3" wire:ignore>
                     <label for="">Supplier type <span style="color: red"> * </span></label>
-                    <select class="form-select @error('p_type') is-invalid @enderror" wire:model='state.p_type' name=""
-                        id="">
-                        <option name="" id="">Select type</option>
-                        <option value="1">Type 1</option>
-                        <option value="2">Type 2</option>
+                    <select class="form-select select2" id='supplier_type'>
+                        <option value="">Select type</option>
+                        @forelse ($supplier_types as $type)
+                        <option @if($p_type == $type->supplier_type_code) selected @endif value="{{ $type->supplier_type_code }}">{{ $type->supplier_type_name }}</option>
+                        @empty
+                        <option value=""></option>
+                        @endforelse
                     </select>
-                    @error('p_type')
-                    <small class="form-text text-danger">{{ $message }}</small>
-                    @enderror
+
                 </div>
+                @error('p_type')
+                <small class="form-text text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="col-6">
+                <div class="form-group mb-3" wire:ignore>
+                    <label for="">Supplier category <span style="color: red"> * </span></label>
+                    <select class="form-select select2 @error('p_category') is-invalid @enderror" name=""
+                        id="supplier_category">
+                        <option>Select category</option>
+                        @forelse ($supplier_categories as $cat)
+                        <option @if($p_category == $cat->supplier_cat_code) selected @endif value="{{ $cat->supplier_cat_code }}">{{ $cat->supplier_cat_name }}</option>
+                        @empty
+                        <option value=""></option>
+                        @endforelse
+                    </select>
+
+                </div>
+                @error('p_catagory')
+                <small class="form-text text-danger">{{ $message }}</small>
+                @enderror
             </div>
             <div class="col-6">
                 <div class="form-group mb-3">
@@ -199,4 +220,27 @@
         </div>
 
     </div>
+
 </div>
+@script
+<script data-navigate-once>
+    document.addEventListener('livewire:navigated', () => {
+        $(document).ready(function() {
+            $('.select2').select2({
+
+            });
+        });
+    })
+
+    $('#supplier_type').on('change', function(){
+        let data = $(this).val();
+        $wire.dispatch('supplier_type_change', {id: data});
+    })
+
+    $('#supplier_category').on('change', function(){
+        let data = $(this).val();
+        $wire.dispatch('supplier_category_change', {id: data});
+    })
+
+</script>
+@endscript

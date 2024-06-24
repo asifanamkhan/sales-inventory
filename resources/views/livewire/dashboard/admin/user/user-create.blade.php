@@ -36,7 +36,7 @@
                     </select>
                 </div>
                 @error('user')
-                <small id="" class="form-text text-danger">{{ $message }}</small>
+                    <small id="" class="form-text text-danger">{{ $message }}</small>
                 @enderror
                 <x-input wire:model='email' name='email' type='email' label='Email' readonly />
                 <x-input wire:model='phone_number' name='phone_number' type='text' label='Phone' readonly />
@@ -91,7 +91,6 @@
         let data = $(this).val();
         $wire.dispatch('employee-select-user-create', {id: data});
     })
-
 
 </script>
 @endscript

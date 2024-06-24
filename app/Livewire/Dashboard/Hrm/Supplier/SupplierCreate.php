@@ -7,28 +7,35 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 
 class SupplierCreate extends Component
 {
     use WithFileUploads;
 
     public $state = [];
-    public $editForm = false;
-
+    public $supplier_categories,$supplier_types,$p_category,$p_type;
+    public $editForm = '';
 
     public function save()
     {
+        $this->state['p_type'] = $this->p_type;
+        $this->state['p_catagory'] = $this->p_category;
 
         Validator::make($this->state, [
             'p_name' => 'required',
             'phone' => 'required',
             'email' => 'email|nullable',
             'status' => 'required|numeric',
-            'p_type' => 'required',
+            'p_type' => 'required|numeric',
+            'p_catagory' => 'required|numeric',
+
         ])->validate();
 
-        if ($this->state['photo']) {
-            $this->state['photo'] = $this->state['photo']->store('upload');
+
+        if (@$this->state['photo']) {
+            $this->state['photo'] = $this->state['photo']->store('upload/supplier');
         }
 
         DB::table('INV_SUPPLIER_INFO')->insert($this->state);
@@ -37,9 +44,36 @@ class SupplierCreate extends Component
 
         $this->reset();
         $this->state['photo'] = '';
+        $this->state['p_type'] = '';
+        $this->state['p_catagory'] = '';
     }
+
+    public function category_type()
+    {
+        $this->supplier_categories = DB::table('INV_SUPPLIER_CATEGORY')
+            ->orderBy('supplier_cat_code', 'DESC')
+            ->get();
+
+        $this->supplier_types = DB::table('INV_SUPPLIER_TYPE')
+            ->orderBy('supplier_type_code', 'DESC')
+            ->get();
+    }
+
+    #[On('supplier_type_change')]
+    public function supplier_type_change($id)
+    {
+        $this->p_type = $id;
+    }
+
+    #[On('supplier_category_change')]
+    public function supplier_category_change($id)
+    {
+        $this->p_category = $id;
+    }
+
     public function render()
     {
+        $this->category_type();
         return view('livewire.dashboard.hrm.supplier.supplier-create');
     }
 }

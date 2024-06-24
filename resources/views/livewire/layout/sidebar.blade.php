@@ -64,6 +64,8 @@
         {{ request()->routeIs('supplier-create') ? 'show' : ' ' }}
         {{ request()->routeIs('supplier-edit') ? 'show' : ' ' }}
         {{ request()->routeIs('customer') ? 'show' : ' ' }}
+        {{ request()->routeIs('customer-create') ? 'show' : ' ' }}
+        {{ request()->routeIs('customer-edit') ? 'show' : ' ' }}
 
         " id="HRMSubmenu">
                 <li class="{{ request()->routeIs('branch') ? 'active' : ' ' }}">
@@ -86,7 +88,11 @@
                  ">
                     <a class="list" wire:navigate href="{{ route('supplier') }}">Supplier information</a>
                 </li>
-                <li class="{{ request()->routeIs('customer') ? 'active' : ' ' }}">
+                <li class="
+                {{ request()->routeIs('customer') ? 'active' : ' ' }}
+                {{ request()->routeIs('customer-create') ? 'active' : ' ' }}
+                {{ request()->routeIs('customer-edit') ? 'active' : ' ' }}
+                 ">
                     <a class="list" wire:navigate href="{{ route('customer') }}">Customer information</a>
                 </li>
 
@@ -123,14 +129,15 @@
                 <i class="fa fa-list"></i> Product settings
             </a>
             <ul class="collapse list-unstyled
-        {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
+            {{ request()->routeIs('product-group') ? 'show' : ' ' }}
+            {{ request()->routeIs('product-brand') ? 'show' : ' ' }}
 
         " id="productSubmenu">
-                <li class="">
-                    <a class="list" wire:navigate href="">Product group</a>
+                <li class="{{ request()->routeIs('product-group') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('product-group') }}">Product group</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href="">Product brand</a>
+                <li class="{{ request()->routeIs('product-brand') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('product-brand') }}">Product brand</a>
                 </li>
 
                 <li class="">
