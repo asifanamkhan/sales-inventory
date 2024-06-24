@@ -7,7 +7,8 @@
     <div>
         <div class="row g-3 mb-3 align-items-center">
             <div class="col-auto">
-                <input type="text" wire:model.live.debounce.300ms='search' class="form-control" placeholder="search here">
+                <input type="text" wire:model.live.debounce.300ms='search' class="form-control"
+                    placeholder="search here">
             </div>
             <div class="col-auto">
                 <select class="form-select" wire:model.live='pagination' name="" id="">

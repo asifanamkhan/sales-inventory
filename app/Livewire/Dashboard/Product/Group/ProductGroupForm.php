@@ -14,7 +14,8 @@ class ProductGroupForm extends Component
     public $editForm = false;
 
 
-    public function store(){
+    public function store()
+    {
 
         $this->validate([
             'group_name' => 'required',
@@ -32,22 +33,26 @@ class ProductGroupForm extends Component
     }
 
     #[On('create-product-group-modal')]
-    public function refresh(){
+    public function refresh()
+    {
         $this->reset();
+        $this->resetValidation();
     }
 
     #[On('product-group-edit-modal')]
-    public function edit($id){
+    public function edit($id)
+    {
 
+        $this->resetValidation();
         $this->editForm = true;
         $this->product_group = DB::table('INV_ST_GROUP_INFO')
             ->where('st_group_id', $id)->first();
 
         $this->group_name = $this->product_group->group_name;
-
     }
 
-    public function update() {
+    public function update()
+    {
         $validate = $this->validate([
             'group_name' => 'required',
         ]);
@@ -58,7 +63,6 @@ class ProductGroupForm extends Component
 
         $this->dispatch('refresh-product-group');
         session()->flash('status', 'Product group updated successfully');
-
     }
     public function render()
     {

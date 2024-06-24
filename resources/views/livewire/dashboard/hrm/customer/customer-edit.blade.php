@@ -3,7 +3,7 @@
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
-        <h3 style="padding: 0px 5px 10px 5px;">Supplier edit</h3>
+        <h3 style="padding: 0px 5px 10px 5px;">Customer edit</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
@@ -15,10 +15,11 @@
         </nav>
     </div>
     <div class="card p-4">
-        @include('livewire.dashboard.hrm.customer.customer-form')
-        <div class="mt-4 d-flex justify-content-center">
-            <button wire:click.='update' class="btn btn-primary">Update</button>
-        </div>
+        <form wire:submit='update' action="">
+            @include('livewire.dashboard.hrm.customer.customer-form')
+            <div class="mt-4 d-flex justify-content-center">
+                <button class="btn btn-primary">Update</button>
+            </div>
+        </form>
     </div>
 </div>
-

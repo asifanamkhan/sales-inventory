@@ -14,7 +14,8 @@ class ProductBrandForm extends Component
     public $editForm = false;
 
 
-    public function store(){
+    public function store()
+    {
 
         $this->validate([
             'brand_name' => 'required',
@@ -32,22 +33,26 @@ class ProductBrandForm extends Component
     }
 
     #[On('create-product-brand-modal')]
-    public function refresh(){
+    public function refresh()
+    {
         $this->reset();
+        $this->resetValidation();
     }
 
     #[On('product-brand-edit-modal')]
-    public function edit($id){
+    public function edit($id)
+    {
 
+        $this->refresh();
         $this->editForm = true;
         $this->product_brand = DB::table('INV_ST_BRAND_INFO')
             ->where('brand_code', $id)->first();
 
         $this->brand_name = $this->product_brand->brand_name;
-
     }
 
-    public function update() {
+    public function update()
+    {
         $validate = $this->validate([
             'brand_name' => 'required',
         ]);
@@ -58,7 +63,6 @@ class ProductBrandForm extends Component
 
         $this->dispatch('refresh-product-brand');
         session()->flash('status', 'Product brand updated successfully');
-
     }
     public function render()
     {

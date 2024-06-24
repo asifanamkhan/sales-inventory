@@ -56,9 +56,9 @@
                 </thead>
                 <tbody>
                     @if (count($this->resultBranch) > 0)
-                    @foreach ($this->resultBranch as $branch)
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
+                    @foreach ($this->resultBranch as $key => $branch)
+                    <tr wire:key='{{ $key }}'>
+                        <td>{{ $this->resultBranch->firstItem() + $key }}</td>
                         <td>{{ $branch->branch_name }}</td>
                         <td style="display: flex; justify-content:center">
                             <div class="">

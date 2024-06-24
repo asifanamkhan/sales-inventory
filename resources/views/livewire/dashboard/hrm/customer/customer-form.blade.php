@@ -179,7 +179,5 @@
         $wire.dispatch('customer_type_change', {id: data});
     })
 
-
-
 </script>
 @endscript

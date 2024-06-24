@@ -8,9 +8,15 @@
     </div>
 
     @endif
-
     <form wire:submit="@if($editForm) update @else store @endif" action="">
-        <x-input wire:model='desig_name' name='desig_name' type='text' label='Name' />
+        <div class="form-group mb-3">
+            <label for="">Name</label>
+            <input wire:model='color_name' type='text' label='Name'
+                class="form-control @error('color_name') is-invalid @enderror">
+            @error('color_name')
+            <small class="form-text text-danger">{{ $message }}</small>
+            @enderror
+        </div>
         <div class="mt-4 d-flex justify-content-center">
             <button class="btn btn-primary">Save</button>
         </div>

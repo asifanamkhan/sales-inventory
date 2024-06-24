@@ -131,6 +131,9 @@
             <ul class="collapse list-unstyled
             {{ request()->routeIs('product-group') ? 'show' : ' ' }}
             {{ request()->routeIs('product-brand') ? 'show' : ' ' }}
+            {{ request()->routeIs('product-unit') ? 'show' : ' ' }}
+            {{ request()->routeIs('product-color') ? 'show' : ' ' }}
+            {{ request()->routeIs('product-category') ? 'show' : ' ' }}
 
         " id="productSubmenu">
                 <li class="{{ request()->routeIs('product-group') ? 'active' : ' ' }}">
@@ -140,14 +143,14 @@
                     <a class="list" wire:navigate href="{{ route('product-brand') }}">Product brand</a>
                 </li>
 
-                <li class="">
-                    <a class="list" wire:navigate href="">Product category</a>
+                <li class="{{ request()->routeIs('product-category') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('product-category') }}">Product category</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href="">Product unit</a>
+                <li class="{{ request()->routeIs('product-unit') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('product-unit') }}">Product unit</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href="">Product colors</a>
+                <li class="{{ request()->routeIs('product-color') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('product-color') }}">Product colors</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href="">Product information</a>

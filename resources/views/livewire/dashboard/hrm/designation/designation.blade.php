@@ -50,9 +50,9 @@
                 </thead>
                 <tbody>
                     @if (count($this->resultDesignation) > 0)
-                    @foreach ($this->resultDesignation as $designation)
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
+                    @foreach ($this->resultDesignation as $key => $designation)
+                    <tr wire:key='{{ $key }}'>
+                        <td>{{ $this->resultDesignation->firstItem() + $key }}</td>
                         <td>{{ $designation->desig_name }}</td>
                         <td style="display: flex; justify-content:center">
                             <div class="">

@@ -8,19 +8,17 @@
     </div>
 
     @endif
-    <div class="form-group mb-3">
-        <label for="">Name</label>
-        <input wire:model='brand_name' type='text' label='Name' class="form-control @error('brand_name') is-invalid @enderror">
-        @error('brand_name')
-        <small class="form-text text-danger">{{ $message }}</small>
-        @enderror
-    </div>
-    <div class="mt-4 d-flex justify-content-center">
-        @if($editForm)
-        <button wire:click='update' class="btn btn-primary">Update</button>
-        @else
-        <button wire:click='store' class="btn btn-primary">Create</button>
-        @endif
-    </div>
+    <form wire:submit="@if($editForm) update @else store @endif" action="">
+        <div class="form-group mb-3">
+            <label for="">Name</label>
+            <input wire:model='brand_name' type='text' label='Name'
+                class="form-control @error('brand_name') is-invalid @enderror">
+            @error('brand_name')
+            <small class="form-text text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        <div class="mt-4 d-flex justify-content-center">
+            <button class="btn btn-primary">Save</button>
+        </div>
+    </form>
 </div>
-

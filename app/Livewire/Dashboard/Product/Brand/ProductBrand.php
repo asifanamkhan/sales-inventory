@@ -21,16 +21,15 @@ class ProductBrand extends Component
     #[Computed]
     public function resultBrand()
     {
-        $branchs = DB::table('INV_ST_BRAND_INFO');
+        $brands = DB::table('INV_ST_BRAND_INFO');
 
 
         if ($this->search) {
-            $branchs
-                ->where(DB::raw('lower(brand_name)'), 'like', '%' . strtolower($this->search) . '%')
-                ;
+            $brands
+                ->where(DB::raw('lower(brand_name)'), 'like', '%' . strtolower($this->search) . '%');
         }
 
-        return $branchs->orderBy('brand_code', 'DESC')
+        return $brands->orderBy('brand_code', 'DESC')
             ->paginate($this->pagination);
     }
 
@@ -40,18 +39,21 @@ class ProductBrand extends Component
     }
 
     #[On('refresh-product-brand')]
-    public function refreshBranch(){
+    public function refreshBrand()
+    {
         $this->resultBrand();
     }
 
     #[On('create-product-brand-modal')]
-    public function modalCreateTitle(){
-        $this->modal_title = 'Create';
+    public function modalCreateTitle()
+    {
+        $this->modal_title = 'Create product brand';
     }
 
     #[On('product-brand-edit-modal')]
-    public function modalEditTitle(){
-        $this->modal_title = 'Update';
+    public function modalEditTitle()
+    {
+        $this->modal_title = 'Update product brand';
     }
 
     public function render()

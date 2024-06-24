@@ -52,9 +52,9 @@
                 </thead>
                 <tbody>
                     @if (count($this->resultDepartment) > 0)
-                    @foreach ($this->resultDepartment as $department)
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
+                    @foreach ($this->resultDepartment as $key => $department)
+                    <tr wire:key='{{ $key }}'>
+                        <td>{{ $this->resultDepartment->firstItem() + $key }}</td>
                         <td>{{ $department->dept_name }}</td>
                         <td style="display: flex; justify-content:center">
                             <div class="">

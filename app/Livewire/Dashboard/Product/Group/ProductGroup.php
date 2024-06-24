@@ -21,16 +21,15 @@ class ProductGroup extends Component
     #[Computed]
     public function resultGroup()
     {
-        $branchs = DB::table('INV_ST_GROUP_INFO');
+        $groups = DB::table('INV_ST_GROUP_INFO');
 
 
         if ($this->search) {
-            $branchs
-                ->where(DB::raw('lower(group_name)'), 'like', '%' . strtolower($this->search) . '%')
-                ;
+            $groups
+                ->where(DB::raw('lower(group_name)'), 'like', '%' . strtolower($this->search) . '%');
         }
 
-        return $branchs->orderBy('st_group_id', 'DESC')
+        return $groups->orderBy('st_group_id', 'DESC')
             ->paginate($this->pagination);
     }
 
@@ -40,18 +39,21 @@ class ProductGroup extends Component
     }
 
     #[On('refresh-product-group')]
-    public function refreshBranch(){
+    public function refreshGroup()
+    {
         $this->resultGroup();
     }
 
     #[On('create-product-group-modal')]
-    public function modalCreateTitle(){
-        $this->modal_title = 'Create';
+    public function modalCreateTitle()
+    {
+        $this->modal_title = 'Create product group';
     }
 
     #[On('product-group-edit-modal')]
-    public function modalEditTitle(){
-        $this->modal_title = 'Update';
+    public function modalEditTitle()
+    {
+        $this->modal_title = 'Update product group';
     }
 
     public function render()

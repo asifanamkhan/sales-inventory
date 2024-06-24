@@ -47,9 +47,9 @@
                 </thead>
                 <tbody>
                     @if (count($this->resultCustomer) > 0)
-                    @foreach ($this->resultCustomer as $customer)
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
+                    @foreach ($this->resultCustomer as $key => $customer)
+                    <tr wire:key='{{ $key }}'>
+                        <td>{{ $this->resultCustomer->firstItem() + $key }}</td>
                         <td>{{ $customer->customer_name }}</td>
                         <td>{{ $customer->phone_no }}</td>
                         <td>{{ $customer->email }}</td>

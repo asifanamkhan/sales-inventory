@@ -46,9 +46,9 @@
                 </thead>
                 <tbody>
                     @if (count($this->resultRole) > 0)
-                    @foreach ($this->resultRole as $role)
-                    <tr wire:key='{{ $role->role_id }}'>
-                        <td>{{ $loop->index + 1 }}</td>
+                    @foreach ($this->resultRole as $key => $role)
+                    <tr wire:key='{{ $key }}'>
+                        <td>{{ $this->resultRole->firstItem() + $key }}</td>
                         <td>{{ $role->role_name }}</td>
                         <td>{{ $role->role_desc }}</td>
                         <td style="display: flex; justify-content:center">
