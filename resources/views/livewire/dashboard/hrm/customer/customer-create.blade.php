@@ -15,10 +15,13 @@
         </nav>
     </div>
     <div class="card p-4">
-        @include('livewire.dashboard.hrm.customer.customer-form')
-        <div class="mt-4 d-flex justify-content-center">
-            <button wire:click.prevent='save' class="btn btn-primary">Save</button>
-        </div>
+        <form wire:submit='save' action="">
+            @include('livewire.dashboard.hrm.customer.customer-form')
+            <div class="mt-4 d-flex justify-content-center">
+                <button class="btn btn-primary">Save</button>
+            </div>
+        </form>
+
     </div>
 </div>
 

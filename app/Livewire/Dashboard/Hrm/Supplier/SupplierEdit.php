@@ -26,7 +26,8 @@ class SupplierEdit extends Component
             'phone' => 'required',
             'email' => 'email|nullable',
             'status' => 'required|numeric',
-            'p_type' => 'required',
+            'p_type' => 'required|numeric',
+            'p_catagory' => 'required|numeric',
         ])->validate();
 
         if (@$this->state['photo']) {
@@ -41,6 +42,8 @@ class SupplierEdit extends Component
         DB::table('INV_SUPPLIER_INFO')
             ->where('p_code', $this->supplier_id)
             ->update($this->state);
+
+
 
         session()->flash('status', 'Supplier information updated successfully.');
 

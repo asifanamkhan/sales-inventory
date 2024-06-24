@@ -47,9 +47,9 @@
                 </thead>
                 <tbody>
                     @if (count($this->resultEmployee) > 0)
-                    @foreach ($this->resultEmployee as $employee)
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
+                    @foreach ($this->resultEmployee as $key => $employee)
+                    <tr wire:key='{{ $key }}'>
+                        <td>{{ $this->resultEmployee->firstItem() + $key }}</td>
                         <td>{{ $employee->photo }}</td>
                         <td>{{ $employee->card_no }}</td>
                         <td>{{ $employee->emp_name }}</td>

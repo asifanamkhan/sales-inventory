@@ -63,21 +63,21 @@
                 <thead>
                     <tr>
                         <td class="bg-sidebar" style="width: 5%">#</td>
-                        <td class="bg-sidebar" style="width: 30%">Group name</td>
-                        <td class="bg-sidebar text-center" style="width: 20%">Action</td>
+                        <td class="bg-sidebar" >Group name</td>
+                        <td class="bg-sidebar text-center" >Action</td>
                     </tr>
                 </thead>
                 <tbody>
                     @if (count($this->resultGroup) > 0)
-                    @foreach ($this->resultGroup as $productGroup)
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
+                    @foreach ($this->resultGroup as $key => $productGroup)
+                    <tr wire:key='{{ $key }}'>
+                        <td>{{ $this->resultGroup->firstItem() + $key }}</td>
                         <td>{{ $productGroup->group_name }}</td>
                         <td style="display: flex; justify-content:center">
                             <div class="">
-                                <button @click="$dispatch('product-group-edit-modal', {id: {{ $productGroup->st_group_id }}})"
-                                    data-toggle="modal" data-target="#{{ $event }}"
-                                    class="btn btn-sm btn-success">
+                                <button
+                                    @click="$dispatch('product-group-edit-modal', {id: {{ $productGroup->st_group_id }}})"
+                                    data-toggle="modal" data-target="#{{ $event }}" class="btn btn-sm btn-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
                                         viewBox="0 0 50 50">
                                         <path fill="white"

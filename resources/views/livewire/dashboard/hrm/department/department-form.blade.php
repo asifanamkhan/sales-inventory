@@ -8,12 +8,11 @@
     </div>
 
     @endif
-    <x-input wire:model='dept_name' name='dept_name' type='text' label='Name' />
-    <div class="mt-4 d-flex justify-content-center">
-        @if($editForm)
-        <button wire:click='update' class="btn btn-primary">Update</button>
-        @else
-        <button wire:click='store' class="btn btn-primary">Create</button>
-        @endif
-    </div>
+
+    <form wire:submit="@if($editForm) update @else store @endif" action="">
+        <x-input wire:model='dept_name' name='dept_name' type='text' label='Name' />
+        <div class="mt-4 d-flex justify-content-center">
+            <button class="btn btn-primary">Save</button>
+        </div>
+    </form>
 </div>

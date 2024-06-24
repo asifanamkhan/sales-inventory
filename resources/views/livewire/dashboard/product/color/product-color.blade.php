@@ -1,15 +1,15 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" product-brand="status">
+    <div wire:loading class="spinner-border text-primary custom-loading" product-color="status">
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
-        <h3 style="padding: 0px 5px 10px 5px;">Product brands</h3>
+        <h3 style="padding: 0px 5px 10px 5px;">Product colors</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">Product</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product-brand') }}"
-                        style="color: #3C50E0">brands</a></li>
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product-color') }}"
+                        style="color: #3C50E0">colors</a></li>
             </ol>
         </nav>
     </div>
@@ -31,9 +31,9 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <button @click="$dispatch('create-product-brand-modal')" type="button" class="btn btn-primary"
+                <button @click="$dispatch('create-product-color-modal')" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target="#{{ $event }}">
-                    Create product brand
+                    Create product color
                 </button>
             </div>
             @endpermission
@@ -51,7 +51,7 @@
                             </b>
                         </div>
                         <div class="modal-body">
-                            <livewire:dashboard.product.brand.product-brand-form />
+                            <livewire:dashboard.product.color.product-color-form />
                         </div>
                     </div>
                 </div>
@@ -63,20 +63,20 @@
                 <thead>
                     <tr>
                         <td class="bg-sidebar" style="width: 5%">#</td>
-                        <td class="bg-sidebar" >Brand name</td>
-                        <td class="bg-sidebar text-center" >Action</td>
+                        <td class="bg-sidebar">Color name</td>
+                        <td class="bg-sidebar text-center">Action</td>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($this->resultBrand) > 0)
-                    @foreach ($this->resultBrand as $key => $productBrand)
+                    @if (count($this->resultColor) > 0)
+                    @foreach ($this->resultColor as $key => $productColor)
                     <tr wire:key='{{ $key }}'>
-                        <td>{{ $this->resultBrand->firstItem() + $key }}</td>
-                        <td>{{ $productBrand->brand_name }}</td>
+                        <td>{{ $this->resultColor->firstItem() + $key }}</td>
+                        <td>{{ $productColor->color_name }}</td>
                         <td style="display: flex; justify-content:center">
                             <div class="">
                                 <button
-                                    @click="$dispatch('product-brand-edit-modal', {id: {{ $productBrand->brand_code }}})"
+                                    @click="$dispatch('product-color-edit-modal', {id: {{ $productColor->tran_mst_id }}})"
                                     data-toggle="modal" data-target="#{{ $event }}" class="btn btn-sm btn-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
                                         viewBox="0 0 50 50">
@@ -101,7 +101,7 @@
                 </tbody>
             </table>
         </div>
-        <span>{{ $this->resultBrand->links() }}</span>
+        <span>{{ $this->resultColor->links() }}</span>
     </div>
 </div>
 

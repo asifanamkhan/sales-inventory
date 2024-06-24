@@ -18,7 +18,10 @@ use App\Livewire\Dashboard\Hrm\Supplier\Supplier;
 use App\Livewire\Dashboard\Hrm\Supplier\SupplierCreate;
 use App\Livewire\Dashboard\Hrm\Supplier\SupplierEdit;
 use App\Livewire\Dashboard\Product\Brand\ProductBrand;
+use App\Livewire\Dashboard\Product\Category\ProductCategory;
+use App\Livewire\Dashboard\Product\Color\ProductColor;
 use App\Livewire\Dashboard\Product\Group\ProductGroup;
+use App\Livewire\Dashboard\Product\Unit\ProductUnit;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -63,5 +66,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //Product
     Route::get('product-group', ProductGroup::class)->name('product-group');
     Route::get('product-brand', ProductBrand::class)->name('product-brand');
+    Route::get('product-unit', ProductUnit::class)->name('product-unit');
+    Route::get('product-color', ProductColor::class)->name('product-color');
+    Route::get('product-category', ProductCategory::class)->name('product-category');
 
 });

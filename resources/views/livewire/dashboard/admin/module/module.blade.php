@@ -45,9 +45,9 @@
                 </thead>
                 <tbody>
                     @if (count($this->resultModule) > 0)
-                    @foreach ($this->resultModule as $module)
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
+                    @foreach ($this->resultModule as $key => $module)
+                    <tr wire:key='{{ $key }}'>
+                        <td>{{ $this->resultModule->firstItem() + $key }}</td>
                         <td>{{ $module->module_name }}</td>
                         <td style="display: flex; justify-content:center">
                             <div class="">
