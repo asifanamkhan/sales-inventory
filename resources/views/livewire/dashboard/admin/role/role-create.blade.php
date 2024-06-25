@@ -53,7 +53,7 @@
                     <input wire:model.live='allCheck.{{ (int)$this->module }}' class="form-check-input" type="checkbox">
 
                 </div>
-                <table class="table table-bordered">
+                <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
                             <td class="bg-sidebar" style="">Sub Module</td>
@@ -66,7 +66,7 @@
                     </thead>
                     <tbody>
                         @foreach ($sub_modules as $key => $sub_module)
-                        <tr>
+                        <tr wire:key='{{ $sub_module->module_dtl_id }}'>
                             <td>
                                 {{ $sub_module->module_dtl_name }}
                             </td>

@@ -134,6 +134,7 @@
             {{ request()->routeIs('product-unit') ? 'show' : ' ' }}
             {{ request()->routeIs('product-color') ? 'show' : ' ' }}
             {{ request()->routeIs('product-category') ? 'show' : ' ' }}
+            {{ request()->routeIs('product') ? 'show' : ' ' }}
 
         " id="productSubmenu">
                 <li class="{{ request()->routeIs('product-group') ? 'active' : ' ' }}">
@@ -152,8 +153,8 @@
                 <li class="{{ request()->routeIs('product-color') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('product-color') }}">Product colors</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href="">Product information</a>
+                <li class="{{ request()->routeIs('product') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('product') }}">Product information</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href="">Product pricing list</a>
@@ -161,7 +162,6 @@
                 <li class="">
                     <a class="list" wire:navigate href="">Product discount list</a>
                 </li>
-
             </ul>
         </li>
 

@@ -1,15 +1,15 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" product-color="status">
+    <div wire:loading class="spinner-border text-primary custom-loading" product-product="status">
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
-        <h3 style="padding: 0px 5px 10px 5px;">Product colors</h3>
+        <h3 style="padding: 0px 5px 10px 5px;">Product products</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">Product</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product-color') }}"
-                        style="color: #3C50E0">colors</a></li>
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product') }}"
+                        style="color: #3C50E0">products</a></li>
             </ol>
         </nav>
     </div>
@@ -31,31 +31,9 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <button @click="$dispatch('create-product-color-modal')" type="button" class="btn btn-primary"
-                    data-toggle="modal" data-target="#{{ $event }}">
-                    Create product color
-                </button>
+                <button type="button" class="btn btn-primary">Create product</button>
             </div>
             @endpermission
-
-            {{-- modal --}}
-            <div wire:ignore.self class="modal fade" id="{{ $event }}" tabindex="-1" role="dialog"
-                aria-labelledby="{{ $event }}" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header" style="justify-content: space-between">
-                            <h5 class="modal-title" id="exampleModalLabel">{{ $modal_title }}</h5>
-                            <b type="button" class="btn btn-sm btn-danger" class="close" data-dismiss="modal"
-                                aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </b>
-                        </div>
-                        <div class="modal-body">
-                            <livewire:dashboard.product.color.product-color-form />
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </div>
         <div class="table-responsive">
@@ -63,21 +41,19 @@
                 <thead>
                     <tr>
                         <td class="bg-sidebar" style="width: 5%">#</td>
-                        <td class="bg-sidebar">Color name</td>
-                        <td class="bg-sidebar text-center">Action</td>
+                        <td class="bg-sidebar" >product name</td>
+                        <td class="bg-sidebar text-center" >Action</td>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($this->resultColor) > 0)
-                    @foreach ($this->resultColor as $key => $productColor)
+                    @if (count($this->resultProduct) > 0)
+                    @foreach ($this->resultProduct as $key => $product)
                     <tr wire:key='{{ $key }}'>
-                        <td>{{ $this->resultColor->firstItem() + $key }}</td>
-                        <td>{{ $productColor->color_name }}</td>
+                        <td>{{ $this->resultProduct->firstItem() + $key }}</td>
+                        <td>{{ $product->item_name }}</td>
                         <td style="display: flex; justify-content:center">
                             <div class="">
-                                <button
-                                    @click="$dispatch('product-color-edit-modal', {id: {{ $productColor->tran_mst_id }}})"
-                                    data-toggle="modal" data-target="#{{ $event }}" class="btn btn-sm btn-success">
+                                <button class="btn btn-sm btn-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
                                         viewBox="0 0 50 50">
                                         <path fill="white"
@@ -85,14 +61,14 @@
                                         </path>
                                     </svg>
                                 </button>
-                                {{-- <button class="btn btn-sm btn-danger">
+                                <button class="btn btn-sm btn-warning">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
                                         viewBox="0 0 24 24">
                                         <path fill=white
                                             d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z">
                                         </path>
                                     </svg>
-                                </button> --}}
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -101,10 +77,11 @@
                 </tbody>
             </table>
         </div>
-        <span>{{ $this->resultColor->links() }}</span>
+        <span>{{ $this->resultProduct->links() }}</span>
     </div>
 </div>
 
 <script>
 
 </script>
+
