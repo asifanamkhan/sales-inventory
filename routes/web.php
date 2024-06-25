@@ -21,6 +21,7 @@ use App\Livewire\Dashboard\Product\Brand\ProductBrand;
 use App\Livewire\Dashboard\Product\Category\ProductCategory;
 use App\Livewire\Dashboard\Product\Color\ProductColor;
 use App\Livewire\Dashboard\Product\Group\ProductGroup;
+use App\Livewire\Dashboard\Product\Product\Product;
 use App\Livewire\Dashboard\Product\Unit\ProductUnit;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -38,6 +39,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    // ------------- admin start ----------------
     Route::get('role', Role::class)->name('role');
     Route::get('role-create', RoleCreate::class)->name('role-create');
     Route::get('role-details/{role_id}', RoleDetails::class)->name('role-details');
@@ -49,7 +51,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('user', User::class)->name('user');
     Route::get('user-create', UserCreate::class)->name('user-create');
 
-    //hrm
+    // ------------- admin end ----------------
+
+    // ------------- hrm start ----------------
+
     Route::get('branch', Branch::class)->name('branch');
     Route::get('department', Department::class)->name('department');
     Route::get('designation', Designation::class)->name('designation');
@@ -63,11 +68,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('customer-create', CustomerCreate::class)->name('customer-create');
     Route::get('customer/{customer_id}/edit', CustomerEdit::class)->name('customer-edit');
 
-    //Product
+    // ------------- hrm end ----------------
+
+
+    // ------------- product start ----------------
     Route::get('product-group', ProductGroup::class)->name('product-group');
     Route::get('product-brand', ProductBrand::class)->name('product-brand');
     Route::get('product-unit', ProductUnit::class)->name('product-unit');
     Route::get('product-color', ProductColor::class)->name('product-color');
     Route::get('product-category', ProductCategory::class)->name('product-category');
+
+    Route::get('product', Product::class)->name('product');
+
+    // ------------- product end ----------------
 
 });

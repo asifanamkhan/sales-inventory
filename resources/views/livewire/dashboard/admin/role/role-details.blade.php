@@ -19,7 +19,7 @@
     <div class="card p-4">
 
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <tr>
                     <th style="width: 25%">Role name</th>
                     <td>
@@ -33,7 +33,7 @@
                     </td>
                 </tr>
             </table>
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead>
                     <th>Module name</th>
                     <th>Sub module name</th>

@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
                         <td class="bg-sidebar" style="width: 5%">#</td>
@@ -61,7 +61,7 @@
                                 border: 1px solid #D1485F
                             @endif
                             "
-                            class='form-select' name="" id="">
+                            class='form-select select-status' name="" id="">
                                 <option
                                 @if ($supplier->status == 1)
                                     selected
