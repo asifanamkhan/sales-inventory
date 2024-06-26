@@ -224,22 +224,23 @@
 </div>
 @script
 <script data-navigate-once>
+    console.log();
     document.addEventListener('livewire:navigated', () => {
         $(document).ready(function() {
             $('.select2').select2({
-
+                theme: "bootstrap-5",
             });
         });
     })
 
-    $('#supplier_type').on('change', function(){
+    $('#supplier_type').on('change', function(e){
         let data = $(this).val();
-        $wire.dispatch('supplier_type_change', {id: data});
+        @this.set('p_type', e.target.value, false);
     })
 
-    $('#supplier_category').on('change', function(){
+    $('#supplier_category').on('change', function(e){
         let data = $(this).val();
-        $wire.dispatch('supplier_category_change', {id: data});
+        @this.set('p_category', e.target.value, false);
     })
 
 </script>

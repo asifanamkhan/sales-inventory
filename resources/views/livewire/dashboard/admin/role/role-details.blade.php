@@ -7,7 +7,6 @@
         <h3 style="padding: 0px 5px 10px 5px;">Role details</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">administrator</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('role') }}" style="">roles</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('role-details', $role_id) }}"
@@ -21,7 +20,7 @@
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <tr>
-                    <th style="width: 25%">Role name</th>
+                    <th style="width: 25%; color:black">Role name</th>
                     <td>
                         {{ $roleDetail->role_name }}
                     </td>
@@ -35,12 +34,14 @@
             </table>
             <table class="table table-bordered table-hover">
                 <thead>
-                    <th>Module name</th>
-                    <th>Sub module name</th>
-                    <th class="text-center">Visible</th>
-                    <th class="text-center">Write</th>
-                    <th class="text-center">Edit</th>
-                    <th class="text-center">Read</th>
+                    <tr class="bg-sidebar">
+                        <td>Module name</td>
+                        <td>Sub module name</td>
+                        <td class="text-center">Visible</td>
+                        <td class="text-center">Write</td>
+                        <td class="text-center">Edit</td>
+                        <td class="text-center">Read</td>
+                    </tr>
                 </thead>
                 <tbody>
 

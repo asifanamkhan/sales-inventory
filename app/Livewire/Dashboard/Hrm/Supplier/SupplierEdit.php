@@ -51,19 +51,7 @@ class SupplierEdit extends Component
         $this->state['photo'] = '';
     }
 
-    #[On('supplier_type_change')]
-    public function supplier_type_change($id)
-    {
-        $this->p_type = $id;
-    }
-
-    #[On('supplier_category_change')]
-    public function supplier_category_change($id)
-    {
-        $this->p_category = $id;
-    }
-
-
+   
     public function mount($supplier_id)
     {
         $this->supplier_id = $supplier_id;

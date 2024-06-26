@@ -6,7 +6,6 @@
         <h3 style="padding: 0px 5px 10px 5px;">Users</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">Administration</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('user') }}" style="color: #3C50E0">users</a></li>
             </ol>
@@ -35,13 +34,13 @@
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
-                    <tr>
-                        <td class="bg-sidebar" style="">#</td>
-                        <td class="bg-sidebar" style="">Name</td>
-                        <td class="bg-sidebar" style="">Mobile</td>
-                        <td class="bg-sidebar" style="">Email</td>
-                        <td class="bg-sidebar" style="">Roles</td>
-                        <td class="bg-sidebar text-center" style="">Action</td>
+                    <tr class="bg-sidebar">
+                        <td  style="">#</td>
+                        <td  style="">Name</td>
+                        <td  style="">Mobile</td>
+                        <td  style="">Email</td>
+                        <td  style="">Roles</td>
+                        <td class="text-center" style="">Action</td>
                     </tr>
                 </thead>
                 <tbody>

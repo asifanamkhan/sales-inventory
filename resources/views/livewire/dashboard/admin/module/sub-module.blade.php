@@ -23,9 +23,9 @@
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
-                    <tr>
-                        <td class="bg-sidebar" style="width: 10%">#</td>
-                        <td class="bg-sidebar" style="width: 60%">Sub Module name</td>
+                    <tr class="bg-sidebar">
+                        <td  style="width: 10%">#</td>
+                        <td  style="width: 60%">Sub Module name</td>
                     </tr>
                 </thead>
                 <tbody>

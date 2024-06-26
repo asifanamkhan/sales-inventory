@@ -38,7 +38,8 @@
         </div>
         <div class="form-group mb-3">
             <label for="">Name <span style="color: red"> * </span></label>
-            <input wire:model='state.customer_name' type='text' class="form-control @error('customer_name') is-invalid @enderror">
+            <input wire:model='state.customer_name' type='text'
+                class="form-control @error('customer_name') is-invalid @enderror">
             @error('customer_name')
             <small class="form-text text-danger">{{ $message }}</small>
             @enderror
@@ -76,7 +77,8 @@
                     <select class="form-select select2" id='customer_type'>
                         <option value="">Select type</option>
                         @forelse ($customer_types as $type)
-                        <option @if($customer_type == $type->customer_type_code) selected @endif value="{{ $type->customer_type_code }}">{{ $type->customer_type_name }}</option>
+                        <option @if($customer_type==$type->customer_type_code) selected @endif value="{{
+                            $type->customer_type_code }}">{{ $type->customer_type_name }}</option>
                         @empty
                         <option value=""></option>
                         @endforelse
@@ -119,8 +121,7 @@
             <div class="col-6">
                 <div class="form-group mb-3">
                     <label for="">NID</label>
-                    <input wire:model='state.nid' type='text'
-                        class="form-control @error('nid') is-invalid @enderror">
+                    <input wire:model='state.nid' type='text' class="form-control @error('nid') is-invalid @enderror">
                     @error('nid')
                     <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
@@ -141,7 +142,8 @@
             <div class="col-12">
                 <div class="form-group mb-3">
                     <label for="">Email</label>
-                    <input wire:model='state.email' type='text' class="form-control @error('email') is-invalid @enderror">
+                    <input wire:model='state.email' type='text'
+                        class="form-control @error('email') is-invalid @enderror">
                     @error('email')
                     <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
@@ -164,19 +166,28 @@
     </div>
 
 </div>
+@assets
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+@endassets
+
 @script
+
 <script data-navigate-once>
     document.addEventListener('livewire:navigated', () => {
         $(document).ready(function() {
             $('.select2').select2({
-
+                theme: "bootstrap-5",
             });
         });
     })
 
-    $('#customer_type').on('change', function(){
+    $('#customer_type').on('change', function(e){
         let data = $(this).val();
-        $wire.dispatch('customer_type_change', {id: data});
+        @this.set('customer_type', e.target.value, false);
     })
 
 </script>

@@ -48,14 +48,8 @@ class CustomerEdit extends Component
 
         $this->state['old_photo'] = $this->state['photo'];
         $this->state['photo'] = '';
+        $this->resetValidation();
     }
-
-    #[On('customer_type_change')]
-    public function customer_type_change($id)
-    {
-        $this->customer_type = $id;
-    }
-
 
     public function mount($customer_id)
     {

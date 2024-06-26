@@ -6,7 +6,6 @@
         <h3 style="padding: 0px 5px 10px 5px;">Users</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">Administration</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('user') }}">users</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('user-create') }}"
@@ -84,7 +83,9 @@
 <script data-navigate-once>
     document.addEventListener('livewire:navigated', () => {
         $(document).ready(function() {
-            $('.select2').select2();
+            $('.select2').select2({
+                theme: "bootstrap-5",
+            });
         });
     })
 

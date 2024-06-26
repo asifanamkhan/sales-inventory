@@ -41,6 +41,7 @@ class CustomerCreate extends Component
         session()->flash('status', 'New customers create successfully. You can find it at customers list');
 
         $this->reset();
+        // $this->resetValidation();
         $this->state['photo'] = '';
         $this->state['customer_type'] = '';
     }
@@ -50,12 +51,6 @@ class CustomerCreate extends Component
         $this->customer_types = DB::table('INV_CUSTOMER_TYPE')
             ->orderBy('customer_type_code', 'DESC')
             ->get();
-    }
-
-    #[On('customer_type_change')]
-    public function customer_type_change($id)
-    {
-        $this->customer_type = $id;
     }
 
 

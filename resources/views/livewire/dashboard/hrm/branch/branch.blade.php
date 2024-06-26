@@ -6,7 +6,6 @@
         <h3 style="padding: 0px 5px 10px 5px;">Branches</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">Hrm</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('branch') }}" style="color: #3C50E0">branchs</a></li>
             </ol>
@@ -48,10 +47,10 @@
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
-                    <tr>
-                        <td class="bg-sidebar" style="width: 5%">#</td>
-                        <td class="bg-sidebar" style="width: 30%">Branch name</td>
-                        <td class="bg-sidebar text-center" style="width: 20%">Action</td>
+                    <tr class="bg-sidebar">
+                        <td class="" style="width: 5%">#</td>
+                        <td  style="width: 30%">Branch name</td>
+                        <td class="text-center" style="width: 20%">Action</td>
                     </tr>
                 </thead>
                 <tbody>

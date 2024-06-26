@@ -9,8 +9,8 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
@@ -19,6 +19,7 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        '40275907c8566c390185147049ef6e5d' => __DIR__ . '/..' . '/livewire/livewire/src/helpers.php',
         '35a6ad97d21e794e7e22a17d806652e4' => __DIR__ . '/..' . '/nunomaduro/termwind/src/Functions.php',
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
@@ -34,7 +35,6 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
         'f57d353b41eb2e234b26064d63d8c5dd' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Filesystem/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
-        '40275907c8566c390185147049ef6e5d' => __DIR__ . '/..' . '/livewire/livewire/src/helpers.php',
         'c72349b1fe8d0deeedd3a52e8aa814d8' => __DIR__ . '/..' . '/mockery/mockery/library/helpers.php',
         'ce9671a430e4846b44e1c68c7611f9f5' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'a1cfe24d14977df6878b9bf804af2d1c' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Phpunit/Autoload.php',
@@ -93,6 +93,7 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Clock\\' => 24,
+            'Spatie\\LaravelPackageTools\\' => 27,
         ),
         'R' => 
         array (
@@ -167,6 +168,8 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
             'DebugBar\\' => 9,
             'Database\\Seeders\\' => 17,
             'Database\\Factories\\' => 19,
+            'Dasundev\\LivewireQuillTextEditor\\' => 33,
+            'Dasundev\\LivewireDropzone\\' => 26,
         ),
         'C' => 
         array (
@@ -330,6 +333,10 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
         'Symfony\\Component\\Clock\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/clock',
+        ),
+        'Spatie\\LaravelPackageTools\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/spatie/laravel-package-tools/src',
         ),
         'Ramsey\\Uuid\\' => 
         array (
@@ -512,6 +519,14 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
             0 => __DIR__ . '/../..' . '/database/factories',
             1 => __DIR__ . '/..' . '/laravel/pint/database/factories',
         ),
+        'Dasundev\\LivewireQuillTextEditor\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dasundev/livewire-quill-text-editor/src',
+        ),
+        'Dasundev\\LivewireDropzone\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dasundev/livewire-dropzone/src',
+        ),
         'Cron\\' => 
         array (
             0 => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron',
@@ -565,6 +580,8 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
         'App\\Livewire\\Dashboard\\Hrm\\Branch\\BranchForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Branch/BranchForm.php',
         'App\\Livewire\\Dashboard\\Hrm\\Customer\\Customer' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Customer/Customer.php',
         'App\\Livewire\\Dashboard\\Hrm\\Customer\\CustomerCreate' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Customer/CustomerCreate.php',
+        'App\\Livewire\\Dashboard\\Hrm\\Customer\\CustomerEdit' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Customer/CustomerEdit.php',
+        'App\\Livewire\\Dashboard\\Hrm\\Customer\\CustomerForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Customer/CustomerForm.php',
         'App\\Livewire\\Dashboard\\Hrm\\Department\\Department' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Department/Department.php',
         'App\\Livewire\\Dashboard\\Hrm\\Department\\DepartmentForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Department/DepartmentForm.php',
         'App\\Livewire\\Dashboard\\Hrm\\Designation\\Designation' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Designation/Designation.php',
@@ -573,6 +590,21 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
         'App\\Livewire\\Dashboard\\Hrm\\Employee\\EmployeeCreate' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Employee/EmployeeCreate.php',
         'App\\Livewire\\Dashboard\\Hrm\\Supplier\\Supplier' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Supplier/Supplier.php',
         'App\\Livewire\\Dashboard\\Hrm\\Supplier\\SupplierCreate' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Supplier/SupplierCreate.php',
+        'App\\Livewire\\Dashboard\\Hrm\\Supplier\\SupplierEdit' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Supplier/SupplierEdit.php',
+        'App\\Livewire\\Dashboard\\Hrm\\Supplier\\SupplierForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Hrm/Supplier/SupplierForm.php',
+        'App\\Livewire\\Dashboard\\Product\\Brand\\ProductBrand' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Brand/ProductBrand.php',
+        'App\\Livewire\\Dashboard\\Product\\Brand\\ProductBrandForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Brand/ProductBrandForm.php',
+        'App\\Livewire\\Dashboard\\Product\\Category\\ProductCategory' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Category/ProductCategory.php',
+        'App\\Livewire\\Dashboard\\Product\\Category\\ProductCategoryForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Category/ProductCategoryForm.php',
+        'App\\Livewire\\Dashboard\\Product\\Color\\ProductColor' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Color/ProductColor.php',
+        'App\\Livewire\\Dashboard\\Product\\Color\\ProductColorForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Color/ProductColorForm.php',
+        'App\\Livewire\\Dashboard\\Product\\Group\\ProductGroup' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Group/ProductGroup.php',
+        'App\\Livewire\\Dashboard\\Product\\Group\\ProductGroupForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Group/ProductGroupForm.php',
+        'App\\Livewire\\Dashboard\\Product\\Product\\Product' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Product/Product.php',
+        'App\\Livewire\\Dashboard\\Product\\Product\\ProductCreate' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Product/ProductCreate.php',
+        'App\\Livewire\\Dashboard\\Product\\Product\\ProductForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Product/ProductForm.php',
+        'App\\Livewire\\Dashboard\\Product\\Unit\\ProductUnit' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Unit/ProductUnit.php',
+        'App\\Livewire\\Dashboard\\Product\\Unit\\ProductUnitForm' => __DIR__ . '/../..' . '/app/Livewire/Dashboard/Product/Unit/ProductUnitForm.php',
         'App\\Livewire\\Layout\\Navbar' => __DIR__ . '/../..' . '/app/Livewire/Layout/Navbar.php',
         'App\\Livewire\\Layout\\Sidebar' => __DIR__ . '/../..' . '/app/Livewire/Layout/Sidebar.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
@@ -743,6 +775,10 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
         'Cron\\HoursField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/HoursField.php',
         'Cron\\MinutesField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
         'Cron\\MonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
+        'Dasundev\\LivewireDropzone\\Http\\Livewire\\Dropzone' => __DIR__ . '/..' . '/dasundev/livewire-dropzone/src/Http/Livewire/Dropzone.php',
+        'Dasundev\\LivewireDropzone\\LivewireDropzoneServiceProvider' => __DIR__ . '/..' . '/dasundev/livewire-dropzone/src/LivewireDropzoneServiceProvider.php',
+        'Dasundev\\LivewireQuillTextEditor\\Http\\Livewire\\QuillTextEditor' => __DIR__ . '/..' . '/dasundev/livewire-quill-text-editor/src/Http/Livewire/QuillTextEditor.php',
+        'Dasundev\\LivewireQuillTextEditor\\LivewireQuillTextEditorServiceProvider' => __DIR__ . '/..' . '/dasundev/livewire-quill-text-editor/src/LivewireQuillTextEditorServiceProvider.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
@@ -5748,6 +5784,10 @@ class ComposerStaticInitcb54ebf4b45134cbc939aa93c265550a
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'Spatie\\LaravelPackageTools\\Commands\\InstallCommand' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/InstallCommand.php',
+        'Spatie\\LaravelPackageTools\\Exceptions\\InvalidPackage' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Exceptions/InvalidPackage.php',
+        'Spatie\\LaravelPackageTools\\Package' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Package.php',
+        'Spatie\\LaravelPackageTools\\PackageServiceProvider' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/PackageServiceProvider.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'Symfony\\Component\\Clock\\Clock' => __DIR__ . '/..' . '/symfony/clock/Clock.php',
         'Symfony\\Component\\Clock\\ClockAwareTrait' => __DIR__ . '/..' . '/symfony/clock/ClockAwareTrait.php',
