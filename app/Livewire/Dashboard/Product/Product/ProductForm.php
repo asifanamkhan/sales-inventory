@@ -59,7 +59,7 @@ class ProductForm extends Component
 
     public function save()
     {
-        dd($this->photos);
+        dd($this->description);
     }
 
     public function render()
