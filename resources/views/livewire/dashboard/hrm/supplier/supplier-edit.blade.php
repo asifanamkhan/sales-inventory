@@ -6,7 +6,6 @@
         <h3 style="padding: 0px 5px 10px 5px;">Supplier edit</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">Hrm</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('supplier') }}">suppliers</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('supplier-create') }}"

@@ -135,6 +135,7 @@
             {{ request()->routeIs('product-color') ? 'show' : ' ' }}
             {{ request()->routeIs('product-category') ? 'show' : ' ' }}
             {{ request()->routeIs('product') ? 'show' : ' ' }}
+            {{ request()->routeIs('product-create') ? 'show' : ' ' }}
 
         " id="productSubmenu">
                 <li class="{{ request()->routeIs('product-group') ? 'active' : ' ' }}">
@@ -153,7 +154,10 @@
                 <li class="{{ request()->routeIs('product-color') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('product-color') }}">Product colors</a>
                 </li>
-                <li class="{{ request()->routeIs('product') ? 'active' : ' ' }}">
+                <li class="
+                {{ request()->routeIs('product') ? 'active' : ' ' }}
+                {{ request()->routeIs('product-create') ? 'active' : ' ' }}
+                 ">
                     <a class="list" wire:navigate href="{{ route('product') }}">Product information</a>
                 </li>
                 <li class="">
@@ -183,7 +187,7 @@
         </li>
 
         <li>
-            <a href="#salesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+            <a style="display: flex; gap:3px" href="#salesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-receipt"
                     viewBox="0 0 16 16">
                     <path

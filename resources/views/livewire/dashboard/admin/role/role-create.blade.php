@@ -7,7 +7,6 @@
         <h3 style="padding: 0px 5px 10px 5px;">Role create</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">administrator</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('role') }}" style="">roles</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('role-create') }}"
@@ -56,12 +55,12 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
-                            <td class="bg-sidebar" style="">Sub Module</td>
-                            <td class="bg-sidebar text-center" style="">All</td>
-                            <td class="bg-sidebar text-center" style="">View</td>
-                            <td class="bg-sidebar text-center" style="">Write</td>
-                            <td class="bg-sidebar text-center" style="">Edit</td>
-                            <td class="bg-sidebar text-center" style="">Read</td>
+                            <td  style="">Sub Module</td>
+                            <td class="text-center" style="">All</td>
+                            <td class="text-center" style="">View</td>
+                            <td class="text-center" style="">Write</td>
+                            <td class="text-center" style="">Edit</td>
+                            <td class="text-center" style="">Read</td>
                         </tr>
                     </thead>
                     <tbody>

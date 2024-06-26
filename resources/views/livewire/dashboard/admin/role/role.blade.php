@@ -6,8 +6,7 @@
         <h3 style="padding: 0px 5px 10px 5px;">Roles</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="#">administrator</a></li>
+                <li class="breadcrumb-item"><a href="#">Administrator</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('role') }}" style="color: #3C50E0">roles</a></li>
             </ol>
         </nav>
@@ -37,11 +36,11 @@
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-hover">
                 <thead>
-                    <tr>
-                        <td class="bg-sidebar" style="width: 5%">#</td>
-                        <td class="bg-sidebar" style="width: 30%">Role name</td>
-                        <td class="bg-sidebar" style="width: 45%">Description</td>
-                        <td class="bg-sidebar text-center" style="width: 20%">Action</td>
+                    <tr class="bg-sidebar">
+                        <td  style="width: 5%">#</td>
+                        <td  style="width: 30%">Role name</td>
+                        <td  style="width: 45%">Description</td>
+                        <td class="text-center" style="width: 20%">Action</td>
                     </tr>
                 </thead>
                 <tbody>

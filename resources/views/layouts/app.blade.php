@@ -8,19 +8,15 @@
 
     <title>{{ $title ?? 'Page Title' }}</title>
 
-    <!-- Bootstrap CSS CDN -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-
-
-    <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('public/style.css') }}">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap -->
 
     <!-- Font Awesome JS -->
-
-    @livewireStyles
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -29,15 +25,25 @@
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
 
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
-        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
-    </script>
 
-
-
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    {{-- select2 --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {{-- select2 --}}
+
+
+    {{-- Text editor --}}
+
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    {{-- Text editor --}}
+
+    {{-- @vite(['resources/css/app.css']) --}}
+
+    <link rel="stylesheet" href="{{ asset('public/build/assets/app-6EXYc7Fs.css') }}" />
+    <link rel="stylesheet" href="{{ asset('public/build/assets/app-Bg1aHGgo.js') }}" />
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -46,11 +52,11 @@
         });
     });
 
-    // $(document).ready(function() {
-    //     $('.select2').select2();
-    // });
     </script>
 
+    <link rel="stylesheet" href="{{ asset('public/style.css') }}">
+
+    @livewireStyles
 </head>
 
 <body>
@@ -113,8 +119,6 @@
     </div>
 
     @livewireScripts
-
-
 
 </body>
 

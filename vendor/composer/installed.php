@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'eb0fc585f03a4b5c8ac43303d9aa59570c1d0fcd',
+        'reference' => 'e2468b69987c87c01d2f5f81dc1167b32e009c8e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -42,6 +42,24 @@
             'replaced' => array(
                 0 => '*',
             ),
+        ),
+        'dasundev/livewire-dropzone' => array(
+            'pretty_version' => 'v1.2.0',
+            'version' => '1.2.0.0',
+            'reference' => '4f6df52af58b8c4b7f2e5fa7ae0fd9ebbb0b356e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../dasundev/livewire-dropzone',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'dasundev/livewire-quill-text-editor' => array(
+            'pretty_version' => 'v1.0.3',
+            'version' => '1.0.3.0',
+            'reference' => 'f353f832d3f0b8ddb759df4cb7cad5d6b9d7276e',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../dasundev/livewire-quill-text-editor',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'davedevelopment/hamcrest-php' => array(
             'dev_requirement' => true,
@@ -400,7 +418,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'eb0fc585f03a4b5c8ac43303d9aa59570c1d0fcd',
+            'reference' => 'e2468b69987c87c01d2f5f81dc1167b32e009c8e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -979,6 +997,15 @@
             'install_path' => __DIR__ . '/../sebastian/version',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'spatie/laravel-package-tools' => array(
+            'pretty_version' => '1.16.4',
+            'version' => '1.16.4.0',
+            'reference' => 'ddf678e78d7f8b17e5cdd99c0c3413a4a6592e53',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../spatie/laravel-package-tools',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'spatie/once' => array(
             'dev_requirement' => false,

@@ -59,18 +59,7 @@ class SupplierCreate extends Component
             ->get();
     }
 
-    #[On('supplier_type_change')]
-    public function supplier_type_change($id)
-    {
-        $this->p_type = $id;
-    }
-
-    #[On('supplier_category_change')]
-    public function supplier_category_change($id)
-    {
-        $this->p_category = $id;
-    }
-
+   
     public function render()
     {
         $this->category_type();
