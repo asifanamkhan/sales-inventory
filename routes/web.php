@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
+
 use App\Livewire\Dashboard\Admin\Company\CompanyInfo;
 use App\Livewire\Dashboard\Admin\Module\Module;
 use App\Livewire\Dashboard\Admin\Role\Role;
@@ -21,12 +24,13 @@ use App\Livewire\Dashboard\Product\Brand\ProductBrand;
 use App\Livewire\Dashboard\Product\Category\ProductCategory;
 use App\Livewire\Dashboard\Product\Color\ProductColor;
 use App\Livewire\Dashboard\Product\Group\ProductGroup;
+use App\Livewire\Dashboard\Product\PricingList\PricingList;
+use App\Livewire\Dashboard\Product\PricingList\PricingListCreate;
 use App\Livewire\Dashboard\Product\Product\Product;
 use App\Livewire\Dashboard\Product\Product\ProductCreate;
 use App\Livewire\Dashboard\Product\Product\ProductEdit;
 use App\Livewire\Dashboard\Product\Unit\ProductUnit;
-use Illuminate\Support\Facades\Route;
-use Livewire\Livewire;
+
 
 Livewire::setUpdateRoute(function ($handle) {
     return Route::post('/sales-inventory/livewire/update', $handle);
@@ -84,6 +88,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('product-create', ProductCreate::class)->name('product-create');
     Route::get('product/{product_id}/edit', ProductEdit::class)->name('product-edit');
 
+    Route::get('product/pricing-list', PricingList::class)->name('product-pricing-list');
+    
 
     // ------------- product end ----------------
 

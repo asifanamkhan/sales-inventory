@@ -91,8 +91,7 @@ class ProductForm extends Component
             $this->state['photo'] = json_encode($allFile);
         }
 
-
-        $this->state['u_code'] = time();
+        
         $this->state['has_variant'] = $this->varient;
 
         if(count($this->variant_cart) > 0){

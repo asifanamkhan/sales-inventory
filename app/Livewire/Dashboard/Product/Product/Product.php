@@ -34,7 +34,7 @@ class Product extends Component
 
             if ($this->search) {
                 $products
-                    ->where(DB::raw('lower(item_name)'), 'like', '%' . strtolower($this->search) . '%');
+                    ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->search) . '%');
             }
             // $p =   $products->get();
             // dd($p);
