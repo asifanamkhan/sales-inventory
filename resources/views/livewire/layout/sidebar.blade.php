@@ -137,6 +137,7 @@
             {{ request()->routeIs('product') ? 'show' : ' ' }}
             {{ request()->routeIs('product-create') ? 'show' : ' ' }}
             {{ request()->routeIs('product-edit') ? 'show' : ' ' }}
+            {{ request()->routeIs('product-pricing-list') ? 'show' : ' ' }}
 
         " id="productSubmenu">
                 <li class="{{ request()->routeIs('product-group') ? 'active' : ' ' }}">
@@ -162,8 +163,10 @@
                  ">
                     <a class="list" wire:navigate href="{{ route('product') }}">Product information</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href="">Product pricing list</a>
+                <li class="
+                {{ request()->routeIs('product-pricing-list') ? 'active' : ' ' }}
+                ">
+                    <a class="list" wire:navigate href="{{ route('product-pricing-list') }}">Product pricing list</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href="">Product discount list</a>
