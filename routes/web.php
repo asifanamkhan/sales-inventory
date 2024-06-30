@@ -23,6 +23,7 @@ use App\Livewire\Dashboard\Product\Color\ProductColor;
 use App\Livewire\Dashboard\Product\Group\ProductGroup;
 use App\Livewire\Dashboard\Product\Product\Product;
 use App\Livewire\Dashboard\Product\Product\ProductCreate;
+use App\Livewire\Dashboard\Product\Product\ProductEdit;
 use App\Livewire\Dashboard\Product\Unit\ProductUnit;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -81,6 +82,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('product', Product::class)->name('product');
     Route::get('product-create', ProductCreate::class)->name('product-create');
+    Route::get('product/{product_id}/edit', ProductEdit::class)->name('product-edit');
+
 
     // ------------- product end ----------------
 

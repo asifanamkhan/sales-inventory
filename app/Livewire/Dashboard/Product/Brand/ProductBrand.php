@@ -60,4 +60,5 @@ class ProductBrand extends Component
     {
         return view('livewire.dashboard.product.brand.product-brand');
     }
+
 }

@@ -136,6 +136,7 @@
             {{ request()->routeIs('product-category') ? 'show' : ' ' }}
             {{ request()->routeIs('product') ? 'show' : ' ' }}
             {{ request()->routeIs('product-create') ? 'show' : ' ' }}
+            {{ request()->routeIs('product-edit') ? 'show' : ' ' }}
 
         " id="productSubmenu">
                 <li class="{{ request()->routeIs('product-group') ? 'active' : ' ' }}">
@@ -157,6 +158,7 @@
                 <li class="
                 {{ request()->routeIs('product') ? 'active' : ' ' }}
                 {{ request()->routeIs('product-create') ? 'active' : ' ' }}
+                {{ request()->routeIs('product-edit') ? 'active' : ' ' }}
                  ">
                     <a class="list" wire:navigate href="{{ route('product') }}">Product information</a>
                 </li>

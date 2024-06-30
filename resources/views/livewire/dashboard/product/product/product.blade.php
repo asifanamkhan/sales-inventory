@@ -40,7 +40,10 @@
                 <thead>
                     <tr class="bg-sidebar">
                         <td  style="width: 5%">#</td>
-                        <td  >product name</td>
+                        <td >Image</td>
+                        <td >Product name</td>
+                        <td >Category name</td>
+                        <td >Brand name</td>
                         <td class="text-center" >Action</td>
                     </tr>
                 </thead>
@@ -49,17 +52,34 @@
                     @foreach ($this->resultProduct as $key => $product)
                     <tr wire:key='{{ $key }}'>
                         <td>{{ $this->resultProduct->firstItem() + $key }}</td>
-                        <td>{{ $product->item_name }}</td>
-                        <td style="display: flex; justify-content:center">
+                        <td>
                             <div class="">
-                                <button class="btn btn-sm btn-success">
+                                @if ($product->photo)
+                                @php
+                                    $photo = json_decode($product->photo)[0]
+                                @endphp
+                                <a target='_blank' href="{{ asset('storage/app/upload/product/'.$photo) }}">
+                                    <img class="" style="height: 40px; width:50px" src="{{ asset('storage/app/upload/product/'.$photo) }}" alt="">
+                                </a>
+                                @else
+                                <img class="" style="height: 40px; width:50px" src="" alt="">
+                            @endif
+                            </div>
+
+                        </td>
+                        <td>{{ $product->item_name }}</td>
+                        <td>{{ $product->catagories_name }}</td>
+                        <td>{{ $product->brand_name }}</td>
+                        <td style="">
+                            <div class="d-flex justify-content-center gap-2">
+                                <a wire:navigate href="{{ route('product-edit',$product->u_code) }}" class="btn btn-sm btn-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
                                         viewBox="0 0 50 50">
                                         <path fill="white"
                                             d="M 43.050781 1.9746094 C 41.800781 1.9746094 40.549609 2.4503906 39.599609 3.4003906 L 38.800781 4.1992188 L 45.699219 11.099609 L 46.5 10.300781 C 48.4 8.4007812 48.4 5.3003906 46.5 3.4003906 C 45.55 2.4503906 44.300781 1.9746094 43.050781 1.9746094 z M 37.482422 6.0898438 A 1.0001 1.0001 0 0 0 36.794922 6.3925781 L 4.2949219 38.791016 A 1.0001 1.0001 0 0 0 4.0332031 39.242188 L 2.0332031 46.742188 A 1.0001 1.0001 0 0 0 3.2578125 47.966797 L 10.757812 45.966797 A 1.0001 1.0001 0 0 0 11.208984 45.705078 L 43.607422 13.205078 A 1.0001 1.0001 0 1 0 42.191406 11.794922 L 9.9921875 44.09375 L 5.90625 40.007812 L 38.205078 7.8085938 A 1.0001 1.0001 0 0 0 37.482422 6.0898438 z">
                                         </path>
                                     </svg>
-                                </button>
+                                </a>
                                 <button class="btn btn-sm btn-warning">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
                                         viewBox="0 0 24 24">
