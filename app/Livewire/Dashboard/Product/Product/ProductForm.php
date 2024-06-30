@@ -3,20 +3,28 @@
 namespace App\Livewire\Dashboard\Product\Product;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\File;
 
 class ProductForm extends Component
 {
     public $product_groups, $product_group_id,
-        $product_categories, $product_category_id,
+        $product_categories,
         $product_brands, $product_brand_id,
         $product_units, $product_unit_id;
 
+    public $edit_select = [];
+
     public $photos = [];
+    public $editPhotos = [];
     public $varient = false;
     public $varientkey;
     public $description;
+    public $variant_cart = [];
+    public $state = [];
 
     public function productGroup()
     {
@@ -28,7 +36,7 @@ class ProductForm extends Component
     #[On('product_group_change')]
     public function product_group_change($id)
     {
-        $this->product_group_id = $id;
+        $this->state['group_code'] = $id;
         $this->product_categories = DB::table('INV_CATAGORIES_INFO')
             ->where('group_name', $id)
             ->get();
@@ -52,14 +60,107 @@ class ProductForm extends Component
     public function updatedVarientkey($value){
         if($value){
             $this->varient = true;
+            $this->dispatch('refresh-product-varient');
         }else{
             $this->varient = false;
         }
     }
 
+    #[On('product-varient-add-to-cart')]
+    public function product_varient_add_to_cart($data){
+        $this->variant_cart[] = $data;
+
+    }
+
     public function save()
     {
-        dd($this->description);
+        Validator::make($this->state, [
+            'group_code' => 'required',
+            'catagories_id' => 'required',
+            'item_name' => 'required',
+        ])->validate();
+
+        $this->state['u_code'] = time().'-'.mt_rand(1000,9999);
+
+        if(count($this->photos)){
+            foreach($this->photos as $photo){
+                $file_name = $this->state['u_code'].'-'.mt_rand().'.'.$photo['extension'];
+                Storage::putFileAs('upload/product', new File($photo['path']), $file_name);
+                $allFile[] = $file_name;
+            }
+            $this->state['photo'] = json_encode($allFile);
+        }
+
+
+        $this->state['u_code'] = time();
+        $this->state['has_variant'] = $this->varient;
+
+        if(count($this->variant_cart) > 0){
+            foreach($this->variant_cart as $cart){
+                $this->state['item_size'] = $cart['item_size'];
+                $this->state['color_code'] = $cart['color_code'];
+                DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
+            }
+
+        }else{
+            DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
+        }
+
+        session()->flash('status', 'New product create successfully. You can find it at product list');
+
+        $this->reset();
+
+        return $this->redirect('product', navigate:true);
+    }
+
+    public function mount($product_u_code){
+        if($product_u_code){
+
+            $product_edit = (array)DB::table('INV_ST_GROUP_ITEM')
+                ->where('u_code', $product_u_code)
+                ->first([
+                    'item_name','group_code','unit_id','model',
+                    'catagories_id','description','photo','brand_code','has_variant'
+                ]);
+
+           if($product_edit['has_variant']){
+                $product_edit_varient = DB::table('INV_ST_GROUP_ITEM as p')
+                    ->where('u_code', $product_u_code)
+                    ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
+                        $join->on('s.item_size_code', '=', 'p.item_size');
+                    })
+                    ->leftJoin('INV_COLOR_INFO as c', function ($join) {
+                        $join->on('c.tran_mst_id', '=', 'p.color_code');
+                    })
+                    ->get(['p.item_size','p.color_code','c.color_name','s.item_size_name'])
+                    ->toArray();
+
+                $this->variant_cart = $product_edit_varient;
+                $this->varient = true;
+                $this->varientkey = true;
+           }
+
+            if($product_edit['photo']){
+                $editPhotos = json_decode($product_edit['photo']);
+                $this->editPhotos = $editPhotos;
+            }
+
+
+            $this->state = $product_edit;
+            $this->edit_select['edit_group_id'] = $product_edit['group_code'];
+            $this->edit_select['edit_category_id'] = $product_edit['catagories_id'];
+            $this->edit_select['edit_unit_id'] = $product_edit['unit_id'];
+            $this->edit_select['edit_brand_id'] = $product_edit['brand_code'];
+
+        }
+
+    }
+
+    public function editImgRemove($key) {
+        unset($this->editPhotos[$key]);
+    }
+    public function variant_cart_remove($key) {
+        unset($this->variant_cart[$key]);
     }
 
     public function render()

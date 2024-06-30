@@ -19,15 +19,27 @@ class Product extends Component
     #[Computed]
     public function resultProduct()
     {
-        $products = DB::table('INV_ST_GROUP_ITEM');
+        $products = DB::table('INV_ST_GROUP_ITEM as p');
 
-        if ($this->search) {
-            $products
-                ->where(DB::raw('lower(item_name)'), 'like', '%' . strtolower($this->search) . '%');
-        }
+        $products
+            ->distinct('u_code')
+            ->orderBy('u_code', 'DESC')
+            ->leftJoin('INV_ST_BRAND_INFO as b', function ($join) {
+                $join->on('b.brand_code', '=', 'p.brand_code');
+            })
+            ->leftJoin('INV_CATAGORIES_INFO as c', function ($join) {
+                $join->on('c.tran_mst_id', '=', 'p.catagories_id');
+            })
+            ->select(['p.u_code','b.brand_name','c.catagories_name','p.item_name','p.photo']);
 
-        return $products->orderBy('st_group_item_id', 'DESC')
-            ->paginate($this->pagination);
+            if ($this->search) {
+                $products
+                    ->where(DB::raw('lower(item_name)'), 'like', '%' . strtolower($this->search) . '%');
+            }
+            // $p =   $products->get();
+            // dd($p);
+
+        return $products->paginate($this->pagination);
     }
 
     public function updatingSearch()
