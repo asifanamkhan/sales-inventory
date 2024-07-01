@@ -22,12 +22,12 @@
         " id="adminSubmenu">
                 @permission(1,'visible_flag')
                 <li class="{{ request()->routeIs('company-info') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('company-info') }}">Company information</a>
+                    <a class="list" wire:navigate href="{{ route('company-info') }}"> - Company</a>
                 </li>
                 @endpermission
                 @permission(2,'visible_flag')
                 <li class="{{ request()->routeIs('module') ? 'active' : ' ' }} ">
-                    <a class="list" wire:navigate href="{{ route('module') }}">Module information</a>
+                    <a class="list" wire:navigate href="{{ route('module') }}"> - Module</a>
                 </li>
                 @endpermission
                 @permission(3,'visible_flag')
@@ -35,7 +35,7 @@
                 {{ request()->routeIs('user') ? 'active' : ' ' }}
                 {{ request()->routeIs('user-create') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('user') }}">Users</a>
+                    <a class="list" wire:navigate href="{{ route('user') }}"> - Users</a>
                 </li>
                 @endpermission
                 <li class="
@@ -43,10 +43,10 @@
                     {{ request()->routeIs('role-create') ? 'active' : ' ' }}
                     {{ request()->routeIs('role-details') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('role') }}">Role</a>
+                    <a class="list" wire:navigate href="{{ route('role') }}"> - Role</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href="">User role access</a>
+                    <a class="list" wire:navigate href=""> - User role access</a>
                 </li>
             </ul>
         </li>
@@ -69,31 +69,31 @@
 
         " id="HRMSubmenu">
                 <li class="{{ request()->routeIs('branch') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('branch') }}">Branch information</a>
+                    <a class="list" wire:navigate href="{{ route('branch') }}"> - Branch</a>
                 </li>
                 <li class="{{ request()->routeIs('department') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('department') }}">Department information</a>
+                    <a class="list" wire:navigate href="{{ route('department') }}"> - Department</a>
                 </li>
 
                 <li class="{{ request()->routeIs('designation') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('designation') }}">Designation information</a>
+                    <a class="list" wire:navigate href="{{ route('designation') }}"> - Designation</a>
                 </li>
                 <li class="{{ request()->routeIs('employee') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('employee') }}">Employee information</a>
+                    <a class="list" wire:navigate href="{{ route('employee') }}"> - Employee</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('supplier') ? 'active' : ' ' }}
                 {{ request()->routeIs('supplier-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('supplier-edit') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('supplier') }}">Supplier information</a>
+                    <a class="list" wire:navigate href="{{ route('supplier') }}"> - Supplier</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('customer') ? 'active' : ' ' }}
                 {{ request()->routeIs('customer-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('customer-edit') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('customer') }}">Customer information</a>
+                    <a class="list" wire:navigate href="{{ route('customer') }}"> - Customer</a>
                 </li>
 
             </ul>
@@ -141,35 +141,36 @@
 
         " id="productSubmenu">
                 <li class="{{ request()->routeIs('product-group') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('product-group') }}">Product group</a>
+                    <a class="list" wire:navigate href="{{ route('product-group') }}"> - Product group</a>
                 </li>
                 <li class="{{ request()->routeIs('product-brand') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('product-brand') }}">Product brand</a>
+                    <a class="list" wire:navigate href="{{ route('product-brand') }}"> - Product brand</a>
                 </li>
 
                 <li class="{{ request()->routeIs('product-category') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('product-category') }}">Product category</a>
+                    <a class="list" wire:navigate href="{{ route('product-category') }}"> - Product category</a>
                 </li>
                 <li class="{{ request()->routeIs('product-unit') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('product-unit') }}">Product unit</a>
+                    <a class="list" wire:navigate href="{{ route('product-unit') }}"> - Product unit</a>
                 </li>
                 <li class="{{ request()->routeIs('product-color') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('product-color') }}">Product colors</a>
+                    <a class="list" wire:navigate href="{{ route('product-color') }}"> - Product colors</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('product') ? 'active' : ' ' }}
                 {{ request()->routeIs('product-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('product-edit') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('product') }}">Product information</a>
+                    <a class="list" wire:navigate href="{{ route('product') }}"> - Product information</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('product-pricing-list') ? 'active' : ' ' }}
                 ">
-                    <a class="list" wire:navigate href="{{ route('product-pricing-list') }}">Product pricing list</a>
+                    <a class="list" wire:navigate href="{{ route('product-pricing-list') }}"> - Pricing list</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href="">Product discount list</a>
+                    <a class="list" wire:navigate href=""> -
+                        Discount list</a>
                 </li>
             </ul>
         </li>
@@ -179,14 +180,18 @@
                 <i class="fa-solid fa-cart-shopping"></i> Purchase settings
             </a>
             <ul class="collapse list-unstyled
-        {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
+            {{ request()->routeIs('purchase') ? 'show' : ' ' }}
+            {{ request()->routeIs('purchase-create') ? 'show' : ' ' }}
 
         " id="purchaseSubmenu">
-                <li class="">
-                    <a class="list" wire:navigate href="">Product purchase entry</a>
+                <li class="{{ request()->routeIs('purchase') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('purchase') }}"> - Purchase list</a>
+                </li>
+                <li class="{{ request()->routeIs('purchase-create') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('purchase-create') }}"> - Purchase entry</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href="">Product purchase return</a>
+                    <a class="list" wire:navigate href=""> - Purchase return</a>
                 </li>
             </ul>
         </li>
@@ -203,7 +208,6 @@
             </a>
             <ul class="collapse list-unstyled
         {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
-
         " id="salesSubmenu">
                 <li class="">
                     <a class="list" wire:navigate href="">Sales entry</a>
@@ -231,10 +235,8 @@
                 <li class="">
                     <a class="list" wire:navigate href="">Report 2</a>
                 </li>
-
             </ul>
         </li>
-
 
         <li class="">
             <a wire:navigate href=""><i class="fas fa-hdd"></i></i> Data backup</a>
@@ -242,6 +244,5 @@
         <li class="">
             <a wire:navigate href=""><i class="fa fa-question-circle" aria-hidden="true"></i></i> Help</a>
         </li>
-
     </ul>
 </nav>

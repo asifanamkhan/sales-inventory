@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="d-flex gap-2">
                                     <div style="width:50%; font-weight:500">Amt:</div>
-                                    <div style="width:50%;text-align:right">{{ $product->vat_amt ?? '-' }}%</div>
+                                    <div style="width:50%;text-align:right">{{ $product->vat_amt ?? '-' }}</div>
                                 </div>
                             </div>
                         </td>
