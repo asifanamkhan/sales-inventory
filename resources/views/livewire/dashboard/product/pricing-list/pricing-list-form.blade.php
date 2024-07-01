@@ -75,7 +75,7 @@
             </div>
             <div class="col-4">
                 <div class="form-group mb-3">
-                    <label for="">MRP rate </label>
+                    <label for="">MRP rate <span style="color: red"> * </span></label>
                     <input wire:input.debounce.500ms='vat_calculation' wire:model='state.mrp_rate' type='number'
                         class="form-control @error('mrp_rate') is-invalid @enderror">
                     @error('mrp_rate')
@@ -85,7 +85,7 @@
             </div>
             <div class="col-4">
                 <div class="form-group mb-3">
-                    <label for="">Vat rate (%)</label>
+                    <label for="">Vat rate (%) </label>
                     <input wire:input.debounce.500ms='vat_calculation' wire:model='state.vat_rate' type='number'
                         class="form-control @error('vat_rate') is-invalid @enderror">
                     @error('vat_rate')
@@ -153,8 +153,6 @@
     $wire.on('refresh-product-varient-list-as-product',(event)=>{
         $('#product_all_items').html('');
     });
-
-
 
     $('#product_all_items').on('change', function(e){
         @this.set('state.item_code', e.target.value, false);

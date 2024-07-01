@@ -12,6 +12,7 @@ class PricingListForm extends Component
     public $products,$productVarient;
     public $state= [];
 
+
     public function productList(){
         $this->products = DB::table('INV_ST_GROUP_ITEM')
             ->distinct('u_code')
@@ -45,10 +46,14 @@ class PricingListForm extends Component
     }
 
     public function save(){
+
         Validator::make($this->state, [
             'item_code' => 'required',
             'pr_rate' => 'required',
+            'mrp_rate' => 'required',
         ])->validate();
+
+
 
         $item_exist = DB::table('INV_PRICE_SCHEDULE_MST')
                     ->where('item_code', $this->state['item_code'])
@@ -72,7 +77,7 @@ class PricingListForm extends Component
     public function render()
     {
         $this->productList();
-
+        $this->state['vat_rate'] = 0;
         return view('livewire.dashboard.product.pricing-list.pricing-list-form');
     }
 }

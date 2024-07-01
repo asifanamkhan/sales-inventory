@@ -66,10 +66,11 @@ class ProductForm extends Component
         }
     }
 
+    // ------------- product create end ----------------
+
     #[On('product-varient-add-to-cart')]
     public function product_varient_add_to_cart($data){
         $this->variant_cart[] = $data;
-
     }
 
     public function save()
@@ -91,7 +92,7 @@ class ProductForm extends Component
             $this->state['photo'] = json_encode($allFile);
         }
 
-        
+
         $this->state['has_variant'] = $this->varient;
 
         if(count($this->variant_cart) > 0){
@@ -111,6 +112,21 @@ class ProductForm extends Component
 
         return $this->redirect('product', navigate:true);
     }
+
+    // ------------- product create end ----------------
+
+
+
+    // ------------- product edit start ----------------
+
+    public function editImgRemove($key) {
+        unset($this->editPhotos[$key]);
+    }
+    public function variant_cart_remove($key) {
+        unset($this->variant_cart[$key]);
+    }
+
+    // ------------- product edit end ----------------
 
     public function mount($product_u_code){
         if($product_u_code){
@@ -152,14 +168,6 @@ class ProductForm extends Component
             $this->edit_select['edit_brand_id'] = $product_edit['brand_code'];
 
         }
-
-    }
-
-    public function editImgRemove($key) {
-        unset($this->editPhotos[$key]);
-    }
-    public function variant_cart_remove($key) {
-        unset($this->variant_cart[$key]);
     }
 
     public function render()
