@@ -12,6 +12,7 @@ class PurchaseForm extends Component
     public $suppliers, $war_houses, $productsearch;
     public $resultProducts = [];
     public $purchaseCart = [];
+    public $purchaseCheck = [];
     public $searchSelect = -1;
     public $countProduct = 0;
 
@@ -42,13 +43,12 @@ class PurchaseForm extends Component
                 ->leftJoin('INV_COLOR_INFO as c', function ($join) {
                     $join->on('c.tran_mst_id', '=', 'p.color_code');
                 })
-                ->get(['p.st_group_item_id','p.item_name', 'c.color_name', 's.item_size_name'])
+                ->get(['p.st_group_item_id', 'p.item_name', 'c.color_name', 's.item_size_name'])
                 ->toArray();
 
             if ($result) {
                 $this->resultProducts = $result;
                 $this->resultAppend(0);
-
             } else {
 
                 $this->resultProducts = DB::table('INV_ST_GROUP_ITEM as p')
@@ -59,7 +59,7 @@ class PurchaseForm extends Component
                     ->leftJoin('INV_COLOR_INFO as c', function ($join) {
                         $join->on('c.tran_mst_id', '=', 'p.color_code');
                     })
-                    ->get(['p.st_group_item_id','p.item_name', 'c.color_name', 's.item_size_name'])
+                    ->get(['p.st_group_item_id', 'p.item_name', 'c.color_name', 's.item_size_name'])
                     ->toArray();
             }
 
@@ -73,6 +73,11 @@ class PurchaseForm extends Component
 
     public function mount()
     {
+        $this->state['net_payable_amt'] = 0;
+        $this->state['tot_payable_amt'] = 0;
+        $this->state['total_qty'] = 0;
+        $this->state['tot_discount'] = 0;
+        $this->state['pay_amt'] = '';
         $this->state['tran_date'] = Carbon::now()->toDateString();
     }
 
@@ -92,7 +97,6 @@ class PurchaseForm extends Component
     }
     public function incrementHighlight()
     {
-
         if ($this->searchSelect < ($this->countProduct - 1)) {
             $this->searchSelect++;
         }
@@ -110,33 +114,47 @@ class PurchaseForm extends Component
     public function resultAppend($key)
     {
         $search = @$this->resultProducts[$key]->st_group_item_id;
+
         if ($search) {
-            $pricing = DB::table('INV_PRICE_SCHEDULE_MST')
+            $valid = in_array($search, $this->purchaseCheck);
+
+            if (!$valid) {
+
+                $pricing = DB::table('INV_PRICE_SCHEDULE_MST')
                     ->where('item_code', $search)
                     ->first();
 
-            if($pricing){
+                if ($pricing) {
 
-                $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
+                    $this->purchaseCheck[] = $search;
 
-                $this->purchaseCart[] = [
-                    'item_name' => @$this->resultProducts[$key]->item_name,
-                    'color_name' => @$this->resultProducts[$key]->color_name,
-                    'item_size_name' => @$this->resultProducts[$key]->item_size_name,
-                    'mrp_rate' => $pricing->mrp_rate,
-                    'vat_amt' => $pricing->vat_amt,
-                    'line_total' => $line_total,
-                    'qty' => 1,
-                    'discount' => 0,
-                ];
+                    $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
 
-                $this->productsearch = '';
+                    $this->purchaseCart[] = [
+                        'item_name' => @$this->resultProducts[$key]->item_name,
+                        'color_name' => @$this->resultProducts[$key]->color_name,
+                        'item_size_name' => @$this->resultProducts[$key]->item_size_name,
+                        'mrp_rate' => $pricing->mrp_rate,
+                        'vat_amt' => $pricing->vat_amt,
+                        'line_total' => $line_total,
+                        'qty' => 1,
+                        'discount' => 0,
+                        'st_group_item_id' => $search,
+                    ];
+
+                    $this->grandCalculation();
+
+                    $this->productsearch = '';
+                    $this->resetProductSearch();
+                } else {
+                    $this->resetProductSearch();
+                    session()->flash('error', 'Pricing has not added to selected product');
+                }
+            } else {
                 $this->resetProductSearch();
-
-            }else{
-                $this->resetProductSearch();
-                session()->flash('error', 'Pricing has not added to selected product');
+                session()->flash('error', 'Product already added to cart');
             }
+
 
 
             // dd($this->purchaseCart);
@@ -154,14 +172,52 @@ class PurchaseForm extends Component
         $this->resultProducts = [];
     }
 
-    public function calculation($key){
+    public function removeItem($key, $id)
+    {
+        unset($this->purchaseCart[$key]);
+        $del_key = array_search($id, $this->purchaseCheck);
+        if (false !== $del_key) {
+            unset($this->purchaseCheck[$del_key]);
+        }
+        $this->grandCalculation();
+    }
+
+    public function calculation($key)
+    {
         $qty = (float)$this->purchaseCart[$key]['qty'] ?? 0;
         $mrp_rate = (float)$this->purchaseCart[$key]['mrp_rate'] ?? 0;
         $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
         $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
 
-        $this->purchaseCart[$key]['line_total'] = number_format(((($qty * $mrp_rate) + $vat) -  $discount),2);
+        $this->purchaseCart[$key]['line_total'] = number_format(((($qty * $mrp_rate) + $vat) -  $discount), 2);
+
+        $this->grandCalculation();
     }
+
+    public function grandCalculation()
+    {
+        $sub_total = 0;
+        $total_qty = 0;
+        $total_discount = 0;
+        $shipping_amt = $this->state['shipping_amt'] ?? 0;
+
+        foreach ($this->purchaseCart as $value) {
+            $sub_total += (float)$value['line_total'] ?? 0;
+            $total_qty += (float)$value['qty'] ?? 0;
+            $total_discount += (float)$value['discount'] ?? 0;
+        }
+
+        $this->state['net_payable_amt'] = number_format($sub_total,2) ?? 0;
+        $this->state['total_qty'] = $total_qty ?? 0;
+        $this->state['tot_discount'] = number_format($total_discount,2) ?? 0;
+
+        $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total),2);
+        $this->state['due_amt'] = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->state['pay_amt']),2);
+
+
+    }
+
+
 
 
     //search increment decrement end
