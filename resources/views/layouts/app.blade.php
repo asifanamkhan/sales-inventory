@@ -107,7 +107,6 @@
             </nav>
             @endpersist
 
-
             {{ $slot }}
         </div>
     </div>
