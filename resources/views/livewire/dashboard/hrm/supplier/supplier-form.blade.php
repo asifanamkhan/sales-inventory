@@ -8,7 +8,7 @@
         {{ session('status') }}
     </div>
     @endif
-    <div class="col-4" style="border-right: 1px solid rgb(240, 239, 239)">
+    <div class="col-md-4" style="border-right: 1px solid rgb(240, 239, 239)">
         <div class="form-group mb-3">
             <div class="text-center mb-3">
                 @if($editForm)
@@ -76,7 +76,7 @@
     </div>
     <div class="col-8">
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Supplier type <span style="color: red"> * </span></label>
                     <select class="form-select select2" id='supplier_type'>
@@ -93,7 +93,7 @@
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Supplier category <span style="color: red"> * </span></label>
                     <select class="form-select select2 @error('p_category') is-invalid @enderror" name=""
@@ -111,7 +111,7 @@
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Company Id</label>
                     <input wire:model='state.comp_id' type='text'
@@ -121,7 +121,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">County Name</label>
                     <input wire:model='state.county_name' type='text'
@@ -134,7 +134,7 @@
         </div>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Bank code</label>
                     <input wire:model='state.party_bank_code' type='text'
@@ -144,7 +144,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Bank Name</label>
                     <input wire:model='state.party_bank_name' type='text'
@@ -154,7 +154,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Branch Name</label>
                     <input wire:model='state.party_bank_br_name' type='text'
@@ -165,7 +165,7 @@
                 </div>
             </div>
 
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Account Number</label>
                     <input wire:model='state.party_bank_account_no' type='text'
@@ -175,7 +175,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Opening balance</label>
                     <input wire:model='state.p_opbal' type='text'
@@ -187,7 +187,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Contact person</label>
                     <input wire:model='state.contact_person' type='text'
@@ -197,7 +197,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Website</label>
                     <input wire:model='state.web' type='text' class="form-control @error('web') is-invalid @enderror">
@@ -206,7 +206,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label for="">Address</label>
                     <input wire:model='state.address' type='text'

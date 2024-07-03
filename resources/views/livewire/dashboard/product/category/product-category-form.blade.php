@@ -10,7 +10,7 @@
 
     <form wire:submit="@if($editForm) update @else store @endif" action="">
         <div class="row">
-            <div class="col-10 offset-1 form-group mb-3">
+            <div class="col-md-10 offset-1 form-group mb-3">
                 <div class="text-center mb-3">
                     @if($editForm)
                     @if (@$state['photo'])
@@ -40,7 +40,7 @@
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-10 offset-1">
+            <div class="col-md-10 offset-1">
                 <div class="form-group mb-3">
                     <label for="">Name <span style="color: red"> * </span></label>
                     <input wire:model='state.catagories_name' type='text' label='Name'
@@ -50,7 +50,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-10 offset-1">
+            <div class="col-md-10 offset-1">
                 <div class="form-group mb-3">
                     <label for="">Product group</label>
                     <select wire:model='state.group_name' name="" id="" class="form-select">
@@ -67,7 +67,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-10 offset-1">
+            <div class="col-md-10 offset-1">
                 <div class="form-group">
                     <label for="">Description</label>
                     <textarea class="form-control" wire:model='state.description' name="" id="" cols="30"

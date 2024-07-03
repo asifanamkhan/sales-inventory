@@ -61,7 +61,7 @@
                         <small id="" class="form-text text-danger">{{ $message }}</small>
                         @enderror
                         @foreach ($roles as $role)
-                        <div class="col-4 pb-2 d-flex align-items-center">
+                        <div class="col-md-4 pb-2 d-flex align-items-center">
                             <span style="padding-right: 10px">
                                 <input wire:key='{{ $role->role_id }}' type="checkbox" wire:model='role'
                                     value="{{ $role->role_id }}" class="form-check-input">

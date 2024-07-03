@@ -9,12 +9,14 @@ use Livewire\Component;
 class PurchaseForm extends Component
 {
     public $state = [];
-    public $suppliers, $war_houses, $productsearch;
+    public $paymentState = [];
+    public $suppliers, $war_houses, $productsearch, $payment_methods;
     public $resultProducts = [];
     public $purchaseCart = [];
     public $purchaseCheck = [];
     public $searchSelect = -1;
     public $countProduct = 0;
+    public $isCheck = false;
 
 
     public function suppliersAll()
@@ -29,6 +31,12 @@ class PurchaseForm extends Component
         return $this->war_houses = DB::table('INV_WAREHOUSE_INFO')
             ->orderBy('war_id', 'DESC')
             ->get(['war_id', 'war_name']);
+    }
+
+    public function paymentMethodAll()
+    {
+        return $this->payment_methods = DB::table('ACC_PAYMENT_MODE')
+            ->get(['p_mode_id', 'p_mode_name']);
     }
 
     public function updatedProductsearch()
@@ -79,12 +87,14 @@ class PurchaseForm extends Component
         $this->state['tot_discount'] = 0;
         $this->state['pay_amt'] = '';
         $this->state['tran_date'] = Carbon::now()->toDateString();
+        $this->paymentState['pay_mode'] = 1;
     }
 
     public function render()
     {
         $this->suppliersAll();
         $this->wirehouseAll();
+        $this->paymentMethodAll();
         return view('livewire.dashboard.purchase.purchase.purchase-form');
     }
 
