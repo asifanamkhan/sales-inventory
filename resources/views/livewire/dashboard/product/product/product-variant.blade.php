@@ -1,5 +1,5 @@
 <div class="">
-    <div class="col-12">
+    <div class="col-md-12">
         <div class="form-group mb-3" wire:ignore>
             <label for="">Size </label>
             <select class="form-select select2" id='product_size'>
@@ -12,7 +12,7 @@
             </select>
         </div>
     </div>
-    <div class="col-12">
+    <div class="col-md-12">
         <div class="form-group mb-3" wire:ignore>
             <label for="">Color </label>
             <select class="form-select select2" id='product_color'>

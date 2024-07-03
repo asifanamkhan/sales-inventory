@@ -18,7 +18,7 @@
     <form wire:submit='save' action="">
         <div class="card p-4">
 
-            <div class="col-6 offset-3">
+            <div class="col-md-4 offset-3">
                 @if (session('status'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('status') }}

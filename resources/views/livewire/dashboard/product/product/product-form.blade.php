@@ -13,7 +13,7 @@
     @endif
     <form action="" wire:submit='save'>
         <div class="row">
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Product group <span style="color: red"> * </span></label>
                     <select class="form-select select2" id='product_group'>
@@ -33,7 +33,7 @@
                     <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Product Category <span style="color: red"> * </span></label>
                     <select class="form-select select2" id='product_category'>
@@ -44,7 +44,7 @@
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Product Brand </label>
                     <select class="form-select select2" id='product_brand'>
@@ -65,7 +65,7 @@
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Product Name <span style="color: red"> * </span></label>
                     <input wire:model='state.item_name' type='text' label='Name'
@@ -75,7 +75,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Product Unit </label>
                     <select class="form-select select2" id='product_unit'>
@@ -96,7 +96,7 @@
                 @enderror
             </div>
 
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Model </label>
                     <input wire:model='state.model' type='text' label='Name'
@@ -106,13 +106,13 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-6 mb-3">
+            <div class="col-md-6 mb-3">
                 <div class="form-group">
                     <label for="">Product description </label>
                     <livewire:quill-text-editor wire:model="state.description" theme="snow" />
                 </div>
             </div>
-            <div class="col-6 mb-3">
+            <div class="col-md-6 mb-3">
                 <div>
                     @if (count($this->editPhotos) > 0 )
                        <div class="row ">
@@ -152,7 +152,7 @@
 
             @if ($varient)
             <div id='varient_area' class="row" wire:ignore.self>
-                <div class="col-4">
+                <div class="col-md-4">
                     <livewire:dashboard.product.product.product-variant />
                 </div>
                 <div class="col-8">

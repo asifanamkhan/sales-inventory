@@ -14,7 +14,7 @@
     @endif
     <form wire:submit='save' action="">
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Products</label>
                     <select class="form-select select2" id='product'>
@@ -27,7 +27,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Products all items</label>
                     <select class="form-select select2" id='product_all_items'>
@@ -43,7 +43,7 @@
                     <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Purchase rate <span style="color: red"> * </span></label>
                     <input wire:model='state.pr_rate' type='text'
@@ -53,7 +53,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Diller rate </label>
                     <input wire:model='state.dp_rate' type='number'
@@ -63,7 +63,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Retail rate </label>
                     <input wire:model='state.rp_rate' type='number'
@@ -73,7 +73,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">MRP rate <span style="color: red"> * </span></label>
                     <input wire:input.debounce.500ms='vat_calculation' wire:model='state.mrp_rate' type='number'
@@ -83,7 +83,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Vat rate (%) </label>
                     <input wire:input.debounce.500ms='vat_calculation' wire:model='state.vat_rate' type='number'
@@ -93,7 +93,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Vat amount </label>
                     <input readonly wire:model='state.vat_amt' type='number'
@@ -103,7 +103,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Stock Alert quantity </label>
                     <input wire:model='state.max_ch_qty' type='number'

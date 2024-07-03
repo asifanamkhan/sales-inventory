@@ -18,7 +18,7 @@
     @endif
     <form action="" wire:submit='save'>
         <div class="row" x-data="{edit : false}">
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for=""> Date <span style="color: red"> * </span></label>
                     <input wire:model='state.tran_date' type='date'
@@ -28,7 +28,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Supplier<span style="color: red"> * </span></label>
                     <select class="form-select select2" id='supplier'>
@@ -47,7 +47,7 @@
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Warhouse<span style="color: red"> * </span></label>
                     <select class="form-select select2" id='ware_house'>
@@ -66,7 +66,7 @@
                 @enderror
             </div>
 
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">LC no</label>
                     <input wire:model='state.lc_no' type='text'
@@ -76,7 +76,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for=""> Document </label>
                     <input wire:model='state.document' type='file'
@@ -86,7 +86,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Status<span style="color: red"> * </span></label>
                     <select class="form-select" id='status'>
@@ -100,7 +100,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-12 mt-2">
+            <div class="col-md-12 mt-2">
                 <div class="form-group mb-3">
                     <label for=""> Product search </label>
                     <div class="d-flex align-items-center gap-2">
@@ -157,7 +157,7 @@
                 </div>
             </div>
 
-            <div class="col-12 mt-4 table-responsive">
+            <div class="col-md-12 mt-4 table-responsive">
                 <table class="table table-bordered">
                     <thead>
                         <tr class="bg-sidebar">
@@ -171,7 +171,7 @@
                             <td class="text-center" style="width:2%">Action</td>
                         </tr>
                     </thead>
-                    <tbody >
+                    <tbody>
                         @forelse ($purchaseCart as $purchase_key => $purchase)
                         <tr wire:key='{{ $purchase_key }}'>
                             <td>{{ $purchase_key + 1 }}</td>
@@ -187,15 +187,16 @@
 
                             </td>
                             <td>
-                                <input wire:input.debounce.300ms='calculation({{ $purchase_key }})' type="number" wire:model='purchaseCart.{{ $purchase_key }}.qty'
-                                    class="form-control text-center">
+                                <input wire:input.debounce.300ms='calculation({{ $purchase_key }})' type="number"
+                                    wire:model='purchaseCart.{{ $purchase_key }}.qty' class="form-control text-center">
                             </td>
                             <td>
                                 <input readonly type="number" wire:model='purchaseCart.{{ $purchase_key }}.mrp_rate'
                                     class="form-control text-center">
                             </td>
                             <td>
-                                <input wire:input.debounce.300ms='calculation({{ $purchase_key }})' type="number" wire:model='purchaseCart.{{ $purchase_key }}.discount'
+                                <input wire:input.debounce.300ms='calculation({{ $purchase_key }})' type="number"
+                                    wire:model='purchaseCart.{{ $purchase_key }}.discount'
                                     class="form-control text-center">
                             </td>
                             <td>
@@ -208,7 +209,10 @@
                             </td>
                             <td>
                                 <div class="text-center">
-                                    <a type="button" wire:click.prevent='removeItem({{ $purchase_key}}, {{$purchase['st_group_item_id'] }})'>
+                                    <a type="button" wire:click.prevent='
+                                                    removeItem(
+                                                        {{ $purchase_key }},
+                                                        {{ $purchase['st_group_item_id'] }} )'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red"
                                             class="dz-w-6 dz-h-6 dz-text-black dark:dz-text-white">
                                             <path fill-rule="evenodd"
@@ -227,8 +231,7 @@
                         <tr style="font-weight: 500; background:aliceblue">
                             <td colspan="2" style="text-align: right">Total:</td>
                             <td style="text-align: center">
-                                {{ $state['total_qty'] }}
-                            </td>
+                                {{ $state['total_qty'] }} </td>
                             <td colspan="1" style="text-align: right"></td>
                             <td style="text-align: center">
                                 {{ $state['tot_discount'] }}
@@ -240,8 +243,139 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td rowspan="4" colspan="5" style="border: none">
+                            <td rowspan="4" colspan="5" style="border: none; padding-top:40px">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-8" style="border: 1px solid #DEE2E6; padding: 0 !important">
+                                            <div>
+                                                <h4 class="h4 text-center pt-2 pb-2" style="background: #0080005c">Make
+                                                    Payment
+                                                </h4>
+                                            </div>
+                                            <div style="padding: 5px 15px">
+                                                <div class="form-group mb-3">
+                                                    <label for="">Payment method<span style="color: red"> *
+                                                        </span></label>
+                                                    <select wire:model.live.debounce.300ms='paymentState.pay_mode'
+                                                        class="form-select" id='pay_mode'>
+                                                        @forelse ($payment_methods as $method)
+                                                        <option {{-- @if ($supplier->st_group_id ==
+                                                            @$edit_select['edit_group_id'])
+                                                            selected
+                                                            @endif --}}
+                                                            value="{{ $method->p_mode_id }}">{{ $method->p_mode_name }}
+                                                        </option>
+                                                        @empty
+                                                        <option value=""></option>
+                                                        @endforelse
+                                                    </select>
+                                                    @error('pay_mode')
+                                                    <small class="form-text text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                @if ($paymentState['pay_mode'] != 1)
 
+                                                @if ($paymentState['pay_mode'] == 2)
+
+                                                <div class='row'>
+                                                    <div class="col-md-6">
+                                                        <livewire:dashboard.purchase.purchase.pay-partial.bank />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label for="">Bank account no</label>
+                                                            <input wire:model='paymentState.bank_ac_no' type='text'
+                                                                class="form-control @error('bank_ac_no') is-invalid @enderror">
+                                                            @error('bank_ac_no')
+                                                            <small class="form-text text-danger">{{ $message}}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label for="">Cheque no</label>
+                                                            <input wire:model='paymentState.chq_no' type='text'
+                                                                class="form-control @error('chq_no') is-invalid @enderror">
+                                                            @error('chq_no')
+                                                            <small class="form-text text-danger">{{ $message}}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label for="">Cheque date</label>
+                                                            <input wire:model='paymentState.chq_date' type='date'
+                                                                class="form-control @error('chq_date') is-invalid @enderror">
+                                                            @error('chq_date')
+                                                            <small class="form-text text-danger">{{ $message}}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if ($paymentState['pay_mode'] == 3 || $paymentState['pay_mode'] == 6 ||
+                                                $paymentState['pay_mode'] == 7)
+                                                <div class="col-md-12">
+                                                    <div class="form-group mb-3">
+                                                        <label for="">Card no</label>
+                                                        <input wire:model='paymentState.card_no' type='text'
+                                                            class="form-control @error('card_no') is-invalid @enderror">
+                                                        @error('card_no')
+                                                        <small class="form-text text-danger">{{ $message}}</small>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if ($paymentState['pay_mode'] == 4)
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <livewire:dashboard.purchase.purchase.pay-partial.mobile-bank />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label for="">Mobile no</label>
+                                                            <input wire:model='paymentState.mfs_acc_no' type='text'
+                                                                class="form-control @error('mfs_acc_no') is-invalid @enderror">
+                                                            @error('mfs_acc_no')
+                                                            <small class="form-text text-danger">{{ $message}}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if ($paymentState['pay_mode'] == 4 || $paymentState['pay_mode'] == 5)
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label for="">Transaction no</label>
+                                                            <input wire:model='paymentState.online_trx_id' type='text'
+                                                                class="form-control @error('online_trx_id') is-invalid @enderror">
+                                                            @error('online_trx_id')
+                                                            <small class="form-text text-danger">{{ $message}}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group mb-3">
+                                                            <label for="">Transaction date</label>
+                                                            <input wire:model='paymentState.online_trx_dt' type='date'
+                                                                class="form-control @error('online_trx_dt') is-invalid @enderror">
+                                                            @error('online_trx_dt')
+                                                            <small class="form-text text-danger">{{ $message}}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endif
+
+
+                                                @endif
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </td>
                             <td style="text-align: right">
                                 Shipping
@@ -253,7 +387,7 @@
                             <td></td>
                         </tr>
 
-                        <tr >
+                        <tr>
                             <td style="text-align:right">
                                 Net payable
                             </td>
@@ -263,22 +397,22 @@
                             </td>
                             <td style=""></td>
                         </tr>
-                        <tr >
+                        <tr>
                             <td style="text-align:right">
-                                 Payment amount
+                                Payment amount
                             </td>
                             <td style="text-align:right">
-                                <input style="text-align: right" class="form-control"
-                                    wire:model='state.pay_amt' wire:input.debounce.300ms='grandCalculation'>
+                                <input style="text-align: right" class="form-control" wire:model='state.pay_amt'
+                                    wire:input.debounce.300ms='grandCalculation'>
                             </td>
                             <td style=""></td>
                         </tr>
                         <tr style="border-bottom: none">
                             <td style="border-bottom: 1px solid #DEE2E6; text-align:right">
-                                 Due amount
+                                Due amount
                             </td>
                             <td style="border-bottom: 1px solid #DEE2E6; text-align:right">
-                                <input style="text-align: right" readonly class="form-control"
+                                <input style="text-align: right;" readonly class="form-control"
                                     wire:model='state.due_amt'>
                             </td>
                             <td style="border-bottom: 1px solid #DEE2E6"></td>
@@ -287,7 +421,9 @@
                     </tfoot>
                 </table>
             </div>
-
+        </div>
+        <div class="mt-5 d-flex justify-content-center">
+            <button class="btn btn-primary">Save</button>
         </div>
     </form>
 </div>
@@ -309,6 +445,11 @@
     $('#ware_house').on('change', function(e){
         @this.set('state.war_id', e.target.value, false);
     });
+
+    $wire.on('set_bank_code_purchase',(event)=>{
+        @this.set('paymentState.bank_code', event.id, false);
+    });
+
 
 </script>
 @endscript

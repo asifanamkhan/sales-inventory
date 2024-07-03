@@ -8,7 +8,7 @@
         {{ session('status') }}
     </div>
     @endif
-    <div class="col-4" style="border-right: 1px solid rgb(240, 239, 239)">
+    <div class="col-md-4" style="border-right: 1px solid rgb(240, 239, 239)">
         <div class="form-group mb-3">
             <div class="text-center mb-3">
                 @if($editForm)
@@ -71,7 +71,7 @@
     </div>
     <div class="col-8">
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">customer type <span style="color: red"> * </span></label>
                     <select class="form-select select2" id='customer_type'>
@@ -90,7 +90,7 @@
                 @enderror
             </div>
 
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Occupation</label>
                     <input wire:model='state.occupation' type='text'
@@ -106,7 +106,7 @@
 
         <div class="row">
 
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Opening balance</label>
                     <input wire:model='state.op_bal' type='text'
@@ -118,7 +118,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">NID</label>
                     <input wire:model='state.nid' type='text' class="form-control @error('nid') is-invalid @enderror">
@@ -128,7 +128,7 @@
                 </div>
             </div>
 
-            <div class="col-6">
+            <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">Birth date</label>
                     <input wire:model='state.birth_date' type='date'
@@ -139,7 +139,7 @@
                 </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label for="">Email</label>
                     <input wire:model='state.email' type='text'
@@ -150,7 +150,7 @@
                 </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-md-12">
                 <div class="form-group mb-3">
                     <label for="">Address</label>
                     <input wire:model='state.customer_address' type='text'
