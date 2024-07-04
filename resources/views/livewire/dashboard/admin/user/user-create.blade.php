@@ -38,10 +38,10 @@
                     @error('user')
                     <small id="" class="form-text text-danger">{{ $message }}</small>
                     @enderror
-                    <x-input wire:model='email' name='email' type='email' label='Email' readonly />
-                    <x-input wire:model='phone_number' name='phone_number' type='text' label='Phone' readonly />
-                    <x-input wire:model='password' name='password' type='password' label='Password' />
-                    <x-input wire:model='password_confirmation' name='password_confirmation' type='password'
+                    <x-input required_mark='true' wire:model='email' name='email' type='email' label='Email' readonly />
+                    <x-input required_mark='true' wire:model='phone_number' name='phone_number' type='text' label='Phone' readonly />
+                    <x-input required_mark='true' wire:model='password' name='password' type='password' label='Password' />
+                    <x-input required_mark='true' wire:model='password_confirmation' name='password_confirmation' type='password'
                         label='Password confirmation' />
                 </div>
                 <div class='col-7'>

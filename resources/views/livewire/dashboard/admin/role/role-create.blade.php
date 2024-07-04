@@ -28,8 +28,8 @@
                     {{ session('status') }}
                 </div>
                 @endif
-                <x-input wire:model='role_name' name='role_name' type='text' label='Role name' />
-                <x-input wire:model='role_desc' name='role_desc' type='text' label='Role description' />
+                <x-input required_mark='true' wire:model='role_name' name='role_name' type='text' label='Role name' />
+                <x-input required_mark='' wire:model='role_desc' name='role_desc' type='text' label='Role description' />
                 <div class="form-group mb-3">
                     <label for="">Select module</label>
                     <select wire:change='module_change' wire:model='module' name="" id="" class="form-select">

@@ -21,6 +21,7 @@ use App\Livewire\Dashboard\Product\PricingList\PricingList;
 use App\Livewire\Dashboard\Product\Product\{Product, ProductCreate, ProductEdit};
 use App\Livewire\Dashboard\Product\Unit\ProductUnit;
 use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, PurchaseEdit};
+use App\Livewire\Dashboard\Sales\Sales\{Sales, SalesCreate, SalesEdit};
 
 
 Livewire::setUpdateRoute(function ($handle) {
@@ -87,4 +88,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('purchase', Purchase::class)->name('purchase');
     Route::get('purchase/create', PurchaseCreate::class)->name('purchase-create');
     Route::get('purchase/{purchase_id}/edit', PurchaseEdit::class)->name('purchase-edit');
+
+    // ------------- purchase end ----------------
+
+
+    // ------------- sale start ----------------
+    Route::get('sale', Sales::class)->name('sale');
+    Route::get('sale/create', SalesCreate::class)->name('sale-create');
+    Route::get('sale/{sale_id}/edit', SalesEdit::class)->name('sale-edit');
 });

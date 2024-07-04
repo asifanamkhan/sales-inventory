@@ -10,7 +10,7 @@
     @endif
 
     <form wire:submit="@if($editForm) update @else store @endif" action="">
-        <x-input wire:model='dept_name' name='dept_name' type='text' label='Name' />
+        <x-input required_mark='true' wire:model='dept_name' name='dept_name' type='text' label='Name' />
         <div class="mt-4 d-flex justify-content-center">
             <button class="btn btn-primary">Save</button>
         </div>
