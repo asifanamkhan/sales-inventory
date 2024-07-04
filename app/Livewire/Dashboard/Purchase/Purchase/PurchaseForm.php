@@ -266,7 +266,6 @@ class PurchaseForm extends Component
 
                 foreach ($this->purchaseCart as $key => $value) {
                     DB::table('INV_PURCHASE_DTL')->insert([
-
                         'tran_mst_id' => $tran_mst_id,
                         'item_code' => $value['st_group_item_id'],
                         'item_qty' => $value['qty'],
@@ -282,6 +281,7 @@ class PurchaseForm extends Component
 
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
+                    'tran_type' => 'PR',
                     'payment_date' => $this->state['tran_date'],
                     'p_code' => $this->state['p_code'],
                     'pay_mode' => $this->paymentState['pay_mode'],
