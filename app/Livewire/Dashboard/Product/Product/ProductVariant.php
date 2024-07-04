@@ -9,18 +9,21 @@ class ProductVariant extends Component
 {
 
     public $product_colors, $product_size,
-    $product_color_id, $product_size_id,
-    $product_color_name, $product_size_name;
+        $product_color_id, $product_size_id,
+        $product_color_name, $product_size_name;
 
     public function addVariant()
     {
         if ($this->product_color_id || $this->product_size_id) {
+
             $this->dispatch('product-varient-add-to-cart', data: [
                 'color_code' => $this->product_color_id,
-                'color_name' => $this->product_color_name,
+                'color_name' => $this->product_color_id ? $this->product_color_name : '',
                 'item_size' => $this->product_size_id,
-                'item_size_name' => $this->product_size_name,
+                'item_size_name' => $this->product_size_id ? $this->product_size_name : '',
             ]);
+        } else {
+            session()->flash('error', 'Please select at least one varient');
         }
     }
 
@@ -37,10 +40,13 @@ class ProductVariant extends Component
             ->orderBy('item_size_code', 'desc')
             ->get();
     }
-    public function render()
+    public function mount()
     {
         $this->productSize();
         $this->productColor();
+    }
+    public function render()
+    {
         return view('livewire.dashboard.product.product.product-variant');
     }
 }

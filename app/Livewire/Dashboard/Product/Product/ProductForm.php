@@ -130,7 +130,6 @@ class ProductForm extends Component
 
     public function mount($product_u_code){
         if($product_u_code){
-
             $product_edit = (array)DB::table('INV_ST_GROUP_ITEM')
                 ->where('u_code', $product_u_code)
                 ->first([
@@ -168,13 +167,14 @@ class ProductForm extends Component
             $this->edit_select['edit_brand_id'] = $product_edit['brand_code'];
 
         }
+
+        $this->productGroup();
+        $this->productBrand();
+        $this->productUnit();
     }
 
     public function render()
     {
-        $this->productGroup();
-        $this->productBrand();
-        $this->productUnit();
         return view('livewire.dashboard.product.product.product-form');
     }
 }

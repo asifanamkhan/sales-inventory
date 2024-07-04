@@ -1,5 +1,14 @@
 <div class="">
     <div class="col-md-12">
+        @if (session('status'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('status') }}
+        </div>
+        @elseif (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="form-group mb-3" wire:ignore>
             <label for="">Size </label>
             <select class="form-select select2" id='product_size'>

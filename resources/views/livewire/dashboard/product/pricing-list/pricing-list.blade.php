@@ -53,9 +53,8 @@
                 <thead>
                     <tr class="bg-sidebar">
                         <td style="width: 5%">#</td>
-                        <td>Product name</td>
-                        <td>Varient</td>
-                        <td>Purchase r.</td>
+                        <td>Product</td>
+                        <td>Purchase rate</td>
                         <td>Sale rate</td>
                         <td>Vat rate</td>
                         <td>Alert qty</td>
@@ -68,19 +67,24 @@
                     @foreach ($this->resultProduct as $key => $product)
                     <tr wire:key='{{ $key }}'>
                         <td>{{ $this->resultProduct->firstItem() + $key }}</td>
-                        <td>{{ $product->item_name }}</td>
                         <td>
                             <div>
-                                <div class="d-flex gap-2">
-                                    <div style="width:25%; font-weight:500">Size:</div>
-                                    <div style="width:80%;">{{ $product->item_name ?? '-' }}</div>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <div style="width:25%; font-weight:500">Color:</div>
-                                    <div style="width:80%;">{{ $product->color_name ?? '-' }}</div>
-                                </div>
+                                {{
+                                    $product->item_name
+                                }}
                             </div>
+                            @if ($product->item_size_name)
+                            <div>
+                                Size: {{ $product->item_size_name  }}
+                            </div>
+                            @endif
+                            @if ($product->color_name)
+                            <div>
+                                <span style="font-weight: 500">Color:</span> {{ $product->color_name }}
+                            </div>
+                            @endif
                         </td>
+
                         <td>
                             <div class="d-flex align-items-center justify-content-center">
                                 {{ $product->pr_rate }}

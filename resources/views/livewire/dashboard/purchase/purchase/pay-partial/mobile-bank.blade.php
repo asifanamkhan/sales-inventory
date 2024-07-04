@@ -3,7 +3,7 @@
     <div class="form-group mb-3" wire:ignore>
         <label for="">Mobile bank<span style="color: red"> *
             </span></label>
-        <select class="form-select select2" id='bank_id'>
+        <select class="form-select select2" id='mfs_id'>
             <option value="">Select mobile bank</option>
             @forelse ($mfs as $mf)
             <option
@@ -33,9 +33,9 @@
         });
     });
 
-    $('#bank_id').on('change', function(e){
+    $('#mfs_id').on('change', function(e){
         let data = $(this).val();
-        $wire.dispatch('set_bank_code_purchase', {id: data});
+        $wire.dispatch('set_mfs_code_purchase', {id: data});
     });
 </script>
 @endscript

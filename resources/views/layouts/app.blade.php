@@ -58,7 +58,7 @@
     </script>
 
     <link rel="stylesheet" href="{{ asset('public/style.css') }}">
-
+    @stack('css')
     @livewireStyles
 </head>
 
@@ -66,7 +66,7 @@
     <div class="wrapper">
 
         <!-- Sidebar  -->
-        <livewire:layout.sidebar />
+        @include('layouts.sidebar')
 
         <!-- Page Content  -->
         <div id="content">
@@ -106,7 +106,6 @@
                 </div>
             </nav>
             @endpersist
-
             {{ $slot }}
         </div>
     </div>
