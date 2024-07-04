@@ -12,7 +12,15 @@
             </ol>
         </nav>
     </div>
-
+    @if (session('status'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('status') }}
+    </div>
+    @elseif (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="card p-4">
         <div class="row g-3 mb-3 align-items-center">
             <div class="col-auto">
