@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PurchaseForm extends Component
 {
@@ -169,7 +171,6 @@ class PurchaseForm extends Component
                 $this->resetProductSearch();
                 session()->flash('error', 'Product already added to cart');
             }
-
         }
     }
 
@@ -227,19 +228,62 @@ class PurchaseForm extends Component
         $this->state['total_qty'] = $total_qty ?? 0;
         $this->state['tot_discount'] = $total_discount ?? 0;
 
-        $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total),2,'.', '');
+        $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total), 2, '.', '');
         $this->state['due_amt'] = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->state['pay_amt']), 2, '.', '');
-
     }
 
-    public function save(){
-        dd(
-            $this->state,
-            $this->paymentState,
-            $this->purchaseCart,
-        );
+    public function save()
+    {
 
+        Validator::make($this->state, [
+            'tran_date' => 'required|date',
+            'war_id' => 'required|numeric',
+            'status' => 'required|numeric',
+            'p_code' => 'required|numeric',
+            'tot_payable_amt' => 'required|numeric',
+            'net_payable_amt' => 'required|numeric',
+
+        ])->validate();
+
+        if (count($this->purchaseCart) > 0) {
+
+            dd(
+                $this->state,
+                $this->paymentState,
+                $this->purchaseCart,
+            );
+
+            DB::beginTransaction();
+            try {
+                $this->state['user_name'] = Auth::user()->id;
+                $this->state['emp_id'] = Auth::user()->id;
+
+                $id = DB::table('INV_PRICE_SCHEDULE_MST')
+                    ->insertGetId($this->state, 'tran_mst_id');
+
+                // foreach ($this->singleCheck as $key => $value) {
+                //     DB::table('USR_ROLE_DETAIL')->insert([
+                //         'role_id' => $id,
+                //         'module_dtl_id' => $key,
+                //         'visible_flag' => @$value['view'] ?? 0,
+                //         'write_flag' => @$value['write'] ?? 0,
+                //         'edit_flag' => @$value['edit'] ?? 0,
+                //         'read_flag' => @$value['read'] ?? 0,
+                //     ]);
+                // }
+
+                dd(58);
+
+
+                DB::commit();
+
+                session()->flash('status', 'New role created successfully');
+            } catch (\Exception $exception) {
+                DB::rollback();
+                session()->flash('error', $exception);
+            }
+        } else {
+            session()->flash('error', '*At least one product need to added');
+        }
     }
-
-
 }

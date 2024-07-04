@@ -110,7 +110,7 @@ class ProductForm extends Component
 
         $this->reset();
 
-        return $this->redirect('product', navigate:true);
+        return $this->redirect(route('product'), navigate:true);
     }
 
     // ------------- product create end ----------------
