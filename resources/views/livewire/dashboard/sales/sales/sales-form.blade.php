@@ -35,9 +35,9 @@
         <div class="row" x-data="{edit : false}">
             <div class="col-md-2">
                 <x-input required_mark='true' wire:model='state.tran_date' name='tran_date' type='date'
-                    label='Purchase date' />
+                    label='Sale date' />
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Warhouse<span style="color: red"> * </span></label>
                     <select class="form-select" id='ware_house'>
@@ -55,7 +55,7 @@
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="form-group mb-3">
                     <label for="">Status<span style="color: red"> * </span></label>
                     <select wire:model='state.status' class="form-select" id='status'>
@@ -69,7 +69,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group mb-3" wire:ignore>
                     <label for="">Customer<span style="color: red"> * </span></label>
                     <select class="form-select select2" id='customer'>
@@ -89,10 +89,6 @@
                 @enderror
             </div>
 
-
-            <div class="col-md-3">
-                <x-input required_mark='' wire:model='state.lc_no' name='lc_no' type='text' label='LC No.' />
-            </div>
 
 
             @if (session('status'))
@@ -156,8 +152,8 @@
                     <thead>
                         <tr class="bg-sidebar">
                             <td class="" style="width:3%">SL</td>
-                            <td class="" style="width:30%">Name</td>
-                            <td class="" style="width:10%">Expire dt</td>
+                            <td class="" style="width:40%">Name</td>
+
                             <td class="text-center" style="width:10%">Qty</td>
                             <td class="text-center" style="width:10%">Price</td>
                             <td class="text-center" style="width:10%">Discount</td>
@@ -167,53 +163,50 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($purchaseCart as $purchase_key => $purchase)
-                        <tr wire:key='{{ $purchase_key }}'>
-                            <td>{{ $purchase_key + 1 }}</td>
+                        @forelse ($saleCart as $sale_key => $sale)
+                        <tr wire:key='{{ $sale_key }}'>
+                            <td>{{ $sale_key + 1 }}</td>
                             <td>
-                                {{ $purchase['item_name'] }}
+                                {{ $sale['item_name'] }}
 
-                                @if (@$purchase['item_size_name'])
-                                | {{ $purchase['item_size_name'] }}
+                                @if (@$sale['item_size_name'])
+                                | {{ $sale['item_size_name'] }}
                                 @endif
-                                @if (@$purchase['color_name'])
-                                | {{ $purchase['color_name'] }}
+                                @if (@$sale['color_name'])
+                                | {{ $sale['color_name'] }}
                                 @endif
 
                             </td>
+
                             <td>
-                                <input wire:model='purchaseCart.{{ $purchase_key }}.expire_date' type="date"
-                                    class="form-control">
-                            </td>
-                            <td>
-                                <input wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
-                                    wire:model='purchaseCart.{{ $purchase_key }}.qty' class="form-control text-center">
+                                <input wire:input.debounce.500ms='calculation({{ $sale_key }})' type="number"
+                                    wire:model='saleCart.{{ $sale_key }}.qty' class="form-control text-center">
                             </td>
                             <td>
                                 <input tabindex="-1" readonly type="number"
-                                    wire:model='purchaseCart.{{ $purchase_key }}.mrp_rate'
+                                    wire:model='saleCart.{{ $sale_key }}.mrp_rate'
                                     class="form-control text-center">
                             </td>
                             <td>
-                                <input wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
-                                    wire:model='purchaseCart.{{ $purchase_key }}.discount'
+                                <input wire:input.debounce.500ms='calculation({{ $sale_key }})' type="number"
+                                    wire:model='saleCart.{{ $sale_key }}.discount'
                                     class="form-control text-center">
                             </td>
                             <td>
                                 <input tabindex="-1" readonly type="number"
-                                    wire:model='purchaseCart.{{ $purchase_key }}.vat_amt'
+                                    wire:model='saleCart.{{ $sale_key }}.vat_amt'
                                     class="form-control text-center">
                             </td>
                             <td>
                                 <input tabindex="-1" type="number" style="border: 1px solid green; text-align: right"
                                     readonly class="form-control"
-                                    wire:model='purchaseCart.{{ $purchase_key }}.line_total'>
+                                    wire:model='saleCart.{{ $sale_key }}.line_total'>
                             </td>
                             <td>
                                 <div class="text-center">
                                     <a type="button" wire:click.prevent='removeItem(
-                                    {{ $purchase_key }} ,
-                                     {{ $purchase['st_group_item_id'] }})'>
+                                    {{ $sale_key }} ,
+                                     {{ $sale['st_group_item_id'] }})'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red"
                                             class="dz-w-6 dz-h-6 dz-text-black dark:dz-text-white">
                                             <path fill-rule="evenodd"
@@ -231,7 +224,7 @@
                     </tbody>
                     <tfoot>
                         <tr style="font-weight: 500; background:aliceblue">
-                            <td colspan="3" style="text-align: right">Total:</td>
+                            <td colspan="2" style="text-align: right">Total:</td>
                             <td style="text-align: center">
                                 {{ $state['total_qty'] }} </td>
                             <td colspan="1" style="text-align: right"></td>
@@ -288,7 +281,7 @@
 
                         <div class='row'>
                             <div class="col-md-6">
-                                <livewire:dashboard.purchase.purchase.pay-partial.bank />
+                                <livewire:dashboard.sale.sale.pay-partial.bank />
                             </div>
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.bank_ac_no' name='bank_ac_no'
@@ -313,7 +306,7 @@
                         @if ($paymentState['pay_mode'] == 4)
                         <div class="row">
                             <div class="col-md-6">
-                                <livewire:dashboard.purchase.purchase.pay-partial.mobile-bank />
+                                <livewire:dashboard.sale.sale.pay-partial.mobile-bank />
                             </div>
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.mfs_acc_no' name='mfs_acc_no'
@@ -374,13 +367,13 @@
             </div>
             <div class="col-md-7">
                 <div class="form-group">
-                    <label for="">Purchase remarks </label>
+                    <label for="">Sale remarks </label>
                     <livewire:quill-text-editor wire:model="state.remarks" theme="snow" />
                 </div>
             </div>
             <div class="col-md-5">
                 <div class="form-group">
-                    <label for="">Purchase documents </label>
+                    <label for="">Sale documents </label>
                     <livewire:dropzone wire:model="document" :rules="['mimes:jpg,svg,png,jpeg,pdf,docx,xlsx,csv']"
                         :key="'dropzone-two'" />
                 </div>
@@ -403,14 +396,14 @@
     });
 
     $('#customer').on('change', function(e){
-        @this.set('state.p_code', e.target.value, false);
+        @this.set('state.customer_id', e.target.value, false);
     });
 
-    $wire.on('set_bank_code_purchase',(event)=>{
+    $wire.on('set_bank_code_sale',(event)=>{
         @this.set('paymentState.bank_code', event.id, false);
     });
 
-    $wire.on('set_mfs_code_purchase',(event)=>{
+    $wire.on('set_mfs_code_sale',(event)=>{
         @this.set('paymentState.mfs_id', event.id, false);
     });
 </script>
