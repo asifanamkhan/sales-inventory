@@ -43,6 +43,7 @@
                         <td >Date</td>
                         <td >Memo</td>
                         <td >Supplier</td>
+                        <td >Information</td>
                         <td >Status</td>
                         <td class="text-center" >Action</td>
                     </tr>
@@ -52,9 +53,25 @@
                     @foreach ($this->resultPurchase as $key => $purchase)
                     <tr wire:key='{{ $key }}'>
                         <td>{{ $this->resultPurchase->firstItem() + $key }}</td>
-                        <td>{{ $purchase->tran_date }}</td>
+                        <td>{{ date('d-M-Y', strtotime($purchase->tran_date)) }}</td>
                         <td>{{ $purchase->memo_no }}</td>
-                        <td>{{ $purchase->p_code }}</td>
+                        <td>{{ $purchase->p_name }}</td>
+                        <td>
+                            <div class="d-flex">
+                                <span style="width: 40%">Qty:</span>
+                                <span style="width: 60%; text-align:right">
+                                    {{ number_format($purchase->total_qty, 2, '.', '')  }}
+                                </span>
+                            </div>
+                            <div class="d-flex">
+                                <span style="width: 40%">Amount:</span>
+                                <span style="width: 60%; text-align:right">
+                                    {{ number_format($purchase->tot_payable_amt, 2, '.', '')  }}
+                                </span>
+                            </div>
+
+                        </td>
+                        <td>{{ $purchase->status }}</td>
                         <td style="">
                             <div class="d-flex justify-content-center gap-2">
                                 <a wire:navigate href="{{ route('purchase-edit',$purchase->tran_mst_id) }}" class="btn btn-sm btn-success">

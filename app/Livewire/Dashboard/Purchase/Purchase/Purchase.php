@@ -22,9 +22,11 @@ class Purchase extends Component
         $purchases = DB::table('INV_PURCHASE_MST as p');
 
         $purchases
-            ->orderBy('tran_mst_id', 'DESC')
-
-            ->select(['tran_mst_id','status','memo_no','tran_date','p_code']);
+            ->orderBy('p.tran_mst_id', 'DESC')
+            ->leftJoin('INV_SUPPLIER_INFO as s', function ($join) {
+                $join->on('s.p_code', '=', 'p.p_code');
+            })
+            ->select(['p.*','s.p_name']);
 
             if ($this->search) {
                 $purchases

@@ -238,7 +238,9 @@
                             <td style="text-align: center">
                                 {{ $state['tot_discount'] }}
                             </td>
-                            <td colspan="1" style="text-align: right">Sub total: </td>
+                            <td style="text-align: center">
+                                {{ $state['tot_vat_amt'] }}
+                            </td>
                             <td style="text-align: right">
                                 {{ $state['net_payable_amt'] }}
                             </td>
@@ -254,8 +256,8 @@
                             Make Payment
                         </h4>
                         <h4 class="h4 text-center pt-2 pb-2" style="color: darkred">
-                            @if ($state['pay_amt'])
-                            Payment amount: {{ number_format($state['pay_amt'], 2, '.', ',') }}
+                            @if ($pay_amt)
+                            Payment amount: {{ number_format($pay_amt, 2, '.', ',') }}
                             @endif
                         </h4>
                     </div>
@@ -302,8 +304,7 @@
                             </div>
                         </div>
                         @endif
-                        @if ($paymentState['pay_mode'] == 3 || $paymentState['pay_mode'] == 6 ||
-                        $paymentState['pay_mode'] == 7)
+                        @if ($paymentState['pay_mode'] == 3 || $paymentState['pay_mode'] == 6 || $paymentState['pay_mode'] == 7)
                         <div class="col-md-12">
                             <x-input required_mark='' wire:model='paymentState.card_no' name='card_no' type='text'
                                 label='Card no' />
@@ -358,14 +359,14 @@
                             <td> Payment amount</td>
                             <td>
                                 <input type="number" style="text-align: right" class="form-control"
-                                    wire:model='state.pay_amt' wire:input.debounce.500ms='grandCalculation'>
+                                    wire:model='pay_amt' wire:input.debounce.500ms='grandCalculation'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
                             <td>Due amount</td>
                             <td style="text-align:right">
                                 <input style="text-align: right;" readonly class="form-control"
-                                    wire:model='state.due_amt'>
+                                    wire:model='due_amt'>
                             </td>
                         </tr>
                     </tbody>
