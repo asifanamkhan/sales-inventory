@@ -16,8 +16,8 @@ class SalesForm extends Component
     public $paymentState = [];
     public $customers, $war_houses, $productsearch, $payment_methods;
     public $resultProducts = [];
-    public $purchaseCart = [];
-    public $purchaseCheck = [];
+    public $saleCart = [];
+    public $saleCheck = [];
     public $searchSelect = -1;
     public $countProduct = 0;
     public $isCheck = false;
@@ -132,7 +132,7 @@ class SalesForm extends Component
         $search = @$this->resultProducts[$key]->st_group_item_id;
 
         if ($search) {
-            $valid = in_array($search, $this->purchaseCheck);
+            $valid = in_array($search, $this->saleCheck);
 
             if (!$valid) {
 
@@ -142,11 +142,11 @@ class SalesForm extends Component
 
                 if ($pricing) {
 
-                    $this->purchaseCheck[] = $search;
+                    $this->saleCheck[] = $search;
 
                     $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
 
-                    $this->purchaseCart[] = [
+                    $this->saleCart[] = [
                         'item_name' => @$this->resultProducts[$key]->item_name,
                         'color_name' => @$this->resultProducts[$key]->color_name,
                         'item_size_name' => @$this->resultProducts[$key]->item_size_name,
@@ -188,22 +188,22 @@ class SalesForm extends Component
 
     public function removeItem($key, $id)
     {
-        unset($this->purchaseCart[$key]);
-        $del_key = array_search($id, $this->purchaseCheck);
+        unset($this->saleCart[$key]);
+        $del_key = array_search($id, $this->saleCheck);
         if (false !== $del_key) {
-            unset($this->purchaseCheck[$del_key]);
+            unset($this->saleCheck[$del_key]);
         }
         $this->grandCalculation();
     }
 
     public function calculation($key)
     {
-        $qty = (float)$this->purchaseCart[$key]['qty'] ?? 0;
-        $mrp_rate = (float)$this->purchaseCart[$key]['mrp_rate'] ?? 0;
-        $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
-        $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
+        $qty = (float)$this->saleCart[$key]['qty'] ?? 0;
+        $mrp_rate = (float)$this->saleCart[$key]['mrp_rate'] ?? 0;
+        $discount = (float)$this->saleCart[$key]['discount'] ?? 0;
+        $vat = (float)$this->saleCart[$key]['vat_amt'] ?? 0;
 
-        $this->purchaseCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
+        $this->saleCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
 
         $this->grandCalculation();
     }
@@ -216,7 +216,7 @@ class SalesForm extends Component
         $total_vat = 0;
         $shipping_amt = $this->state['shipping_amt'] ?? 0;
 
-        foreach ($this->purchaseCart as $value) {
+        foreach ($this->saleCart as $value) {
 
             $sub_total += (float)$value['line_total'] ?? 0;
             $total_qty += (float)$value['qty'] ?? 0;
@@ -241,18 +241,18 @@ class SalesForm extends Component
             'tran_date' => 'required|date',
             'war_id' => 'required|numeric',
             'status' => 'required|numeric',
-            'p_code' => 'required|numeric',
+            'customer_id' => 'required|numeric',
             'tot_payable_amt' => 'required|numeric',
             'net_payable_amt' => 'required|numeric',
 
         ])->validate();
 
-        if (count($this->purchaseCart) > 0) {
+        if (count($this->saleCart) > 0) {
 
             // dd(
             //     $this->state,
             //     $this->paymentState,
-            //     $this->purchaseCart,
+            //     $this->saleCart,
             // );
 
             DB::beginTransaction();
@@ -262,20 +262,19 @@ class SalesForm extends Component
                 $this->state['comp_id'] = Auth::user()->id;
                 $this->state['branch_id'] = Auth::user()->id;
 
-                $tran_mst_id = DB::table('INV_PURCHASE_MST')->insertGetId($this->state, 'tran_mst_id');
+                $tran_mst_id = DB::table('INV_SALES_MST')->insertGetId($this->state, 'tran_mst_id');
 
-                foreach ($this->purchaseCart as $key => $value) {
-                    DB::table('INV_PURCHASE_DTL')->insert([
+                foreach ($this->saleCart as $key => $value) {
+                    DB::table('INV_SALES_DTL')->insert([
 
                         'tran_mst_id' => $tran_mst_id,
                         'item_code' => $value['st_group_item_id'],
                         'item_qty' => $value['qty'],
-                        'pr_rate' => $value['mrp_rate'],
+                        'mrp_rate' => $value['mrp_rate'],
                         'vat_amt' => $value['vat_amt'],
                         'discount' => $value['discount'],
                         'tot_payble_amt' => $value['line_total'],
                         'user_name' => $this->state['user_name'],
-                        'expire_date' => @$value['expire_date'],
                     ]);
                 }
 
@@ -283,7 +282,7 @@ class SalesForm extends Component
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
                     'payment_date' => $this->state['tran_date'],
-                    'p_code' => $this->state['p_code'],
+                    'p_code' => $this->state['customer_id'],
                     'pay_mode' => $this->paymentState['pay_mode'],
                     'tot_payable_amt' => $this->state['tot_payable_amt'],
                     'discount' => $this->state['tot_discount'],
@@ -317,8 +316,8 @@ class SalesForm extends Component
 
                 DB::commit();
 
-                session()->flash('status', 'New purchase created successfully');
-                return $this->redirect(route('purchase'), navigate:true);
+                session()->flash('status', 'New sale created successfully');
+                return $this->redirect(route('sale'), navigate:true);
 
             } catch (\Exception $exception) {
                 DB::rollback();
