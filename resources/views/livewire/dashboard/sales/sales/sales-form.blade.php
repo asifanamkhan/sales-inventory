@@ -281,7 +281,7 @@
 
                         <div class='row'>
                             <div class="col-md-6">
-                                <livewire:dashboard.sale.sale.pay-partial.bank />
+                                <livewire:dashboard.sales.sales.pay-partial.bank />
                             </div>
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.bank_ac_no' name='bank_ac_no'
@@ -306,7 +306,7 @@
                         @if ($paymentState['pay_mode'] == 4)
                         <div class="row">
                             <div class="col-md-6">
-                                <livewire:dashboard.sale.sale.pay-partial.mobile-bank />
+                                <livewire:dashboard.sales.sales.pay-partial.mobile-bank />
                             </div>
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.mfs_acc_no' name='mfs_acc_no'
