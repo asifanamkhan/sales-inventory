@@ -281,6 +281,7 @@ class SalesForm extends Component
 
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
+                    'tran_type' => 'SL',
                     'payment_date' => $this->state['tran_date'],
                     'p_code' => $this->state['customer_id'],
                     'pay_mode' => $this->paymentState['pay_mode'],
