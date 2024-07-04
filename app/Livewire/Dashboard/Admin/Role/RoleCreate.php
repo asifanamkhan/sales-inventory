@@ -27,7 +27,7 @@ class RoleCreate extends Component
 
     public function mount()
     {
-        $this->allModules();
+
     }
 
     public function allModules()
@@ -126,6 +126,7 @@ class RoleCreate extends Component
     }
     public function render()
     {
+        $this->allModules();
         return view('livewire.dashboard.admin.role.role-create')->title('Role create');
     }
 }

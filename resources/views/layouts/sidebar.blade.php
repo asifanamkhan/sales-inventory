@@ -207,33 +207,79 @@
                 </svg> Sales settings
             </a>
             <ul class="collapse list-unstyled
-        {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
+        {{ request()->routeIs('sale') ? 'show' : ' ' }}
+        {{ request()->routeIs('sale-create') ? 'show' : ' ' }}
         " id="salesSubmenu">
-                <li class="">
-                    <a class="list" wire:navigate href="">Sales entry</a>
+                <li class="{{ request()->routeIs('sale') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('sale') }}"> - Sales list</a>
+                </li>
+                <li class="{{ request()->routeIs('sale-create') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('sale-create') }}"> - Sales entry</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href="">Sales purchase</a>
+                    <a class="list" wire:navigate href=""> - Sales purchase</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href="">Product damage</a>
+                    <a class="list" wire:navigate href=""> - Product damage</a>
                 </li>
             </ul>
         </li>
 
         <li>
             <a href="#misReportSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
-                <i class="fa fa-list"></i> Mis reports
+                <i class="fa fa-list"></i> MIS reports
             </a>
             <ul class="collapse list-unstyled
         {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
 
-        " id="salesSubmenu">
+        " id="misReportSubmenu">
                 <li class="">
-                    <a class="list" wire:navigate href="">Report 1</a>
+                    <a class="list" wire:navigate href=""> - Supplier Ledger</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href="">Report 2</a>
+                    <a class="list" wire:navigate href=""> - Supplier Due Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Customer Ledger</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Customer Due Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Product Lists</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Product Purchase Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Purchase Return Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Product Stock Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Stock Out Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Product Damage Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Product Expiry Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Daily Sells Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Monthly Sells Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Yearly Sells Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Sells Return Report</a>
+                </li>
+                <li class="">
+                    <a class="list" wire:navigate href=""> - Payment Report</a>
                 </li>
             </ul>
         </li>

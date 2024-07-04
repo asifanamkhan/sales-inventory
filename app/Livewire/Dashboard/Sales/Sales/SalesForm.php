@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Dashboard\Purchase\Purchase;
+namespace App\Livewire\Dashboard\Sales\Sales;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -9,12 +9,12 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class PurchaseForm extends Component
+class SalesForm extends Component
 {
     public $state = [];
     public $document = [];
     public $paymentState = [];
-    public $suppliers, $war_houses, $productsearch, $payment_methods;
+    public $customers, $war_houses, $productsearch, $payment_methods;
     public $resultProducts = [];
     public $purchaseCart = [];
     public $purchaseCheck = [];
@@ -24,10 +24,10 @@ class PurchaseForm extends Component
     public $pay_amt, $due_amt;
 
 
-    public function suppliersAll()
+    public function customersAll()
     {
-        return $this->suppliers = DB::table('INV_SUPPLIER_INFO')
-            ->orderBy('p_code', 'DESC')
+        return $this->customers = DB::table('INV_CUSTOMER_INFO')
+            ->orderBy('customer_id', 'DESC')
             ->get();
     }
 
@@ -97,7 +97,7 @@ class PurchaseForm extends Component
         $this->state['tran_date'] = Carbon::now()->toDateString();
         $this->paymentState['pay_mode'] = 1;
 
-        $this->suppliersAll();
+        $this->customersAll();
         $this->wirehouseAll();
         $this->paymentMethodAll();
     }
@@ -328,9 +328,8 @@ class PurchaseForm extends Component
             session()->flash('error', '*At least one product need to added');
         }
     }
-
     public function render()
     {
-        return view('livewire.dashboard.purchase.purchase.purchase-form');
+        return view('livewire.dashboard.sales.sales.sales-form');
     }
 }
