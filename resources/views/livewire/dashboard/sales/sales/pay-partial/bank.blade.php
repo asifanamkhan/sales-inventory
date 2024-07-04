@@ -35,7 +35,7 @@
 
     $('#bank_id').on('change', function(e){
         let data = $(this).val();
-        $wire.dispatch('set_bank_code_purchase', {id: data});
+        $wire.dispatch('set_bank_code_sale', {id: data});
     });
 </script>
 @endscript

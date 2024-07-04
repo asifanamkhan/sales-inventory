@@ -32,7 +32,9 @@
                 <span class="dz-sr-only">Loading...</span>
             </div>
         </div>
-        <div @click="$refs.input.click()" class="dz-border dz-border-dashed dz-rounded dz-border-gray-500 dz-w-full dz-cursor-pointer">
+        <div @click="$refs.input.click()" class="dz-border dz-border-dashed
+        {{-- dz-rounded  --}}
+        dz-border-gray-500 dz-w-full dz-cursor-pointer">
             <div>
                 <div x-show="!isDragging" class="dz-flex dz-items-center dz-bg-gray-50 dz-justify-center dz-gap-2 dz-py-8 dz-h-full dark:dz-bg-gray-700">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="dz-w-6 dz-h-6 dz-text-gray-500 dark:dz-text-gray-400">

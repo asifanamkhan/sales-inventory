@@ -142,6 +142,11 @@ class SalesForm extends Component
 
                 if ($pricing) {
 
+                    // $stock = DB::table('VW_ITEM_STOCK_QTY')
+                    // ->where('item_code', $search)
+                    // ->first();
+                    // dd($stock);
+
                     $this->saleCheck[] = $search;
 
                     $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
