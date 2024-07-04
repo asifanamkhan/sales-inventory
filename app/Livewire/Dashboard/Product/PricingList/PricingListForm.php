@@ -47,11 +47,12 @@ class PricingListForm extends Component
         if($item_exist){
             session()->flash('error', 'This product alrady has the priceing list. check it form the list');
 
-
         }else{
 
             DB::table('INV_PRICE_SCHEDULE_MST')->insert($this->state);
+
             session()->flash('status', 'Pricing list added successfully');
+
             $this->reset();
             $this->dispatch('refresh-product-varient-list');
         }
@@ -59,12 +60,12 @@ class PricingListForm extends Component
     }
 
     public function mount(){
-        $this->productList();
         $this->state['vat_rate'] = '';
     }
 
     public function render()
     {
+        $this->productList();
         return view('livewire.dashboard.product.pricing-list.pricing-list-form');
     }
 }
