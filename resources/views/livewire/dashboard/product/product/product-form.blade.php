@@ -8,7 +8,7 @@
     </div>
     @elseif (session('error'))
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        {{ session('status') }}
+        {{ session('error') }}
     </div>
     @endif
     <form action="" wire:submit='save'>
@@ -170,7 +170,7 @@
                             @php
                                 $c = (array)$cart;
                             @endphp
-                            @if($c['item_size_name'] && $c['color_name'])
+                            @if($c['item_size_name'] || $c['color_name'])
                             <tr wire:key='{{ $key }}'>
                                 <td>
                                     {{ $c['item_size_name'] }}

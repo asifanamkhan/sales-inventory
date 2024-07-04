@@ -40,6 +40,7 @@ class PricingList extends Component
                 $products
                     ->where(DB::raw('lower(c.item_name)'), 'like', '%' . strtolower($this->search) . '%');
             }
+            
 
         return $products->paginate($this->pagination);
     }

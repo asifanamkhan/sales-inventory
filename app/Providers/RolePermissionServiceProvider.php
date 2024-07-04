@@ -23,7 +23,8 @@ class RolePermissionServiceProvider extends ServiceProvider
     {
         view()->composer(
             [
-                '*'
+                'livewire.dashboard.*',
+                'layouts.*'
             ],
             function ($view) {
                 if (Auth::check()) {
@@ -32,7 +33,7 @@ class RolePermissionServiceProvider extends ServiceProvider
                         ->get();
 
                     $permission_status = 0;
-                    
+
                     Blade::if('permission', function ($sub_module, $flag) use ($submodule_access, $permission_status) {
                         foreach ($submodule_access as $access) {
                             if ($access->module_dtl_id == $sub_module) {

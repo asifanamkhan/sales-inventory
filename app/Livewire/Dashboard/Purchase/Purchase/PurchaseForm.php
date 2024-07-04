@@ -5,10 +5,12 @@ namespace App\Livewire\Dashboard\Purchase\Purchase;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Illuminate\Http\File;
 
 class PurchaseForm extends Component
 {
     public $state = [];
+    public $document = [];
     public $paymentState = [];
     public $suppliers, $war_houses, $productsearch, $payment_methods;
     public $resultProducts = [];
@@ -86,15 +88,18 @@ class PurchaseForm extends Component
         $this->state['total_qty'] = 0;
         $this->state['tot_discount'] = 0;
         $this->state['pay_amt'] = '';
+        $this->state['war_id'] = 1;
+        $this->state['status'] = 1;
         $this->state['tran_date'] = Carbon::now()->toDateString();
         $this->paymentState['pay_mode'] = 1;
+
+        $this->suppliersAll();
+        $this->wirehouseAll();
+        $this->paymentMethodAll();
     }
 
     public function render()
     {
-        $this->suppliersAll();
-        $this->wirehouseAll();
-        $this->paymentMethodAll();
         return view('livewire.dashboard.purchase.purchase.purchase-form');
     }
 
@@ -165,9 +170,6 @@ class PurchaseForm extends Component
                 session()->flash('error', 'Product already added to cart');
             }
 
-
-
-            // dd($this->purchaseCart);
         }
     }
 
@@ -175,6 +177,8 @@ class PurchaseForm extends Component
     {
         $this->resetProductSearch();
     }
+
+    //search increment decrement end
 
     public function resetProductSearch()
     {
@@ -199,7 +203,7 @@ class PurchaseForm extends Component
         $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
         $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
 
-        $this->purchaseCart[$key]['line_total'] = number_format(((($qty * $mrp_rate) + $vat) -  $discount), 2);
+        $this->purchaseCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
 
         $this->grandCalculation();
     }
@@ -212,23 +216,30 @@ class PurchaseForm extends Component
         $shipping_amt = $this->state['shipping_amt'] ?? 0;
 
         foreach ($this->purchaseCart as $value) {
+
             $sub_total += (float)$value['line_total'] ?? 0;
             $total_qty += (float)$value['qty'] ?? 0;
             $total_discount += (float)$value['discount'] ?? 0;
         }
 
-        $this->state['net_payable_amt'] = number_format($sub_total,2) ?? 0;
+        $this->state['net_payable_amt'] = number_format($sub_total, 2, '.', '') ?? 0;
+
         $this->state['total_qty'] = $total_qty ?? 0;
-        $this->state['tot_discount'] = number_format($total_discount,2) ?? 0;
+        $this->state['tot_discount'] = $total_discount ?? 0;
 
-        $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total),2);
-        $this->state['due_amt'] = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->state['pay_amt']),2);
+        $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total),2,'.', '');
+        $this->state['due_amt'] = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->state['pay_amt']), 2, '.', '');
 
+    }
+
+    public function save(){
+        dd(
+            $this->state,
+            $this->paymentState,
+            $this->purchaseCart,
+        );
 
     }
 
 
-
-
-    //search increment decrement end
 }
