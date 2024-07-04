@@ -51,7 +51,7 @@
                         @endforelse
                     </select>
                 </div>
-                @error('p_code')
+                @error('war_id')
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
@@ -64,7 +64,7 @@
                         <option value="3">Pending</option>
                         <option value="4">Ordered</option>
                     </select>
-                    @error('p_code')
+                    @error('status')
                     <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
                 </div>
