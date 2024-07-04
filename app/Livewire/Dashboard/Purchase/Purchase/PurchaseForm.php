@@ -320,7 +320,9 @@ class PurchaseForm extends Component
 
                 DB::commit();
 
-                session()->flash('status', 'New role created successfully');
+                session()->flash('status', 'New purchase created successfully');
+                return $this->redirect(route('purchase'), navigate:true);
+
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);
