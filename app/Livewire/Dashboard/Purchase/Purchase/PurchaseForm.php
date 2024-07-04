@@ -21,6 +21,7 @@ class PurchaseForm extends Component
     public $searchSelect = -1;
     public $countProduct = 0;
     public $isCheck = false;
+    public $pay_amt, $due_amt;
 
 
     public function suppliersAll()
@@ -89,7 +90,8 @@ class PurchaseForm extends Component
         $this->state['tot_payable_amt'] = 0;
         $this->state['total_qty'] = 0;
         $this->state['tot_discount'] = 0;
-        $this->state['pay_amt'] = '';
+        $this->state['tot_vat_amt'] = 0;
+        // $this->state['pay_amt'] = '';
         $this->state['war_id'] = 1;
         $this->state['status'] = 1;
         $this->state['tran_date'] = Carbon::now()->toDateString();
@@ -214,6 +216,7 @@ class PurchaseForm extends Component
         $sub_total = 0;
         $total_qty = 0;
         $total_discount = 0;
+        $total_vat = 0;
         $shipping_amt = $this->state['shipping_amt'] ?? 0;
 
         foreach ($this->purchaseCart as $value) {
@@ -221,15 +224,17 @@ class PurchaseForm extends Component
             $sub_total += (float)$value['line_total'] ?? 0;
             $total_qty += (float)$value['qty'] ?? 0;
             $total_discount += (float)$value['discount'] ?? 0;
+            $total_vat += (float)$value['vat_amt'] ?? 0;
         }
 
         $this->state['net_payable_amt'] = number_format($sub_total, 2, '.', '') ?? 0;
 
         $this->state['total_qty'] = $total_qty ?? 0;
+        $this->state['tot_vat_amt'] = $total_vat ?? 0;
         $this->state['tot_discount'] = $total_discount ?? 0;
 
         $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total), 2, '.', '');
-        $this->state['due_amt'] = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->state['pay_amt']), 2, '.', '');
+        $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
     }
 
     public function save()
@@ -247,32 +252,70 @@ class PurchaseForm extends Component
 
         if (count($this->purchaseCart) > 0) {
 
-            dd(
-                $this->state,
-                $this->paymentState,
-                $this->purchaseCart,
-            );
+            // dd(
+            //     $this->state,
+            //     $this->paymentState,
+            //     $this->purchaseCart,
+            // );
 
             DB::beginTransaction();
             try {
                 $this->state['user_name'] = Auth::user()->id;
                 $this->state['emp_id'] = Auth::user()->id;
+                $this->state['comp_id'] = Auth::user()->id;
+                $this->state['branch_id'] = Auth::user()->id;
 
-                $id = DB::table('INV_PRICE_SCHEDULE_MST')
-                    ->insertGetId($this->state, 'tran_mst_id');
+                $tran_mst_id = DB::table('INV_PURCHASE_MST')->insertGetId($this->state, 'tran_mst_id');
 
-                // foreach ($this->singleCheck as $key => $value) {
-                //     DB::table('USR_ROLE_DETAIL')->insert([
-                //         'role_id' => $id,
-                //         'module_dtl_id' => $key,
-                //         'visible_flag' => @$value['view'] ?? 0,
-                //         'write_flag' => @$value['write'] ?? 0,
-                //         'edit_flag' => @$value['edit'] ?? 0,
-                //         'read_flag' => @$value['read'] ?? 0,
-                //     ]);
-                // }
+                foreach ($this->purchaseCart as $key => $value) {
+                    DB::table('INV_PURCHASE_DTL')->insert([
 
-                dd(58);
+                        'tran_mst_id' => $tran_mst_id,
+                        'item_code' => $value['st_group_item_id'],
+                        'item_qty' => $value['qty'],
+                        'pr_rate' => $value['mrp_rate'],
+                        'vat_amt' => $value['vat_amt'],
+                        'discount' => $value['discount'],
+                        'tot_payble_amt' => $value['line_total'],
+                        'user_name' => $this->state['user_name'],
+                        'expire_date' => @$value['expire_date'],
+                    ]);
+                }
+
+
+                $payment_info = [
+                    'tran_mst_id' => $tran_mst_id,
+                    'payment_date' => $this->state['tran_date'],
+                    'p_code' => $this->state['p_code'],
+                    'pay_mode' => $this->paymentState['pay_mode'],
+                    'tot_payable_amt' => $this->state['tot_payable_amt'],
+                    'discount' => $this->state['tot_discount'],
+                    'vat_amt' => $this->state['tot_vat_amt'],
+                    'net_payable_amt' => $this->pay_amt ?? 0,
+                    'due_amt' => $this->due_amt,
+                    'user_id' => $this->state['user_name']
+                ];
+                if ($this->paymentState['pay_mode'] == 2) {
+                    $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
+                    $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
+                    $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
+                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                }
+
+                if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
+                    $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
+                }
+
+                if ($this->paymentState['pay_mode'] == 4) {
+                    $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
+                }
+                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+                    $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
+                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                }
+
+
+                DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
 
 
                 DB::commit();
