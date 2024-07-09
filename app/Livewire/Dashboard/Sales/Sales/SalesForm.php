@@ -80,7 +80,6 @@ class SalesForm extends Component
         } else {
             $this->resetProductSearch();
         }
-
         $this->countProduct = count($this->resultProducts);
     }
 
@@ -133,7 +132,6 @@ class SalesForm extends Component
 
         if ($search) {
             $valid = in_array($search, $this->saleCheck);
-
             if (!$valid) {
 
                 $pricing = DB::table('INV_PRICE_SCHEDULE_MST')
@@ -169,7 +167,7 @@ class SalesForm extends Component
                     $this->resetProductSearch();
                 } else {
                     $this->resetProductSearch();
-                    session()->flash('error', 'Pricing has not added to selected product');
+                    session()->flash('warning', 'Pricing has not added to selected product');
                 }
             } else {
                 $this->resetProductSearch();
@@ -195,9 +193,7 @@ class SalesForm extends Component
     {
         unset($this->saleCart[$key]);
         $del_key = array_search($id, $this->saleCheck);
-        if (false !== $del_key) {
-            unset($this->saleCheck[$del_key]);
-        }
+        unset($this->saleCheck[$del_key]);
         $this->grandCalculation();
     }
 
