@@ -89,11 +89,9 @@
                 @enderror
             </div>
 
-
             <div class="col-md-3">
                 <x-input required_mark='' wire:model='state.lc_no' name='lc_no' type='text' label='LC No.' />
             </div>
-
 
             @if (session('status'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -102,6 +100,10 @@
             @elseif (session('error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ session('error') }}
+            </div>
+            @elseif (session('warning'))
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ session('warning') }}
             </div>
             @endif
             <div class="col-md-12 mt-2">

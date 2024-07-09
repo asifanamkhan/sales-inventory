@@ -1,7 +1,7 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" product-color="status">
+    {{-- <div wire:loading class="spinner-border text-primary custom-loading" product-color="status">
         <span class="sr-only">Loading...</span>
-    </div>
+    </div> --}}
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">Product colors</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">

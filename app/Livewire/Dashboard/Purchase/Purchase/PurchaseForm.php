@@ -102,8 +102,6 @@ class PurchaseForm extends Component
         $this->paymentMethodAll();
     }
 
-
-
     //search increment decrement start
     public function decrementHighlight()
     {
@@ -164,7 +162,7 @@ class PurchaseForm extends Component
                     $this->resetProductSearch();
                 } else {
                     $this->resetProductSearch();
-                    session()->flash('error', 'Pricing has not added to selected product');
+                    session()->flash('warning', 'Pricing has not added to selected product');
                 }
             } else {
                 $this->resetProductSearch();
@@ -190,9 +188,7 @@ class PurchaseForm extends Component
     {
         unset($this->purchaseCart[$key]);
         $del_key = array_search($id, $this->purchaseCheck);
-        if (false !== $del_key) {
-            unset($this->purchaseCheck[$del_key]);
-        }
+        unset($this->purchaseCheck[$del_key]);
         $this->grandCalculation();
     }
 

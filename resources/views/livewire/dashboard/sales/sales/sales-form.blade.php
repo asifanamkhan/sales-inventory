@@ -89,8 +89,6 @@
                 @enderror
             </div>
 
-
-
             @if (session('status'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('status') }}
@@ -99,7 +97,12 @@
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ session('error') }}
             </div>
+            @elseif (session('warning'))
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ session('warning') }}
+            </div>
             @endif
+
             <div class="col-md-12 mt-2">
                 <div class="form-group mb-3">
                     <label for=""> Product search </label>
@@ -184,23 +187,19 @@
                             </td>
                             <td>
                                 <input tabindex="-1" readonly type="number"
-                                    wire:model='saleCart.{{ $sale_key }}.mrp_rate'
-                                    class="form-control text-center">
+                                    wire:model='saleCart.{{ $sale_key }}.mrp_rate' class="form-control text-center">
                             </td>
                             <td>
                                 <input wire:input.debounce.500ms='calculation({{ $sale_key }})' type="number"
-                                    wire:model='saleCart.{{ $sale_key }}.discount'
-                                    class="form-control text-center">
+                                    wire:model='saleCart.{{ $sale_key }}.discount' class="form-control text-center">
                             </td>
                             <td>
                                 <input tabindex="-1" readonly type="number"
-                                    wire:model='saleCart.{{ $sale_key }}.vat_amt'
-                                    class="form-control text-center">
+                                    wire:model='saleCart.{{ $sale_key }}.vat_amt' class="form-control text-center">
                             </td>
                             <td>
                                 <input tabindex="-1" type="number" style="border: 1px solid green; text-align: right"
-                                    readonly class="form-control"
-                                    wire:model='saleCart.{{ $sale_key }}.line_total'>
+                                    readonly class="form-control" wire:model='saleCart.{{ $sale_key }}.line_total'>
                             </td>
                             <td>
                                 <div class="text-center">
@@ -297,7 +296,8 @@
                             </div>
                         </div>
                         @endif
-                        @if ($paymentState['pay_mode'] == 3 || $paymentState['pay_mode'] == 6 || $paymentState['pay_mode'] == 7)
+                        @if ($paymentState['pay_mode'] == 3 || $paymentState['pay_mode'] == 6 ||
+                        $paymentState['pay_mode'] == 7)
                         <div class="col-md-12">
                             <x-input required_mark='' wire:model='paymentState.card_no' name='card_no' type='text'
                                 label='Card no' />
@@ -335,7 +335,7 @@
                 <table class="table table-borderless">
                     <tbody>
                         <tr style="text-align: right">
-                            <td >Shipping</td>
+                            <td>Shipping</td>
                             <td>
                                 <input type="number" wire:model='state.shipping_amt' style="text-align: right"
                                     class="form-control" wire:input.debounce.500ms='grandCalculation'>
@@ -351,27 +351,26 @@
                         <tr style="text-align: right">
                             <td> Payment amount</td>
                             <td>
-                                <input type="number" style="text-align: right" class="form-control"
-                                    wire:model='pay_amt' wire:input.debounce.500ms='grandCalculation'>
+                                <input type="number" style="text-align: right" class="form-control" wire:model='pay_amt'
+                                    wire:input.debounce.500ms='grandCalculation'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
                             <td>Due amount</td>
                             <td style="text-align:right">
-                                <input style="text-align: right;" readonly class="form-control"
-                                    wire:model='due_amt'>
+                                <input style="text-align: right;" readonly class="form-control" wire:model='due_amt'>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-7">
+            <div class="col-md-7 mt-2">
                 <div class="form-group">
                     <label for="">Sale remarks </label>
                     <livewire:quill-text-editor wire:model="state.remarks" theme="snow" />
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5 mt-2">
                 <div class="form-group">
                     <label for="">Sale documents </label>
                     <livewire:dropzone wire:model="document" :rules="['mimes:jpg,svg,png,jpeg,pdf,docx,xlsx,csv']"
