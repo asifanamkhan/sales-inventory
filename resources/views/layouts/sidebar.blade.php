@@ -182,6 +182,9 @@
             <ul class="collapse list-unstyled
             {{ request()->routeIs('purchase') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-create') ? 'show' : ' ' }}
+            {{ request()->routeIs('purchase-return') ? 'show' : ' ' }}
+            {{ request()->routeIs('purchase-return-create') ? 'show' : ' ' }}
+            {{ request()->routeIs('purchase-return-edit') ? 'show' : ' ' }}
 
         " id="purchaseSubmenu">
                 <li class="{{ request()->routeIs('purchase') ? 'active' : ' ' }}">
@@ -190,14 +193,19 @@
                 <li class="{{ request()->routeIs('purchase-create') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('purchase-create') }}"> - Purchase entry</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Purchase return</a>
+                <li class="
+                {{ request()->routeIs('purchase-return') ? 'active' : ' ' }}
+                {{ request()->routeIs('purchase-return-create') ? 'active' : ' ' }}
+                {{ request()->routeIs('purchase-return-edit') ? 'active' : ' ' }}
+                 ">
+                    <a class="list" wire:navigate href="{{ route('purchase-return') }}"> - Purchase return</a>
                 </li>
             </ul>
         </li>
 
         <li>
-            <a style="display: flex; gap:3px" href="#salesSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+            <a style="display: flex; gap:3px" href="#salesSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle main-list">
                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-receipt"
                     viewBox="0 0 16 16">
                     <path

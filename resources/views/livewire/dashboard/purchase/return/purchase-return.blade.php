@@ -3,12 +3,12 @@
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
-        <h3 style="padding: 0px 5px 10px 5px;">Purchase</h3>
+        <h3 style="padding: 0px 5px 10px 5px;">Purchase return</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Purchase</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase') }}"
-                        style="color: #3C50E0">purchases</a></li>
+                <li class="breadcrumb-item"><a href="#">Purchase return</a></li>
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-return') }}"
+                        style="color: #3C50E0">purchase return list</a></li>
             </ol>
         </nav>
     </div>
@@ -38,7 +38,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a wire:navigate href='{{ route('purchase-create') }}' type="button" class="btn btn-primary">Create purchase</a>
+                <a wire:navigate href='{{ route('purchase-return-create') }}' type="button" class="btn btn-primary">Create purchase return</a>
             </div>
             @endpermission
 
@@ -57,32 +57,32 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($this->resultPurchase) > 0)
-                    @foreach ($this->resultPurchase as $key => $purchase)
+                    @if (count($this->resultPurchaseReturn) > 0)
+                    @foreach ($this->resultPurchaseReturn as $key => $purchase_return)
                     <tr wire:key='{{ $key }}'>
-                        <td>{{ $this->resultPurchase->firstItem() + $key }}</td>
-                        <td>{{ date('d-M-Y', strtotime($purchase->tran_date)) }}</td>
-                        <td>{{ $purchase->memo_no }}</td>
-                        <td>{{ $purchase->p_name }}</td>
+                        <td>{{ $this->resultPurchaseReturn->firstItem() + $key }}</td>
+                        <td>{{ date('d-M-Y', strtotime($purchase_return->tran_date)) }}</td>
+                        <td>{{ $purchase_return->memo_no }}</td>
+                        <td>{{ $purchase_return->p_name }}</td>
                         <td>
                             <div class="d-flex">
                                 <span style="width: 40%">Qty:</span>
                                 <span style="width: 60%; text-align:right">
-                                    {{ number_format($purchase->total_qty, 2, '.', '')  }}
+                                    {{ number_format($purchase_return->total_qty, 2, '.', '')  }}
                                 </span>
                             </div>
                             <div class="d-flex">
                                 <span style="width: 40%">Amount:</span>
                                 <span style="width: 60%; text-align:right">
-                                    {{ number_format($purchase->tot_payable_amt, 2, '.', '')  }}
+                                    {{ number_format($purchase_return->tot_payable_amt, 2, '.', '')  }}
                                 </span>
                             </div>
 
                         </td>
-                        <td>{{ $purchase->status }}</td>
+                        <td>{{ $purchase_return->status }}</td>
                         <td style="">
                             <div class="d-flex justify-content-center gap-2">
-                                <a wire:navigate href="{{ route('purchase-edit',$purchase->tran_mst_id) }}" class="btn btn-sm btn-success">
+                                <a wire:navigate href="{{ route('purchase-edit',$purchase_return->tran_mst_id) }}" class="btn btn-sm btn-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
                                         viewBox="0 0 50 50">
                                         <path fill="white"
@@ -106,7 +106,7 @@
                 </tbody>
             </table>
         </div>
-        <span>{{ $this->resultPurchase->links() }}</span>
+        <span>{{ $this->resultPurchaseReturn->links() }}</span>
     </div>
 </div>
 

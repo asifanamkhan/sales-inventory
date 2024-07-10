@@ -3,18 +3,19 @@
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
-        <h3 style="padding: 0px 5px 10px 5px;">Purchase create</h3>
+        <h3 style="padding: 0px 5px 10px 5px;">Purchase return create</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Purchase</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase') }}">purchase</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-create') }}"
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-return') }}">purchase return</a></li>
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-return-create') }}"
                         style="color: #3C50E0">create</a></li>
             </ol>
         </nav>
     </div>
     <div class="card p-4" wire:ignore.self>
-        <livewire:dashboard.purchase.purchase.purchase-form :purchase_id=false />
+        <livewire:dashboard.purchase.return.purchase-return-form :purchase_return_id=false />
     </div>
 </div>
+
 
