@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Dashboard\Purchase\Purchase;
+namespace App\Livewire\Dashboard\Purchase\Return;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -9,34 +9,20 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class PurchaseForm extends Component
+class PurchaseReturnForm extends Component
 {
     public $state = [];
     public $document = [];
     public $paymentState = [];
-    public $suppliers, $war_houses, $productsearch, $payment_methods;
-    public $resultProducts = [];
+    public $purchasesearch, $payment_methods;
+    public $resultPurchases = [];
     public $purchaseCart = [];
-    public $purchaseCheck = [];
     public $searchSelect = -1;
     public $countProduct = 0;
     public $isCheck = false;
     public $pay_amt, $due_amt;
 
 
-    public function suppliersAll()
-    {
-        return $this->suppliers = DB::table('INV_SUPPLIER_INFO')
-            ->orderBy('p_code', 'DESC')
-            ->get();
-    }
-
-    public function wirehouseAll()
-    {
-        return $this->war_houses = DB::table('INV_WAREHOUSE_INFO')
-            ->orderBy('war_id', 'DESC')
-            ->get(['war_id', 'war_name']);
-    }
 
     public function paymentMethodAll()
     {
@@ -44,61 +30,46 @@ class PurchaseForm extends Component
             ->get(['p_mode_id', 'p_mode_name']);
     }
 
-    public function updatedProductsearch()
+    public function updatedPurchasesearch()
     {
-        if ($this->productsearch) {
+        if ($this->purchasesearch) {
 
-            $result = DB::table('INV_ST_GROUP_ITEM as p')
-                ->where('barcode', $this->productsearch)
-                ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                    $join->on('s.item_size_code', '=', 'p.item_size');
-                })
-                ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                    $join->on('c.tran_mst_id', '=', 'p.color_code');
-                })
-                ->get(['p.st_group_item_id', 'p.item_name', 'c.color_name', 's.item_size_name'])
+            $result = DB::table('INV_PURCHASE_MST as p')
+                ->where('memo_no', $this->purchasesearch)
+                ->get()
                 ->toArray();
 
             if ($result) {
-                $this->resultProducts = $result;
+                $this->resultPurchases = $result;
                 $this->resultAppend(0);
             } else {
-
-                $this->resultProducts = DB::table('INV_ST_GROUP_ITEM as p')
-                    ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->productsearch) . '%')
-                    ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                        $join->on('s.item_size_code', '=', 'p.item_size');
-                    })
-                    ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                        $join->on('c.tran_mst_id', '=', 'p.color_code');
-                    })
-                    ->get(['p.st_group_item_id', 'p.item_name', 'c.color_name', 's.item_size_name'])
+                $this->resultPurchases = DB::table('INV_PURCHASE_MST as p')
+                    ->where(DB::raw('lower(p.memo_no)'), 'like', '%' . strtolower($this->purchasesearch) . '%')
+                    ->get(['*'])
                     ->toArray();
             }
 
             $this->searchSelect = -1;
         } else {
-            $this->resetProductSearch();
+            $this->resetPurchaseSearch();
         }
 
-        $this->countProduct = count($this->resultProducts);
+        $this->countProduct = count($this->resultPurchases);
     }
 
-    public function mount($purchase_id)
+    public function mount($purchase_return_id)
     {
         $this->state['net_payable_amt'] = 0;
         $this->state['tot_payable_amt'] = 0;
         $this->state['total_qty'] = 0;
+        $this->state['return_total_qty'] = 0;
         $this->state['tot_discount'] = 0;
         $this->state['tot_vat_amt'] = 0;
         // $this->state['pay_amt'] = '';
-        $this->state['war_id'] = 1;
         $this->state['status'] = 1;
         $this->state['tran_date'] = Carbon::now()->toDateString();
         $this->paymentState['pay_mode'] = 1;
 
-        $this->suppliersAll();
-        $this->wirehouseAll();
         $this->paymentMethodAll();
     }
 
@@ -127,70 +98,67 @@ class PurchaseForm extends Component
 
     public function resultAppend($key)
     {
-        $search = @$this->resultProducts[$key]->st_group_item_id;
+        $search = @$this->resultPurchases[$key]->tran_mst_id;
 
         if ($search) {
-            $valid = in_array($search, $this->purchaseCheck);
+            $purchase_dtls =DB::table('INV_PURCHASE_DTL as pr')
+                    ->where('pr.tran_mst_id', $search)
+                    ->leftJoin('INV_ST_GROUP_ITEM as p', function ($join) {
+                        $join->on('p.st_group_item_id', '=', 'pr.item_code');
+                    })
+                    ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
+                        $join->on('s.item_size_code', '=', 'p.item_size');
+                    })
+                    ->leftJoin('INV_COLOR_INFO as c', function ($join) {
+                        $join->on('c.tran_mst_id', '=', 'p.color_code');
+                    })
 
-            if (!$valid) {
+                    ->get(['pr.*','p.item_name','p.st_group_item_id','s.item_size_name','c.color_name']);
 
-                $pricing = DB::table('INV_PRICE_SCHEDULE_MST')
-                    ->where('item_code', $search)
-                    ->first();
+                    $this->purchaseCart = [];
+                    foreach($purchase_dtls as $purchase_dtl){
 
-                if ($pricing) {
+                        $this->purchaseCart[] = [
+                            'item_name' => $purchase_dtl->item_name,
+                            'color_name' => $purchase_dtl->color_name,
+                            'item_size_name' => $purchase_dtl->item_size_name,
+                            'mrp_rate' => $purchase_dtl->pr_rate,
+                            'vat_amt' => $purchase_dtl->vat_amt,
+                            'line_total' => $purchase_dtl->tot_payble_amt,
+                            'qty' => $purchase_dtl->item_qty,
+                            'discount' => $purchase_dtl->discount,
+                            'st_group_item_id' => $purchase_dtl->st_group_item_id,
+                            'is_check' => 0,
+                            'return_qty' => '',
+                            'return_line_total' => '',
+                            'return_discount' => '',
+                        ];
+                    }
 
-                    $this->purchaseCheck[] = $search;
-
-                    $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
-
-                    $this->purchaseCart[] = [
-                        'item_name' => @$this->resultProducts[$key]->item_name,
-                        'color_name' => @$this->resultProducts[$key]->color_name,
-                        'item_size_name' => @$this->resultProducts[$key]->item_size_name,
-                        'mrp_rate' => $pricing->mrp_rate,
-                        'vat_amt' => $pricing->vat_amt,
-                        'line_total' => $line_total,
-                        'qty' => 1,
-                        'discount' => 0,
-                        'st_group_item_id' => $search,
-                    ];
 
                     $this->grandCalculation();
 
-                    $this->productsearch = '';
-                    $this->resetProductSearch();
-                } else {
-                    $this->resetProductSearch();
-                    session()->flash('warning', 'Pricing has not added to selected product');
-                }
-            } else {
-                $this->resetProductSearch();
-                session()->flash('error', 'Product already added to cart');
+                    $this->purchasesearch = '';
+                    $this->resetPurchaseSearch();
+
+
             }
-        }
     }
 
     public function hideDropdown()
     {
-        $this->resetProductSearch();
+        $this->resetPurchaseSearch();
     }
 
     //search increment decrement end
 
-    public function resetProductSearch()
+    public function resetPurchaseSearch()
     {
         $this->searchSelect = -1;
-        $this->resultProducts = [];
+        $this->resultPurchases = [];
     }
 
-    public function removeItem($key, $id)
-    {
-        unset($this->purchaseCart[$key]);
-        $del_key = array_search($id, $this->purchaseCheck);
-        unset($this->purchaseCheck[$del_key]);
-        $this->grandCalculation();
-    }
+
 
     public function calculation($key)
     {
@@ -199,7 +167,13 @@ class PurchaseForm extends Component
         $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
         $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
 
+        $return_qty = (float)$this->purchaseCart[$key]['return_qty'] ?? 0;
+        $mrp_rate = (float)$this->purchaseCart[$key]['mrp_rate'] ?? 0;
+        $return_discount = (float)$this->purchaseCart[$key]['return_discount'] ?? 0;
+        $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
+
         $this->purchaseCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
+        $this->purchaseCart[$key]['return_line_total'] = ((($return_qty * $mrp_rate) + $vat) -  $return_discount);
 
         $this->grandCalculation();
     }
@@ -212,12 +186,22 @@ class PurchaseForm extends Component
         $total_vat = 0;
         $shipping_amt = $this->state['shipping_amt'] ?? 0;
 
+        $total_return_qty = 0;
+        $return_sub_total = 0;
+        $total_return_discount = 0;
+        $total_return_vat = 0;
+
         foreach ($this->purchaseCart as $value) {
 
             $sub_total += (float)$value['line_total'] ?? 0;
             $total_qty += (float)$value['qty'] ?? 0;
             $total_discount += (float)$value['discount'] ?? 0;
             $total_vat += (float)$value['vat_amt'] ?? 0;
+
+            $return_sub_total += (float)$value['return_line_total'] ?? 0;
+            $total_return_qty += (float)$value['return_qty'] ?? 0;
+            $total_return_discount += (float)$value['return_discount'] ?? 0;
+            
         }
 
         $this->state['net_payable_amt'] = number_format($sub_total, 2, '.', '') ?? 0;
@@ -228,6 +212,16 @@ class PurchaseForm extends Component
 
         $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total), 2, '.', '');
         $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+    }
+
+    public function purchaseActive($key){
+        if($this->purchaseCart[$key]['is_check'] == true){
+            $this->purchaseCart[$key]['is_check'] = 1;
+
+        }else{
+            $this->purchaseCart[$key]['is_check'] = 0;
+            $this->purchaseCart[$key]['return_qty'] =  '';
+        }
     }
 
     public function save()
@@ -324,9 +318,8 @@ class PurchaseForm extends Component
             session()->flash('error', '*At least one product need to added');
         }
     }
-
     public function render()
     {
-        return view('livewire.dashboard.purchase.purchase.purchase-form');
+        return view('livewire.dashboard.purchase.return.purchase-return-form');
     }
 }

@@ -21,6 +21,9 @@ use App\Livewire\Dashboard\Product\PricingList\PricingList;
 use App\Livewire\Dashboard\Product\Product\{Product, ProductCreate, ProductEdit};
 use App\Livewire\Dashboard\Product\Unit\ProductUnit;
 use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, PurchaseEdit};
+use App\Livewire\Dashboard\Purchase\Return\PurchaseReturn;
+use App\Livewire\Dashboard\Purchase\Return\PurchaseReturnCreate;
+use App\Livewire\Dashboard\Purchase\Return\PurchaseReturnEdit;
 use App\Livewire\Dashboard\Sales\Sales\{Sales, SalesCreate, SalesEdit};
 
 
@@ -69,6 +72,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // ------------- product start ----------------
+
     Route::get('product/group', ProductGroup::class)->name('product-group');
     Route::get('product/brand', ProductBrand::class)->name('product-brand');
     Route::get('product/unit', ProductUnit::class)->name('product-unit');
@@ -85,9 +89,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     // ------------- purchase start ----------------
+
     Route::get('purchase', Purchase::class)->name('purchase');
     Route::get('purchase/create', PurchaseCreate::class)->name('purchase-create');
     Route::get('purchase/{purchase_id}/edit', PurchaseEdit::class)->name('purchase-edit');
+
+    Route::get('purchase-return', PurchaseReturn::class)->name('purchase-return');
+    Route::get('purchase-return/create', PurchaseReturnCreate::class)->name('purchase-return-create');
+    Route::get('purchase-return/{purchase_return_id}/edit', PurchaseReturnEdit::class)->name('purchase-return-edit');
 
     // ------------- purchase end ----------------
 
