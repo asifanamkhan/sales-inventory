@@ -118,7 +118,7 @@
                             <td class="" style="width:30%">Name</td>
                             <td class="text-center" style="width:10%">RT Qty</td>
                             <td class="text-center" style="width:10%">Price</td>
-                            <td class="text-center" style="width:10%">RT Discount</td>
+                            <td class="text-center" style="width:10%">ADJ Discount</td>
                             <td class="text-center" style="width:10%">RT Tax</td>
                             <td class="text-center" style="width:15%">RT Amount</td>
                             <td class="text-center" style="width:2%">Action</td>
