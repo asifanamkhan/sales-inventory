@@ -361,18 +361,6 @@
 
 @script
 <script data-navigate-once>
-    document.addEventListener('livewire:navigated', () => {
-        $(document).ready(function() {
-            $('.select2').select2({
-                theme: "bootstrap-5",
-            });
-        });
-    });
-
-    $('#supplier').on('change', function(e){
-        @this.set('state.p_code', e.target.value, false);
-    });
-
     $wire.on('set_bank_code_purchase',(event)=>{
         @this.set('paymentState.bank_code', event.id, false);
     });

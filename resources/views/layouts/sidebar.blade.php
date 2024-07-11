@@ -217,6 +217,9 @@
             <ul class="collapse list-unstyled
         {{ request()->routeIs('sale') ? 'show' : ' ' }}
         {{ request()->routeIs('sale-create') ? 'show' : ' ' }}
+        {{ request()->routeIs('sale-return') ? 'show' : ' ' }}
+        {{ request()->routeIs('sale-return-create') ? 'show' : ' ' }}
+        {{ request()->routeIs('sale-return-edit') ? 'show' : ' ' }}
         " id="salesSubmenu">
                 <li class="{{ request()->routeIs('sale') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('sale') }}"> - Sales list</a>
@@ -224,8 +227,12 @@
                 <li class="{{ request()->routeIs('sale-create') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('sale-create') }}"> - Sales entry</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Sales purchase</a>
+                <li class="
+                {{ request()->routeIs('sale-return') ? 'active' : ' ' }}
+                {{ request()->routeIs('sale-return-create') ? 'active' : ' ' }}
+                {{ request()->routeIs('sale-return-edit') ? 'active' : ' ' }}
+                ">
+                    <a class="list" wire:navigate href="{{ route('sale-return') }}"> - Sales return</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href=""> - Product damage</a>
