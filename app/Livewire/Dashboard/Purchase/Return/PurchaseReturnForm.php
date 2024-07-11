@@ -23,7 +23,6 @@ class PurchaseReturnForm extends Component
     public $pay_amt, $due_amt;
 
 
-
     public function paymentMethodAll()
     {
         return $this->payment_methods = DB::table('ACC_PAYMENT_MODE')
@@ -45,7 +44,7 @@ class PurchaseReturnForm extends Component
             } else {
                 $this->resultPurchases = DB::table('INV_PURCHASE_MST as p')
                     ->where(DB::raw('lower(p.memo_no)'), 'like', '%' . strtolower($this->purchasesearch) . '%')
-                    ->get(['*'])
+                    ->get()
                     ->toArray();
             }
 
@@ -123,8 +122,14 @@ class PurchaseReturnForm extends Component
                     $this->state['ref_memo_no'] = @$this->resultPurchases[$key]->memo_no;
 
                     foreach($purchase_dtls as $purchase_dtl){
-                        // $dd = DB::table('INV_PURCHASE_RET_MST as pr')
-                        //             ->where('memo_no')
+
+                        $return_qty = DB::table('INV_PURCHASE_RET_DTL as pr')
+                                    ->where('ref_memo_no',$this->state['ref_memo_no'])
+                                    ->where('item_code', $purchase_dtl->st_group_item_id)
+                                    ->sum('item_qty');
+
+                        $current_qty = (float)$purchase_dtl->item_qty - $return_qty;
+
                         if((float)$purchase_dtl->vat_amt && (float)$purchase_dtl->vat_amt > 0){
                             $p_vat_amt = (float)$purchase_dtl->vat_amt / $purchase_dtl->item_qty;
                         }
@@ -137,8 +142,8 @@ class PurchaseReturnForm extends Component
                             'vat_amt' => $purchase_dtl->vat_amt,
                             'p_vat_amt' => $p_vat_amt,
                             'line_total' => $purchase_dtl->tot_payble_amt,
-                            'qty' => $purchase_dtl->item_qty,
-                            'p_qty' => $purchase_dtl->item_qty,
+                            'qty' => $current_qty,
+                            'p_qty' => $current_qty,
                             'discount' => $purchase_dtl->discount,
                             'st_group_item_id' => $purchase_dtl->st_group_item_id,
                             'is_check' => false,
@@ -200,7 +205,6 @@ class PurchaseReturnForm extends Component
                 $total_discount += (float)$value['discount'] ?? 0;
                 $total_vat += (float)$value['vat_amt'] ?? 0;
             }
-
         }
 
         $this->state['net_payable_amt'] = number_format($sub_total, 2, '.', '') ?? 0;
@@ -253,19 +257,21 @@ class PurchaseReturnForm extends Component
                 $tran_mst_id = DB::table('INV_PURCHASE_RET_MST')->insertGetId($this->state, 'tran_mst_id');
 
                 foreach ($this->purchaseCart as $key => $value) {
-                    DB::table('INV_PURCHASE_RET_DTL')->insert([
-                        'tran_mst_id' => $tran_mst_id,
-                        'item_code' => $value['st_group_item_id'],
-                        'item_qty' => $value['qty'],
-                        'pr_rate' => $value['mrp_rate'],
-                        'vat_amt' => $value['vat_amt'],
-                        'discount' => $value['discount'],
-                        'tot_payble_amt' => $value['line_total'],
-                        'user_name' => $this->state['user_name'],
-                        'expire_date' => @$value['expire_date'],
-                    ]);
+                    if($value['is_check'] == 1){
+                        DB::table('INV_PURCHASE_RET_DTL')->insert([
+                            'tran_mst_id' => $tran_mst_id,
+                            'item_code' => $value['st_group_item_id'],
+                            'item_qty' => $value['qty'],
+                            'pr_rate' => $value['mrp_rate'],
+                            'vat_amt' => $value['vat_amt'],
+                            'discount' => $value['discount'],
+                            'tot_payble_amt' => $value['line_total'],
+                            'user_name' => $this->state['user_name'],
+                            'expire_date' => @$value['expire_date'],
+                            'ref_memo_no' => $this->state['ref_memo_no']
+                        ]);
+                    }
                 }
-
 
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
@@ -279,7 +285,7 @@ class PurchaseReturnForm extends Component
                     'net_payable_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
                     'user_id' => $this->state['user_name'],
-                    'ref_memo_no' => $this->state['ref_memo_no']
+
                 ];
                 if ($this->paymentState['pay_mode'] == 2) {
                     $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
