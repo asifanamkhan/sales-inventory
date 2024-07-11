@@ -285,7 +285,8 @@ class PurchaseReturnForm extends Component
                     'net_payable_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
                     'user_id' => $this->state['user_name'],
-
+                    'ref_memo_no' => $this->state['ref_memo_no']
+                    
                 ];
                 if ($this->paymentState['pay_mode'] == 2) {
                     $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
