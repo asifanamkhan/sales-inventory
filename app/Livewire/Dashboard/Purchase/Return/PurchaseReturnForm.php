@@ -17,8 +17,6 @@ class PurchaseReturnForm extends Component
     public $purchasesearch, $payment_methods;
     public $resultPurchases = [];
     public $purchaseCart = [];
-    public $purchaseQtyCheck = [];
-    public $purchaseVatAmt = [];
     public $searchSelect = -1;
     public $countProduct = 0;
     public $isCheck = false;
@@ -101,7 +99,6 @@ class PurchaseReturnForm extends Component
     {
         $search = @$this->resultPurchases[$key]->tran_mst_id;
 
-
         if ($search) {
             $purchase_dtls =DB::table('INV_PURCHASE_DTL as pr')
                     ->where('pr.tran_mst_id', $search)
@@ -118,22 +115,19 @@ class PurchaseReturnForm extends Component
                     ->get(['pr.*','p.item_name','p.st_group_item_id','s.item_size_name','c.color_name']);
 
                     $this->purchaseCart = [];
-                    $this->purchaseQtyCheck = [];
-                    $this->purchaseVatAmt = [];
                     $this->state['p_code'] = @$this->resultPurchases[$key]->p_code;
                     $this->state['war_id'] = @$this->resultPurchases[$key]->war_id;
                     $this->state['comp_id'] = @$this->resultPurchases[$key]->comp_id;
                     $this->state['branch_id'] = @$this->resultPurchases[$key]->branch_id;
                     $this->state['lc_no'] = @$this->resultPurchases[$key]->lc_no;
+                    $this->state['ref_memo_no'] = @$this->resultPurchases[$key]->memo_no;
 
                     foreach($purchase_dtls as $purchase_dtl){
-
-                        $this->purchaseQtyCheck[] = [
-                            $purchase_dtl->item_qty,
-                        ];
-                        $this->purchaseVatAmt[] = [
-                            $purchase_dtl->vat_amt,
-                        ];
+                        // $dd = DB::table('INV_PURCHASE_RET_MST as pr')
+                        //             ->where('memo_no')
+                        if((float)$purchase_dtl->vat_amt && (float)$purchase_dtl->vat_amt > 0){
+                            $p_vat_amt = (float)$purchase_dtl->vat_amt / $purchase_dtl->item_qty;
+                        }
 
                         $this->purchaseCart[] = [
                             'item_name' => $purchase_dtl->item_name,
@@ -141,8 +135,10 @@ class PurchaseReturnForm extends Component
                             'item_size_name' => $purchase_dtl->item_size_name,
                             'mrp_rate' => $purchase_dtl->pr_rate,
                             'vat_amt' => $purchase_dtl->vat_amt,
+                            'p_vat_amt' => $p_vat_amt,
                             'line_total' => $purchase_dtl->tot_payble_amt,
                             'qty' => $purchase_dtl->item_qty,
+                            'p_qty' => $purchase_dtl->item_qty,
                             'discount' => $purchase_dtl->discount,
                             'st_group_item_id' => $purchase_dtl->st_group_item_id,
                             'is_check' => false,
@@ -172,7 +168,7 @@ class PurchaseReturnForm extends Component
 
     public function calculation($key)
     {
-        $purchase_qty = (float)$this->purchaseQtyCheck[$key][0];
+        $purchase_qty = (float)$this->purchaseCart[$key]['p_qty'];
         if((float)$this->purchaseCart[$key]['qty'] > $purchase_qty){
             (float)$this->purchaseCart[$key]['qty'] = 1;
             session()->flash('error', "Return quantity can not bigger than purchase quantity ($purchase_qty)");
@@ -181,8 +177,8 @@ class PurchaseReturnForm extends Component
         $qty = (float)$this->purchaseCart[$key]['qty'] ?? 1;
         $mrp_rate = (float)$this->purchaseCart[$key]['mrp_rate'] ?? 0;
         $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
-        (float)$this->purchaseCart[$key]['vat_amt'] = (float)$this->purchaseVatAmt[$key][0] * $qty;
-        $vat =  (float)$this->purchaseCart[$key]['vat_amt']?? 0;
+        (float)$this->purchaseCart[$key]['vat_amt'] = (float)$this->purchaseCart[$key]['p_vat_amt'] * $qty;
+        $vat =  (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
 
         $this->purchaseCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
 
@@ -198,11 +194,12 @@ class PurchaseReturnForm extends Component
         $shipping_amt = $this->state['shipping_amt'] ?? 0;
 
         foreach ($this->purchaseCart as $value) {
-
-            $sub_total += (float)$value['line_total'] ?? 0;
-            $total_qty += (float)$value['qty'] ?? 0;
-            $total_discount += (float)$value['discount'] ?? 0;
-            $total_vat += (float)$value['vat_amt'] ?? 0;
+            if($value['is_check']){
+                $sub_total += (float)$value['line_total'] ?? 0;
+                $total_qty += (float)$value['qty'] ?? 0;
+                $total_discount += (float)$value['discount'] ?? 0;
+                $total_vat += (float)$value['vat_amt'] ?? 0;
+            }
 
         }
 
@@ -212,7 +209,7 @@ class PurchaseReturnForm extends Component
         $this->state['tot_vat_amt'] = $total_vat ?? 0;
         $this->state['tot_discount'] = $total_discount ?? 0;
 
-        $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total), 2, '.', '');
+        $this->state['tot_payable_amt'] = number_format(((float)$sub_total - (float)$shipping_amt), 2, '.', '');
         $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
     }
 
@@ -224,6 +221,7 @@ class PurchaseReturnForm extends Component
             $this->purchaseCart[$key]['is_check'] = 0;
             $this->purchaseCart[$key]['return_qty'] =  '';
         }
+        $this->calculation($key);
     }
 
     public function save()
@@ -280,7 +278,8 @@ class PurchaseReturnForm extends Component
                     'vat_amt' => $this->state['tot_vat_amt'],
                     'net_payable_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
-                    'user_id' => $this->state['user_name']
+                    'user_id' => $this->state['user_name'],
+                    'ref_memo_no' => $this->state['ref_memo_no']
                 ];
                 if ($this->paymentState['pay_mode'] == 2) {
                     $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
