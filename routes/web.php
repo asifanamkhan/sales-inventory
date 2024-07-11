@@ -21,10 +21,9 @@ use App\Livewire\Dashboard\Product\PricingList\PricingList;
 use App\Livewire\Dashboard\Product\Product\{Product, ProductCreate, ProductEdit};
 use App\Livewire\Dashboard\Product\Unit\ProductUnit;
 use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, PurchaseEdit};
-use App\Livewire\Dashboard\Purchase\Return\PurchaseReturn;
-use App\Livewire\Dashboard\Purchase\Return\PurchaseReturnCreate;
-use App\Livewire\Dashboard\Purchase\Return\PurchaseReturnEdit;
+use App\Livewire\Dashboard\Purchase\Return\{PurchaseReturn, PurchaseReturnCreate, PurchaseReturnEdit};
 use App\Livewire\Dashboard\Sales\Sales\{Sales, SalesCreate, SalesEdit};
+use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnEdit};
 
 
 Livewire::setUpdateRoute(function ($handle) {
@@ -105,4 +104,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sale', Sales::class)->name('sale');
     Route::get('sale/create', SalesCreate::class)->name('sale-create');
     Route::get('sale/{sale_id}/edit', SalesEdit::class)->name('sale-edit');
+
+    Route::get('sale-return', SalesReturn::class)->name('sale-return');
+    Route::get('sale-return/create', SalesReturnCreate::class)->name('sale-return-create');
+    Route::get('sale-return/{sale_return_id}/edit', SalesReturnEdit::class)->name('sale-return-edit');
+
+    // ------------- sale end ----------------
+
 });

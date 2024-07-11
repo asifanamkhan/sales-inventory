@@ -261,7 +261,7 @@ class PurchaseForm extends Component
                 $this->state['branch_id'] = 1;
 
                 $tran_mst_id = DB::table('INV_PURCHASE_MST')
-                        ->insertGetId($this->state, 'tran_mst_id');
+                ->insertGetId($this->state, 'tran_mst_id');
 
                 foreach ($this->purchaseCart as $key => $value) {
                     DB::table('INV_PURCHASE_DTL')->insert([
@@ -277,7 +277,7 @@ class PurchaseForm extends Component
                     ]);
                 }
 
-                
+
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
                     'tran_type' => 'PR',
@@ -317,7 +317,8 @@ class PurchaseForm extends Component
                 DB::commit();
 
                 session()->flash('status', 'New purchase created successfully');
-                return $this->redirect(route('purchase'), navigate: true);
+                return $this->redirect(route('purchase'), navigate:true);
+
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);
