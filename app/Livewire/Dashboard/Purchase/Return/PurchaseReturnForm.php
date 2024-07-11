@@ -17,6 +17,8 @@ class PurchaseReturnForm extends Component
     public $purchasesearch, $payment_methods;
     public $resultPurchases = [];
     public $purchaseCart = [];
+    public $purchaseQtyCheck = [];
+    public $purchaseVatAmt = [];
     public $searchSelect = -1;
     public $countProduct = 0;
     public $isCheck = false;
@@ -62,7 +64,6 @@ class PurchaseReturnForm extends Component
         $this->state['net_payable_amt'] = 0;
         $this->state['tot_payable_amt'] = 0;
         $this->state['total_qty'] = 0;
-        $this->state['return_total_qty'] = 0;
         $this->state['tot_discount'] = 0;
         $this->state['tot_vat_amt'] = 0;
         // $this->state['pay_amt'] = '';
@@ -100,6 +101,7 @@ class PurchaseReturnForm extends Component
     {
         $search = @$this->resultPurchases[$key]->tran_mst_id;
 
+
         if ($search) {
             $purchase_dtls =DB::table('INV_PURCHASE_DTL as pr')
                     ->where('pr.tran_mst_id', $search)
@@ -116,7 +118,22 @@ class PurchaseReturnForm extends Component
                     ->get(['pr.*','p.item_name','p.st_group_item_id','s.item_size_name','c.color_name']);
 
                     $this->purchaseCart = [];
+                    $this->purchaseQtyCheck = [];
+                    $this->purchaseVatAmt = [];
+                    $this->state['p_code'] = @$this->resultPurchases[$key]->p_code;
+                    $this->state['war_id'] = @$this->resultPurchases[$key]->war_id;
+                    $this->state['comp_id'] = @$this->resultPurchases[$key]->comp_id;
+                    $this->state['branch_id'] = @$this->resultPurchases[$key]->branch_id;
+                    $this->state['lc_no'] = @$this->resultPurchases[$key]->lc_no;
+
                     foreach($purchase_dtls as $purchase_dtl){
+
+                        $this->purchaseQtyCheck[] = [
+                            $purchase_dtl->item_qty,
+                        ];
+                        $this->purchaseVatAmt[] = [
+                            $purchase_dtl->vat_amt,
+                        ];
 
                         $this->purchaseCart[] = [
                             'item_name' => $purchase_dtl->item_name,
@@ -128,19 +145,13 @@ class PurchaseReturnForm extends Component
                             'qty' => $purchase_dtl->item_qty,
                             'discount' => $purchase_dtl->discount,
                             'st_group_item_id' => $purchase_dtl->st_group_item_id,
-                            'is_check' => 0,
-                            'return_qty' => '',
-                            'return_line_total' => '',
-                            'return_discount' => '',
+                            'is_check' => false,
                         ];
                     }
 
-
                     $this->grandCalculation();
-
                     $this->purchasesearch = '';
                     $this->resetPurchaseSearch();
-
 
             }
     }
@@ -159,21 +170,21 @@ class PurchaseReturnForm extends Component
     }
 
 
-
     public function calculation($key)
     {
-        $qty = (float)$this->purchaseCart[$key]['qty'] ?? 0;
+        $purchase_qty = (float)$this->purchaseQtyCheck[$key][0];
+        if((float)$this->purchaseCart[$key]['qty'] > $purchase_qty){
+            (float)$this->purchaseCart[$key]['qty'] = 1;
+            session()->flash('error', "Return quantity can not bigger than purchase quantity ($purchase_qty)");
+        }
+
+        $qty = (float)$this->purchaseCart[$key]['qty'] ?? 1;
         $mrp_rate = (float)$this->purchaseCart[$key]['mrp_rate'] ?? 0;
         $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
-        $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
-
-        $return_qty = (float)$this->purchaseCart[$key]['return_qty'] ?? 0;
-        $mrp_rate = (float)$this->purchaseCart[$key]['mrp_rate'] ?? 0;
-        $return_discount = (float)$this->purchaseCart[$key]['return_discount'] ?? 0;
-        $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
+        (float)$this->purchaseCart[$key]['vat_amt'] = (float)$this->purchaseVatAmt[$key][0] * $qty;
+        $vat =  (float)$this->purchaseCart[$key]['vat_amt']?? 0;
 
         $this->purchaseCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
-        $this->purchaseCart[$key]['return_line_total'] = ((($return_qty * $mrp_rate) + $vat) -  $return_discount);
 
         $this->grandCalculation();
     }
@@ -186,11 +197,6 @@ class PurchaseReturnForm extends Component
         $total_vat = 0;
         $shipping_amt = $this->state['shipping_amt'] ?? 0;
 
-        $total_return_qty = 0;
-        $return_sub_total = 0;
-        $total_return_discount = 0;
-        $total_return_vat = 0;
-
         foreach ($this->purchaseCart as $value) {
 
             $sub_total += (float)$value['line_total'] ?? 0;
@@ -198,10 +204,6 @@ class PurchaseReturnForm extends Component
             $total_discount += (float)$value['discount'] ?? 0;
             $total_vat += (float)$value['vat_amt'] ?? 0;
 
-            $return_sub_total += (float)$value['return_line_total'] ?? 0;
-            $total_return_qty += (float)$value['return_qty'] ?? 0;
-            $total_return_discount += (float)$value['return_discount'] ?? 0;
-            
         }
 
         $this->state['net_payable_amt'] = number_format($sub_total, 2, '.', '') ?? 0;
@@ -229,9 +231,7 @@ class PurchaseReturnForm extends Component
 
         Validator::make($this->state, [
             'tran_date' => 'required|date',
-            'war_id' => 'required|numeric',
             'status' => 'required|numeric',
-            'p_code' => 'required|numeric',
             'tot_payable_amt' => 'required|numeric',
             'net_payable_amt' => 'required|numeric',
 
@@ -249,13 +249,13 @@ class PurchaseReturnForm extends Component
             try {
                 $this->state['user_name'] = Auth::user()->id;
                 $this->state['emp_id'] = Auth::user()->id;
-                $this->state['comp_id'] = Auth::user()->id;
-                $this->state['branch_id'] = Auth::user()->id;
+                $this->state['comp_id'] = 1;
+                $this->state['branch_id'] = 1;
 
-                $tran_mst_id = DB::table('INV_PURCHASE_MST')->insertGetId($this->state, 'tran_mst_id');
+                $tran_mst_id = DB::table('INV_PURCHASE_RET_MST')->insertGetId($this->state, 'tran_mst_id');
 
                 foreach ($this->purchaseCart as $key => $value) {
-                    DB::table('INV_PURCHASE_DTL')->insert([
+                    DB::table('INV_PURCHASE_RET_DTL')->insert([
                         'tran_mst_id' => $tran_mst_id,
                         'item_code' => $value['st_group_item_id'],
                         'item_qty' => $value['qty'],
@@ -271,7 +271,7 @@ class PurchaseReturnForm extends Component
 
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
-                    'tran_type' => 'PR',
+                    'tran_type' => 'PRT',
                     'payment_date' => $this->state['tran_date'],
                     'p_code' => $this->state['p_code'],
                     'pay_mode' => $this->paymentState['pay_mode'],
@@ -291,14 +291,15 @@ class PurchaseReturnForm extends Component
 
                 if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
                     $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
+                    $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
                 }
 
                 if ($this->paymentState['pay_mode'] == 4) {
                     $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
                 }
-                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5 || $this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6) {
                     $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
-                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                    $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                 }
 
 
@@ -307,15 +308,15 @@ class PurchaseReturnForm extends Component
 
                 DB::commit();
 
-                session()->flash('status', 'New purchase created successfully');
-                return $this->redirect(route('purchase'), navigate:true);
+                session()->flash('status', 'New purchase return created successfully');
+                return $this->redirect(route('purchase-return'), navigate:true);
 
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);
             }
         } else {
-            session()->flash('error', '*At least one product need to added');
+            session()->flash('error', '*At least one item need to added');
         }
     }
     public function render()

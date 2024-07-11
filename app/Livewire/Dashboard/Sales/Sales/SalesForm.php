@@ -309,7 +309,7 @@ class SalesForm extends Component
                 }
                 if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
                     $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
-                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                    $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                 }
 
 

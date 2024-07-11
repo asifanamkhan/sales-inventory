@@ -91,7 +91,7 @@
                                         style="@if($searchSelect === $pk) background: #1e418685; @endif">
                                         {{ $resultPurchase->memo_no }}
                                         | {{ date('d-M-Y', strtotime($resultPurchase->tran_date)) }}
-                                        | <b>Amt:</b> {{ number_format($resultPurchase->tot_payable_amt, 2, '.', '')  }}
+                                        | <b>Amt:</b> {{ number_format($resultPurchase->tot_payable_amt, 2, '.', '') }}
 
                                     </p>
                                     @empty
@@ -115,14 +115,12 @@
                     <thead>
                         <tr class="bg-sidebar">
                             <td class="" style="width:3%">SL</td>
-                            <td class="" style="width:28%">Name</td>
-                            <td class="text-center" style="width:10%">Qty</td>
+                            <td class="" style="width:30%">Name</td>
                             <td class="text-center" style="width:10%">RT Qty</td>
                             <td class="text-center" style="width:10%">Price</td>
-                            <td class="text-center" style="width:10%">Discount</td>
-                            <td class="text-center" style="width:7%">Tax</td>
-                            <td class="text-center" style="width:10%">PR Amount</td>
-                            <td class="text-center" style="width:10%">RT Amount</td>
+                            <td class="text-center" style="width:10%">RT Discount</td>
+                            <td class="text-center" style="width:10%">RT Tax</td>
+                            <td class="text-center" style="width:15%">RT Amount</td>
                             <td class="text-center" style="width:2%">Action</td>
                         </tr>
                     </thead>
@@ -142,54 +140,37 @@
 
                             </td>
                             <td>
-                                <input
-                                @if ($purchase['is_check'] == 0)
-                                    readonly
-                                @endif
-                                wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
+                                <input @if ($purchase['is_check']==0) readonly @endif
+                                    wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
                                     wire:model='purchaseCart.{{ $purchase_key }}.qty' class="form-control text-center">
                             </td>
-                            <td>
-                                <input
-                                @if ($purchase['is_check'] == 0)
-                                    readonly
-                                @endif
-                                wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
-                                    wire:model='purchaseCart.{{ $purchase_key }}.return_qty' class="form-control text-center">
-                            </td>
+
                             <td>
                                 <input tabindex="-1" readonly type="number"
                                     wire:model='purchaseCart.{{ $purchase_key }}.mrp_rate'
                                     class="form-control text-center">
                             </td>
                             <td>
-                                <input
-                                @if ($purchase['is_check'] == 0)
-                                    readonly
-                                @endif
-                                wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
+                                <input @if ($purchase['is_check']==0) readonly @endif
+                                    wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
                                     wire:model='purchaseCart.{{ $purchase_key }}.discount'
                                     class="form-control text-center">
                             </td>
                             <td>
                                 <input tabindex="-1" readonly type="number"
+                                    wire:input.debounce.500ms='calculation({{ $purchase_key }})'
                                     wire:model='purchaseCart.{{ $purchase_key }}.vat_amt'
                                     class="form-control text-center">
                             </td>
                             <td>
-                                <input tabindex="-1" type="number" style="text-align: right"
-                                    readonly class="form-control"
-                                    wire:model='purchaseCart.{{ $purchase_key }}.line_total'>
+                                <input tabindex="-1" type="number" style="text-align: right" readonly
+                                    class="form-control" wire:model='purchaseCart.{{ $purchase_key }}.line_total'>
                             </td>
-                            <td>
-                                <input tabindex="-1" type="number" style="border: 1px solid green; text-align: right"
-                                    readonly class="form-control"
-                                    wire:model='purchaseCart.{{ $purchase_key }}.return_line_total'>
-                            </td>
+
                             <td>
                                 <div class="text-center">
                                     <div class="d-flex justify-content-center">
-                                        <input wire:click='purchaseActive({{ $purchase_key }})' id='purchaseCart.{{ $purchase_key }}.is_check'
+                                        <input wire:click='purchaseActive({{ $purchase_key }})'
                                             wire:model='purchaseCart.{{ $purchase_key }}.is_check'
                                             class="form-check-input" type="checkbox">
                                     </div>
@@ -207,12 +188,7 @@
                             <td style="text-align: center">
                                 {{ $state['total_qty'] }}
                             </td>
-                            <td style="text-align: center">
-                                {{ $state['return_total_qty'] }}
-                            </td>
-                            <td style="text-align: center">
-                                {{ $state['total_qty'] }}
-                            </td>
+                            <td></td>
                             <td style="text-align: center">
                                 {{ $state['tot_discount'] }}
                             </td>
@@ -223,7 +199,6 @@
                                 {{ $state['net_payable_amt'] }}
                             </td>
                             <td></td>
-                            <td></td>
                         </tr>
                     </tfoot>
                 </table>
@@ -232,11 +207,11 @@
                 <div style="border: 1px solid #DEE2E6; padding: 0 !important">
                     <div>
                         <h4 class="h4 text-center pt-2 pb-2" style="background: #0080005c">
-                            Make Payment
+                            Payment return
                         </h4>
                         <h4 class="h4 text-center pt-2 pb-2" style="color: darkred">
                             @if ($pay_amt)
-                            Payment amount: {{ number_format($pay_amt, 2, '.', ',') }}
+                            Return amount: {{ number_format($pay_amt, 2, '.', ',') }}
                             @endif
                         </h4>
                     </div>
@@ -247,7 +222,8 @@
                             <select wire:model.live.debounce.500ms='paymentState.pay_mode' class="form-select"
                                 id='pay_mode'>
                                 @forelse ($payment_methods as $method)
-                                <option {{-- @if ($supplier->st_group_id ==
+                                <option
+                                {{-- @if ($supplier->st_group_id ==
                                     @$edit_select['edit_group_id'])
                                     selected
                                     @endif --}}
@@ -262,13 +238,16 @@
                             @enderror
                         </div>
                         @if ($paymentState['pay_mode'] != 1)
-
-                        @if ($paymentState['pay_mode'] == 2)
-
                         <div class='row'>
+                            @if ($paymentState['pay_mode'] == 2 || $paymentState['pay_mode'] == 3 ||
+                            $paymentState['pay_mode'] == 6)
+
+
+
                             <div class="col-md-6">
                                 <livewire:dashboard.purchase.purchase.pay-partial.bank />
                             </div>
+                            @if ($paymentState['pay_mode'] == 2)
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.bank_ac_no' name='bank_ac_no'
                                     type='text' label='Bank account no' />
@@ -281,16 +260,18 @@
                                 <x-input required_mark='' wire:model='paymentState.chq_date' name='chq_date' type='date'
                                     label='Cheque date' />
                             </div>
-                        </div>
-                        @endif
-                        @if ($paymentState['pay_mode'] == 3 || $paymentState['pay_mode'] == 6 || $paymentState['pay_mode'] == 7)
-                        <div class="col-md-12">
-                            <x-input required_mark='' wire:model='paymentState.card_no' name='card_no' type='text'
-                                label='Card no' />
-                        </div>
-                        @endif
-                        @if ($paymentState['pay_mode'] == 4)
-                        <div class="row">
+                            @endif
+
+                            @endif
+                            @if ($paymentState['pay_mode'] == 3 || $paymentState['pay_mode'] == 6 ||
+                            $paymentState['pay_mode'] == 7)
+                            <div class="col-md-12">
+                                <x-input required_mark='' wire:model='paymentState.card_no' name='card_no' type='text'
+                                    label='Card no' />
+                            </div>
+                            @endif
+                            @if ($paymentState['pay_mode'] == 4)
+
                             <div class="col-md-6">
                                 <livewire:dashboard.purchase.purchase.pay-partial.mobile-bank />
                             </div>
@@ -298,10 +279,11 @@
                                 <x-input required_mark='' wire:model='paymentState.mfs_acc_no' name='mfs_acc_no'
                                     type='text' label='Mobile no' />
                             </div>
-                        </div>
-                        @endif
-                        @if ($paymentState['pay_mode'] == 4 || $paymentState['pay_mode'] == 5)
-                        <div class="row">
+
+                            @endif
+                            @if ($paymentState['pay_mode'] == 4 || $paymentState['pay_mode'] == 5 ||
+                            $paymentState['pay_mode'] == 6 || $paymentState['pay_mode'] == 3)
+
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.online_trx_id' name='online_trx_id'
                                     type='text' label='Transaction no' />
@@ -310,8 +292,9 @@
                                 <x-input required_mark='' wire:model='paymentState.online_trx_dt' name='tran_date'
                                     type='date' label='Transaction date' />
                             </div>
+
+                            @endif
                         </div>
-                        @endif
                         @endif
                     </div>
                 </div>
@@ -321,31 +304,30 @@
                 <table class="table table-borderless">
                     <tbody>
                         <tr style="text-align: right">
-                            <td >Shipping</td>
+                            <td>Return shipping</td>
                             <td>
                                 <input type="number" wire:model='state.shipping_amt' style="text-align: right"
                                     class="form-control" wire:input.debounce.500ms='grandCalculation'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
-                            <td>Net payable</td>
+                            <td>Return net payable</td>
                             <td>
                                 <input style="text-align: right" readonly class="form-control"
                                     wire:model='state.tot_payable_amt'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
-                            <td> Payment amount</td>
+                            <td>Return payment amount</td>
                             <td>
-                                <input type="number" style="text-align: right" class="form-control"
-                                    wire:model='pay_amt' wire:input.debounce.500ms='grandCalculation'>
+                                <input type="number" style="text-align: right" class="form-control" wire:model='pay_amt'
+                                    wire:input.debounce.500ms='grandCalculation'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
-                            <td>Due amount</td>
+                            <td>Return due amount</td>
                             <td style="text-align:right">
-                                <input style="text-align: right;" readonly class="form-control"
-                                    wire:model='due_amt'>
+                                <input style="text-align: right;" readonly class="form-control" wire:model='due_amt'>
                             </td>
                         </tr>
                     </tbody>
@@ -353,13 +335,13 @@
             </div>
             <div class="col-md-7">
                 <div class="form-group">
-                    <label for="">Purchase remarks </label>
+                    <label for="">Purchase return remarks </label>
                     <livewire:quill-text-editor wire:model="state.remarks" theme="snow" />
                 </div>
             </div>
             <div class="col-md-5">
                 <div class="form-group">
-                    <label for="">Purchase documents </label>
+                    <label for="">Purchase return documents </label>
                     <livewire:dropzone wire:model="document" :rules="['mimes:jpg,svg,png,jpeg,pdf,docx,xlsx,csv']"
                         :key="'dropzone-two'" />
                 </div>
@@ -394,4 +376,3 @@
     });
 </script>
 @endscript
-

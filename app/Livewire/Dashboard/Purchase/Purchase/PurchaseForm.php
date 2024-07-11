@@ -255,8 +255,8 @@ class PurchaseForm extends Component
             try {
                 $this->state['user_name'] = Auth::user()->id;
                 $this->state['emp_id'] = Auth::user()->id;
-                $this->state['comp_id'] = Auth::user()->id;
-                $this->state['branch_id'] = Auth::user()->id;
+                $this->state['comp_id'] = 1;
+                $this->state['branch_id'] = 1;
 
                 $tran_mst_id = DB::table('INV_PURCHASE_MST')->insertGetId($this->state, 'tran_mst_id');
 
@@ -304,7 +304,7 @@ class PurchaseForm extends Component
                 }
                 if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
                     $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
-                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                    $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                 }
 
 
