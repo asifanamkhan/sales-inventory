@@ -126,7 +126,13 @@
                     </thead>
                     <tbody>
                         @forelse ($purchaseCart as $purchase_key => $purchase)
-                        <tr wire:key='{{ $purchase_key }}'>
+                        <tr wire:key='{{ $purchase_key }}'
+                        style="
+                        @if ($purchase['is_check'] == 1)
+                            background: #A3D1A3
+                        @endif
+                        "
+                        >
                             <td>{{ $purchase_key + 1 }}</td>
                             <td>
                                 {{ $purchase['item_name'] }}
@@ -141,7 +147,7 @@
                             </td>
                             <td>
                                 <input @if ($purchase['is_check']==0) readonly @endif
-                                    wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
+                                    wire:input.debounce.1000ms='calculation({{ $purchase_key }})' type="number"
                                     wire:model='purchaseCart.{{ $purchase_key }}.qty' class="form-control text-center">
                             </td>
 
@@ -207,7 +213,7 @@
                 <div style="border: 1px solid #DEE2E6; padding: 0 !important">
                     <div>
                         <h4 class="h4 text-center pt-2 pb-2" style="background: #0080005c">
-                            Payment return
+                            Make receivable payment
                         </h4>
                         <h4 class="h4 text-center pt-2 pb-2" style="color: darkred">
                             @if ($pay_amt)
@@ -311,21 +317,21 @@
                             </td>
                         </tr>
                         <tr style="text-align: right">
-                            <td>Return net payable</td>
+                            <td>Net receivable</td>
                             <td>
                                 <input style="text-align: right" readonly class="form-control"
                                     wire:model='state.tot_payable_amt'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
-                            <td>Return payment amount</td>
+                            <td>Received amount</td>
                             <td>
                                 <input type="number" style="text-align: right" class="form-control" wire:model='pay_amt'
                                     wire:input.debounce.500ms='grandCalculation'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
-                            <td>Return due amount</td>
+                            <td>Due amount</td>
                             <td style="text-align:right">
                                 <input style="text-align: right;" readonly class="form-control" wire:model='due_amt'>
                             </td>

@@ -150,6 +150,7 @@ class PurchaseForm extends Component
                         'item_size_name' => @$this->resultProducts[$key]->item_size_name,
                         'mrp_rate' => $pricing->mrp_rate,
                         'vat_amt' => $pricing->vat_amt,
+                        'p_vat_amt' => $pricing->vat_amt,
                         'line_total' => $line_total,
                         'qty' => 1,
                         'discount' => 0,
@@ -197,6 +198,7 @@ class PurchaseForm extends Component
         $qty = (float)$this->purchaseCart[$key]['qty'] ?? 0;
         $mrp_rate = (float)$this->purchaseCart[$key]['mrp_rate'] ?? 0;
         $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
+        (float)$this->purchaseCart[$key]['vat_amt'] = ((float)$this->purchaseCart[$key]['p_vat_amt'] * $qty) ?? 0;
         $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
 
         $this->purchaseCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
