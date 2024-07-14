@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\Sales\Sales;
 
+use App\Service\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -237,6 +238,20 @@ class SalesForm extends Component
         $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
     }
 
+    public function qtyCalculation($product, $key){
+        $stock = DB::table('VW_ITEM_STOCK_QTY')
+            ->where('item_code',$product)
+            ->pluck('stock_qty');
+
+        if((float)$stock[0] >= $this->saleCart[$key]['qty']){
+            $this->calculation($key);
+        }else{
+            session()->flash('error', "You can maximum $stock[0] qty of this item");
+            $this->saleCart[$key]['qty'] = 1;
+        }
+
+    }
+
     public function save()
     {
 
@@ -264,12 +279,12 @@ class SalesForm extends Component
                 $this->state['emp_id'] = Auth::user()->id;
                 $this->state['comp_id'] = Auth::user()->id;
                 $this->state['branch_id'] = Auth::user()->id;
+                $this->state['tot_due_amt'] = $this->due_amt;
 
                 $tran_mst_id = DB::table('INV_SALES_MST')->insertGetId($this->state, 'tran_mst_id');
 
                 foreach ($this->saleCart as $key => $value) {
                     DB::table('INV_SALES_DTL')->insert([
-
                         'tran_mst_id' => $tran_mst_id,
                         'item_code' => $value['st_group_item_id'],
                         'item_qty' => $value['qty'],
@@ -281,6 +296,9 @@ class SalesForm extends Component
                     ]);
                 }
 
+                $ref_memo_no = DB::table('INV_SALES_MST')
+                    ->where('tran_mst_id', $tran_mst_id)
+                    ->first();
 
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
@@ -293,7 +311,9 @@ class SalesForm extends Component
                     'vat_amt' => $this->state['tot_vat_amt'],
                     'net_payable_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
-                    'user_id' => $this->state['user_name']
+                    'user_id' => $this->state['user_name'],
+                    'ref_memo_no' => $ref_memo_no->memo_no,
+                    'payment_status' => Payment::PaymentCheck($this->due_amt),
                 ];
                 if ($this->paymentState['pay_mode'] == 2) {
                     $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
@@ -316,7 +336,6 @@ class SalesForm extends Component
 
 
                 DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
-
 
                 DB::commit();
 

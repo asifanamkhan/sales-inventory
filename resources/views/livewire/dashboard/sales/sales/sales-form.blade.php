@@ -113,7 +113,7 @@
                         <div class="position-relative" @click.away="edit = false" style="width: 90%">
                             <input autocomplete="off" autofocus='true'
                                 placeholder="please type product name or code or scan barcode" @input="edit = true"
-                                style="padding: 1rem" wire:model.live.debounce.500ms='productsearch'
+                                style="padding: 1rem" wire:model.live.debounce.1000ms='productsearch'
                                 wire:keydown.escape="hideDropdown" wire:keydown.tab="hideDropdown"
                                 wire:keydown.Arrow-Up="decrementHighlight" wire:keydown.Arrow-Down="incrementHighlight"
                                 wire:keydown.enter.prevent="selectAccount" type='text' class="form-control">
@@ -182,15 +182,16 @@
                             </td>
 
                             <td>
-                                <input wire:input.debounce.500ms='calculation({{ $sale_key }})' type="number"
-                                    wire:model='saleCart.{{ $sale_key }}.qty' class="form-control text-center">
+                                <input wire:input.debounce.1000ms='qtyCalculation({{ $sale['st_group_item_id'] }},{{ $sale_key }})'
+                                    type="number" wire:model='saleCart.{{ $sale_key }}.qty'
+                                    class="form-control text-center">
                             </td>
                             <td>
                                 <input tabindex="-1" readonly type="number"
                                     wire:model='saleCart.{{ $sale_key }}.mrp_rate' class="form-control text-center">
                             </td>
                             <td>
-                                <input wire:input.debounce.500ms='calculation({{ $sale_key }})' type="number"
+                                <input wire:input.debounce.1000ms='calculation({{ $sale_key }})' type="number"
                                     wire:model='saleCart.{{ $sale_key }}.discount' class="form-control text-center">
                             </td>
                             <td>
@@ -257,7 +258,7 @@
                         <div class="form-group mb-3">
                             <label for="">Payment method<span style="color: red"> *
                                 </span></label>
-                            <select wire:model.live.debounce.500ms='paymentState.pay_mode' class="form-select"
+                            <select wire:model.live.debounce.1000ms='paymentState.pay_mode' class="form-select"
                                 id='pay_mode'>
                                 @forelse ($payment_methods as $method)
                                 <option {{-- @if ($customer->st_group_id ==
@@ -338,7 +339,7 @@
                             <td>Shipping</td>
                             <td>
                                 <input type="number" wire:model='state.shipping_amt' style="text-align: right"
-                                    class="form-control" wire:input.debounce.500ms='grandCalculation'>
+                                    class="form-control" wire:input.debounce.1000ms='grandCalculation'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
@@ -352,7 +353,7 @@
                             <td> Payment amount</td>
                             <td>
                                 <input type="number" style="text-align: right" class="form-control" wire:model='pay_amt'
-                                    wire:input.debounce.500ms='grandCalculation'>
+                                    wire:input.debounce.1000ms='grandCalculation'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
