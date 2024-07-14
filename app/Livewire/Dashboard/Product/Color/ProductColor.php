@@ -46,7 +46,7 @@ class ProductColor extends Component
     #[On('create-product-color-modal')]
     public function modalCreateTitle()
     {
-        $this->modal_title = 'Create product color';
+        $this->modal_title = 'Create new product color';
     }
 
     #[On('product-color-edit-modal')]

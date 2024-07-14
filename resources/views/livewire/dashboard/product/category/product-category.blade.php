@@ -32,7 +32,7 @@
             <div class="col-auto">
                 <button @click="$dispatch('create-product-category-modal')" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target=".{{ $event }}">
-                    Create product category
+                    Create new product category
                 </button>
             </div>
             @endpermission
@@ -41,7 +41,15 @@
             <div wire:ignore.self class="modal fade {{ $event }}" tabindex="-1" role="dialog"
                 aria-labelledby="myLargeModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
+
                     <div class="modal-content">
+                        <div class="modal-header" style="justify-content: space-between">
+                            <h5 class="modal-title text-center w-100" id="exampleModalLabel">Product category</h5>
+                            <b type="button" class="btn btn-sm btn-danger" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </b>
+                        </div>
                         <livewire:dashboard.product.category.product-category-form />
                     </div>
                 </div>
@@ -52,9 +60,9 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td  style="width: 5%">#</td>
-                        <td  >Category name</td>
-                        <td class="text-center" >Action</td>
+                        <td style="width: 5%">#</td>
+                        <td>Category name</td>
+                        <td class="text-center">Action</td>
                     </tr>
                 </thead>
                 <tbody>

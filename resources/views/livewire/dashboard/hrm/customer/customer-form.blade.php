@@ -53,9 +53,6 @@
             @enderror
         </div>
 
-
-
-
         <div class="form-group mb-3">
             <label for="">Status <span style="color: red"> * </span></label>
             <select class="form-select @error('status') is-invalid @enderror" wire:model='state.status' name="" id="">

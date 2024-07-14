@@ -47,7 +47,7 @@ class ProductUnit extends Component
     #[On('create-product-unit-modal')]
     public function modalCreateTitle()
     {
-        $this->modal_title = 'Create product unit';
+        $this->modal_title = 'Create new product unit';
     }
 
     #[On('product-unit-edit-modal')]

@@ -8,7 +8,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Purchase</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase') }}"
-                        style="color: #3C50E0">purchases</a></li>
+                        style="color: #3C50E0">purchase list</a></li>
             </ol>
         </nav>
     </div>
@@ -38,7 +38,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a wire:navigate href='{{ route('purchase-create') }}' type="button" class="btn btn-primary">Create purchase</a>
+                <a href='{{ route('purchase-create') }}' type="button" class="btn btn-primary">Create new purchase</a>
             </div>
             @endpermission
 

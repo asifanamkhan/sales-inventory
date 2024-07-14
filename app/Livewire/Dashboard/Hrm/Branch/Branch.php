@@ -13,8 +13,8 @@ class Branch extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $create_title = 'Branch create';
-    public $update_title = 'Branch update';
+    public $create_title = 'Create new branch ';
+    public $update_title = 'Update branch';
     public $create_event = 'branch-create';
     public $update_event = 'branch-update';
     public $search;

@@ -38,7 +38,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a wire:navigate href='{{ route('sale-return-create') }}' type="button" class="btn btn-primary">Create sale return</a>
+                <a href='{{ route('sale-return-create') }}' type="button" class="btn btn-primary">Create new sale return</a>
             </div>
             @endpermission
 

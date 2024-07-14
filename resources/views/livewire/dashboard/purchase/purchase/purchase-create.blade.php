@@ -3,11 +3,11 @@
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
-        <h3 style="padding: 0px 5px 10px 5px;">Purchase create</h3>
+        <h3 style="padding: 0px 5px 10px 5px;">Create new purchase </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Purchase</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase') }}">purchase</a></li>
+
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase') }}">Purchase</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-create') }}"
                         style="color: #3C50E0">create</a></li>
             </ol>

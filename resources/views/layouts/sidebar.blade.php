@@ -191,7 +191,7 @@
                     <a class="list" wire:navigate href="{{ route('purchase') }}"> - Purchase list</a>
                 </li>
                 <li class="{{ request()->routeIs('purchase-create') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('purchase-create') }}"> - Purchase entry</a>
+                    <a class="list" href="{{ route('purchase-create') }}"> - Purchase entry</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('purchase-return') ? 'active' : ' ' }}
@@ -225,14 +225,14 @@
                     <a class="list" wire:navigate href="{{ route('sale') }}"> - Sales list</a>
                 </li>
                 <li class="{{ request()->routeIs('sale-create') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('sale-create') }}"> - Sales entry</a>
+                    <a class="list" href="{{ route('sale-create') }}"> - Sales entry</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('sale-return') ? 'active' : ' ' }}
                 {{ request()->routeIs('sale-return-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('sale-return-edit') ? 'active' : ' ' }}
                 ">
-                    <a class="list" wire:navigate href="{{ route('sale-return') }}"> - Sales return</a>
+                    <a class="list"  href="{{ route('sale-return') }}"> - Sales return</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href=""> - Product damage</a>

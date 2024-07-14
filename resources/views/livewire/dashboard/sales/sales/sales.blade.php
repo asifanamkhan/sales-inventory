@@ -6,9 +6,9 @@
         <h3 style="padding: 0px 5px 10px 5px;">Sales</h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">sale</a></li>
+                <li class="breadcrumb-item"><a href="#">Sales</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('sale') }}"
-                        style="color: #3C50E0">sales</a></li>
+                        style="color: #3C50E0">sale list</a></li>
             </ol>
         </nav>
     </div>
@@ -38,7 +38,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a wire:navigate href='{{ route('sale-create') }}' type="button" class="btn btn-primary">Create Sale</a>
+                <a wire:navigate href='{{ route('sale-create') }}' type="button" class="btn btn-primary">Create new Sale</a>
             </div>
             @endpermission
 

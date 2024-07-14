@@ -32,7 +32,7 @@
             <div class="col-auto">
                 <button @click="$dispatch('create-product-brand-modal')" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target=".{{ $event }}">
-                    Create pricing list
+                    Add new pricing
                 </button>
             </div>
 
@@ -41,6 +41,13 @@
                 aria-labelledby="myLargeModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
+                        <div class="modal-header" style="justify-content: space-between">
+                            <h5 class="modal-title text-center w-100" id="exampleModalLabel">Product pricing</h5>
+                            <b type="button" class="btn btn-sm btn-danger" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </b>
+                        </div>
                         <livewire:dashboard.product.pricing-list.pricing-list-form />
                     </div>
                 </div>

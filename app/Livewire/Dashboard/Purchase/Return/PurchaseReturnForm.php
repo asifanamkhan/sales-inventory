@@ -141,7 +141,7 @@ class PurchaseReturnForm extends Component
                             'item_size_name' => $purchase_dtl->item_size_name,
                             'mrp_rate' => $purchase_dtl->pr_rate,
                             'vat_amt' => $purchase_dtl->vat_amt,
-                            'p_vat_amt' => $p_vat_amt,
+                            'p_vat_amt' => $p_vat_amt ?? 0,
                             'line_total' => $purchase_dtl->tot_payble_amt,
                             'qty' => $current_qty,
                             'p_qty' => $current_qty,
@@ -275,6 +275,9 @@ class PurchaseReturnForm extends Component
                     }
                 }
 
+                $ref_memo_no = DB::table('INV_PURCHASE_RET_MST')
+                    ->where('tran_mst_id', $tran_mst_id)
+                    ->first();
 
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
@@ -288,7 +291,7 @@ class PurchaseReturnForm extends Component
                     'net_payable_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
                     'user_id' => $this->state['user_name'],
-                    'ref_memo_no' => $this->state['ref_memo_no'],
+                    'ref_memo_no' => $ref_memo_no->memo_no,
                     'payment_status' => Payment::PaymentCheck($this->due_amt),
 
                 ];

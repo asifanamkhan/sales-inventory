@@ -30,7 +30,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a wire:navigate href='{{ route('product-create') }}' type="button" class="btn btn-primary">Create product</a>
+                <a wire:navigate href='{{ route('product-create') }}' type="button" class="btn btn-primary">Create new product</a>
             </div>
             @endpermission
 

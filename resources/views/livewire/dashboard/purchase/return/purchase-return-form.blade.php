@@ -42,10 +42,8 @@
                 <div class="form-group mb-3">
                     <label for="">Status<span style="color: red"> * </span></label>
                     <select wire:model='state.status' class="form-select" id='status'>
-                        <option value="1">Received</option>
-                        <option value="2">Partial</option>
-                        <option value="3">Pending</option>
-                        <option value="4">Ordered</option>
+                        <option value="1">Full returned</option>
+                        <option value="2">Partial returned</option>
                     </select>
                     @error('status')
                     <small class="form-text text-danger">{{ $message }}</small>

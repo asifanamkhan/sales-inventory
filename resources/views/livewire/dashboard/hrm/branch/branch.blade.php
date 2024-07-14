@@ -32,7 +32,7 @@
             <div class="col-auto">
                 <button @click="$dispatch('create-branch-modal')" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#{{ $create_event }}">
-                    Create branch
+                    Create new branch
                 </button>
             </div>
             @endpermission

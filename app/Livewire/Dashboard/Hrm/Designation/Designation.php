@@ -13,8 +13,8 @@ class Designation extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $create_title = 'Designation create';
-    public $update_title = 'Designation update';
+    public $create_title = 'Create new designation';
+    public $update_title = 'Update designation';
     public $create_event = 'designation-create';
     public $update_event = 'designation-update';
     public $search;
