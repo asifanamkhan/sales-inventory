@@ -12,8 +12,8 @@ class Department extends Component
 {
     use WithPagination;
 
-    public $create_title = 'Department create';
-    public $update_title = 'Department update';
+    public $create_title = 'Create new department';
+    public $update_title = 'Update department';
     public $create_event = 'department-create';
     public $update_event = 'department-update';
     public $search;

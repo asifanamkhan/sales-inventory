@@ -14,58 +14,79 @@
     <form action="" wire:submit='save'>
         <div class="row">
             <div class="col-md-4">
-                <div class="form-group mb-3" wire:ignore>
-                    <label for="">Product group <span style="color: red"> * </span></label>
-                    <select class="form-select select2" id='product_group'>
-                        <option value="">Select type</option>
-                        @forelse ($product_groups as $group)
-                        <option
-                        @if ($group->st_group_id == @$edit_select['edit_group_id'])
-                            selected
-                        @endif
-                        value="{{ $group->st_group_id }}">{{ $group->group_name }}</option>
-                        @empty
-                        <option value=""></option>
-                        @endforelse
-                    </select>
+                <div class="d-flex align-items-center" >
+                    <div style="width: 90%">
+                        <div class="form-group mb-3" wire:ignore>
+                            <label for="">Product group <span style="color: red"> * </span></label>
+                            <select class="form-select select2" id='product_group'>
+                                <option value="">Select type</option>
+                                @forelse ($product_groups as $group)
+                                <option
+                                @if ($group->st_group_id == @$edit_select['edit_group_id'])
+                                    selected
+                                @endif
+                                value="{{ $group->st_group_id }}">{{ $group->group_name }}</option>
+                                @empty
+                                <option value=""></option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <a class="btn btn-primary">+</a>
+                    </div>
                 </div>
                 @error('group_group_id')
                     <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
             <div class="col-md-4">
-                <div class="form-group mb-3" wire:ignore>
-                    <label for="">Product Category <span style="color: red"> * </span></label>
-                    <select class="form-select select2" id='product_category'>
-                        <option value="">Select type</option>
-                    </select>
+                <div class="d-flex align-items-center" >
+                    <div style="width: 90%">
+                        <div class="form-group mb-3" wire:ignore>
+                            <label for="">Product Category <span style="color: red"> * </span></label>
+                            <select class="form-select select2" id='product_category'>
+                                <option value="">Select type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <a class="btn btn-primary">+</a>
+                    </div>
                 </div>
                 @error('catagories_id')
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
             <div class="col-md-4">
-                <div class="form-group mb-3" wire:ignore>
-                    <label for="">Product Brand </label>
-                    <select class="form-select select2" id='product_brand'>
-                        <option value="">Select type</option>
-                        @forelse ($product_brands as $brand)
-                        <option
-                        @if ($brand->brand_code == @$edit_select['edit_brand_id'])
-                            selected
-                        @endif
-                        value="{{ $brand->brand_code }}">{{ $brand->brand_name }}</option>
-                        @empty
-                        <option value=""></option>
-                        @endforelse
+                <div class="d-flex align-items-center" >
+                    <div style="width: 90%">
+                        <div class="form-group mb-3" wire:ignore>
+                            <label for="">Product Brand </label>
+                            <select class="form-select select2" id='product_brand'>
+                                <option value="">Select type</option>
+                                @forelse ($product_brands as $brand)
+                                <option
+                                @if ($brand->brand_code == @$edit_select['edit_brand_id'])
+                                    selected
+                                @endif
+                                value="{{ $brand->brand_code }}">{{ $brand->brand_name }}</option>
+                                @empty
+                                <option value=""></option>
+                                @endforelse
 
-                    </select>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <a class="btn btn-primary">+</a>
+                    </div>
                 </div>
                 @error('brand_code')
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="form-group mb-3">
                     <label for="">Product Name <span style="color: red"> * </span></label>
                     <input wire:model='state.item_name' type='text' label='Name'
@@ -75,21 +96,28 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group mb-3" wire:ignore>
-                    <label for="">Product Unit </label>
-                    <select class="form-select select2" id='product_unit'>
-                        <option value="">Select type</option>
-                        @forelse ($product_units as $unit)
-                        <option
-                        @if ($unit->st_unit_convert_id == @$edit_select['edit_unit_id'])
-                            selected
-                        @endif
-                        value="{{ $unit->st_unit_convert_id }}">{{ $unit->unit_name }}</option>
-                        @empty
-                        <option value=""></option>
-                        @endforelse
-                    </select>
+            <div class="col-md-3">
+                <div class="d-flex align-items-center" >
+                    <div style="width: 90%">
+                        <div class="form-group mb-3" wire:ignore>
+                            <label for="">Product Unit </label>
+                            <select class="form-select select2" id='product_unit'>
+                                <option value="">Select type</option>
+                                @forelse ($product_units as $unit)
+                                <option
+                                @if ($unit->st_unit_convert_id == @$edit_select['edit_unit_id'])
+                                    selected
+                                @endif
+                                value="{{ $unit->st_unit_convert_id }}">{{ $unit->unit_name }}</option>
+                                @empty
+                                <option value=""></option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <a class="btn btn-primary">+</a>
+                    </div>
                 </div>
                 @error('unit_id')
                     <small class="form-text text-danger">{{ $message }}</small>

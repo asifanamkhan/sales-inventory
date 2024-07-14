@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\Sales\SalesReturn;
 
+use App\Service\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -138,7 +139,7 @@ class SalesReturnForm extends Component
                             'item_size_name' => $sale_dtl->item_size_name,
                             'mrp_rate' => $sale_dtl->mrp_rate,
                             'vat_amt' => $sale_dtl->vat_amt,
-                            'p_vat_amt' => $p_vat_amt,
+                            'p_vat_amt' => $p_vat_amt ?? 0,
                             'line_total' => $sale_dtl->tot_payble_amt,
                             'qty' => $current_qty,
                             'p_qty' => $current_qty,
@@ -239,11 +240,6 @@ class SalesReturnForm extends Component
 
         if (count($this->saleCart) > 0) {
 
-            // dd(
-            //     $this->state,
-            //     $this->paymentState,
-            //     $this->saleCart,
-            // );
 
             DB::beginTransaction();
             try {
@@ -270,6 +266,10 @@ class SalesReturnForm extends Component
                     }
                 }
 
+                $ref_memo_no = DB::table('INV_SALES_RET_MST')
+                    ->where('tran_mst_id', $tran_mst_id)
+                    ->first();
+
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
                     'tran_type' => 'SRT',
@@ -282,7 +282,8 @@ class SalesReturnForm extends Component
                     'net_payable_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
                     'user_id' => $this->state['user_name'],
-                    'ref_memo_no' => $this->state['ref_memo_no']
+                    'ref_memo_no' => $ref_memo_no->memo_no,
+                    'payment_status' => Payment::PaymentCheck($this->due_amt),
 
                 ];
                 if ($this->paymentState['pay_mode'] == 2) {

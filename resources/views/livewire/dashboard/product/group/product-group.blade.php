@@ -32,7 +32,7 @@
             <div class="col-auto">
                 <button @click="$dispatch('create-product-group-modal')" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target="#{{ $event }}">
-                    Create product group
+                    Create new product group
                 </button>
             </div>
             @endpermission

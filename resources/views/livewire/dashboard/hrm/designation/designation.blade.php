@@ -28,7 +28,7 @@
             <div class="col-auto">
                 <button @click="$dispatch('create-designation-modal')" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#{{ $create_event }}">
-                    Create designation
+                    Create new designation
                 </button>
             </div>
             <x-modal :modalTitle='$create_title' :eventName='$create_event'>

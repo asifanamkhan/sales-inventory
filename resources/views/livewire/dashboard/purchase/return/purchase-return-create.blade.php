@@ -3,12 +3,12 @@
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
-        <h3 style="padding: 0px 5px 10px 5px;">Purchase return create</h3>
+        <h3 style="padding: 0px 5px 10px 5px;">Create new purchase return </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Purchase</a></li>
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-return') }}">purchase return</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-return-create') }}"
+                <li class="breadcrumb-item active"><a  href="{{ route('purchase-return-create') }}"
                         style="color: #3C50E0">create</a></li>
             </ol>
         </nav>

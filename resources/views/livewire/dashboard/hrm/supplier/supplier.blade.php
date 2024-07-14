@@ -28,7 +28,7 @@
 
             <div class="col-auto">
                 <a wire:navigate href='{{ route('supplier-create') }}' class="btn btn-primary">
-                    Create supplier
+                    Create new supplier
                 </a>
             </div>
         </div>

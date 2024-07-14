@@ -59,10 +59,8 @@
                 <div class="form-group mb-3">
                     <label for="">Status<span style="color: red"> * </span></label>
                     <select wire:model='state.status' class="form-select" id='status'>
-                        <option value="1">Received</option>
-                        <option value="2">Partial</option>
-                        <option value="3">Pending</option>
-                        <option value="4">Ordered</option>
+                        <option value="1">Complete</option>
+                        <option value="2">Pending</option>
                     </select>
                     @error('status')
                     <small class="form-text text-danger">{{ $message }}</small>
@@ -70,19 +68,26 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-group mb-3" wire:ignore>
-                    <label for="">Customer<span style="color: red"> * </span></label>
-                    <select class="form-select select2" id='customer'>
-                        <option value="">Select customer</option>
-                        @forelse ($customers as $customer)
-                        <option {{-- @if ($customer->st_group_id == @$edit_select['edit_group_id'])
-                            selected
-                            @endif --}}
-                            value="{{ $customer->customer_id }}">{{ $customer->customer_name }}</option>
-                        @empty
-                        <option value=""></option>
-                        @endforelse
-                    </select>
+                <div class="d-flex align-items-center" >
+                    <div style="width: 90%">
+                        <div class="form-group mb-3" wire:ignore>
+                            <label for="">Customer<span style="color: red"> * </span></label>
+                            <select class="form-select select2" id='customer'>
+                                <option value="">Select customer</option>
+                                @forelse ($customers as $customer)
+                                <option {{-- @if ($customer->st_group_id == @$edit_select['edit_group_id'])
+                                    selected
+                                    @endif --}}
+                                    value="{{ $customer->customer_id }}">{{ $customer->customer_name }}</option>
+                                @empty
+                                <option value=""></option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <a class="btn btn-primary">+</a>
+                    </div>
                 </div>
                 @error('customer_id')
                 <small class="form-text text-danger">{{ $message }}</small>

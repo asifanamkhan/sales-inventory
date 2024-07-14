@@ -47,7 +47,7 @@ class ProductGroup extends Component
     #[On('create-product-group-modal')]
     public function modalCreateTitle()
     {
-        $this->modal_title = 'Create product group';
+        $this->modal_title = 'Create new product group';
     }
 
     #[On('product-group-edit-modal')]

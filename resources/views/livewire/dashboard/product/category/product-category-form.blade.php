@@ -10,6 +10,7 @@
 
     <form wire:submit="@if($editForm) update @else store @endif" action="">
         <div class="row">
+            
             <div class="col-md-10 offset-1 form-group mb-3">
                 <div class="text-center mb-3">
                     @if($editForm)

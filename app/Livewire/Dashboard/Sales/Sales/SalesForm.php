@@ -156,7 +156,7 @@ class SalesForm extends Component
                         'item_size_name' => @$this->resultProducts[$key]->item_size_name,
                         'mrp_rate' => $pricing->mrp_rate,
                         'vat_amt' => $pricing->vat_amt,
-                        'p_vat_amt' => $pricing->vat_amt,
+                        'p_vat_amt' => $pricing->vat_amt ?? 0,
                         'line_total' => $line_total,
                         'qty' => 1,
                         'discount' => 0,

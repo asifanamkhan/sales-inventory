@@ -32,7 +32,7 @@
             <div class="col-auto">
                 <button @click="$dispatch('create-product-brand-modal')" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target="#{{ $event }}">
-                    Create product brand
+                    Create new product brand
                 </button>
             </div>
             @endpermission

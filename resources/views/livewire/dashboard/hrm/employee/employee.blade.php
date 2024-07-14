@@ -27,7 +27,7 @@
             </div>
             <div class="col-auto">
                 <button type="button" class="btn btn-primary">
-                    Create employee
+                    Create new employee
                 </button>
             </div>
         </div>

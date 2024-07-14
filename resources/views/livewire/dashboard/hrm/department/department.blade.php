@@ -29,7 +29,7 @@
             <div class="col-auto">
                 <button @click="$dispatch('create-department-modal')" type="button" class="btn btn-primary" data-toggle="modal"
                     data-target="#{{ $create_event }}">
-                    Create department
+                    Create new department
                 </button>
             </div>
             {{-- @endpermission --}}

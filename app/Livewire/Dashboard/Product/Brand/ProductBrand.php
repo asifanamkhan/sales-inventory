@@ -47,7 +47,7 @@ class ProductBrand extends Component
     #[On('create-product-brand-modal')]
     public function modalCreateTitle()
     {
-        $this->modal_title = 'Create product brand';
+        $this->modal_title = 'Create new product brand';
     }
 
     #[On('product-brand-edit-modal')]
