@@ -23,7 +23,7 @@
                         <option value="{{ $product->st_group_item_id }}">
                             {{ $product->item_name }}
                             @if ($product->item_size_name)
-                            | {{ $product->item_size_name  }}
+                            | {{ $product->item_size_name }}
 
                             @endif
                             @if ($product->color_name)
@@ -36,7 +36,7 @@
                     </select>
                 </div>
                 @error('item_code')
-                    <small class="form-text text-danger">{{ $message }}</small>
+                <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
 
@@ -54,17 +54,27 @@
                 <x-input required_mark='true' wire:input.debounce.500ms='vat_calculation' wire:model='state.mrp_rate'
                     name='mrp_rate' type='number' label='MRP rate' />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3 d-flex align-items-center">
+                <div class="form-group mb-3">
+                    <input wire:click='vatApply' wire:model='state.vat_apply' class="form-check-input" type="checkbox">
+                    <label for="">Vat applicable </label>
+                    @error('vat_apply')
+                    <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-md-2">
                 <div class="form-group mb-3">
                     <label for="">Vat rate (%) </label>
-                    <input wire:input.debounce.500ms='vat_calculation' wire:model='state.vat_rate' type='number'
+                    <input @if (@$state['vat_apply'] == false) readonly @endif wire:input.debounce.500ms='vat_calculation'
+                        wire:model='state.vat_rate' type='number' step="any"
                         class="form-control @error('vat_rate') is-invalid @enderror">
                     @error('vat_rate')
                     <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group mb-3">
                     <label for="">Vat amount </label>
                     <input readonly wire:model='state.vat_amt' type='number'

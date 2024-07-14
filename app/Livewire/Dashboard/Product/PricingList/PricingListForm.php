@@ -9,11 +9,12 @@ use Livewire\Component;
 
 class PricingListForm extends Component
 {
-    public $products,$productVarient;
-    public $state= [];
+    public $products, $productVarient;
+    public $state = [];
 
 
-    public function productList(){
+    public function productList()
+    {
         $this->products = DB::table('INV_ST_GROUP_ITEM as p')
             ->orderBy('p.u_code', 'DESC')
             ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
@@ -22,17 +23,18 @@ class PricingListForm extends Component
             ->leftJoin('INV_COLOR_INFO as cl', function ($join) {
                 $join->on('cl.tran_mst_id', '=', 'p.color_code');
             })
-            ->get(['p.*','cl.color_name','s.item_size_name']);
-
+            ->get(['p.*', 'cl.color_name', 's.item_size_name']);
     }
 
-    public function vat_calculation(){
-        if(@$this->state['mrp_rate'] && @$this->state['vat_rate']){
-            $this->state['vat_amt'] = ((float)$this->state['mrp_rate'] /100) * (float)$this->state['vat_rate'] ?? 0;
+    public function vat_calculation()
+    {
+        if (@$this->state['mrp_rate'] && @$this->state['vat_rate']) {
+            $this->state['vat_amt'] = ((float)$this->state['mrp_rate'] / 100) * (float)$this->state['vat_rate'] ?? 0;
         }
     }
 
-    public function save(){
+    public function save()
+    {
 
         Validator::make($this->state, [
             'item_code' => 'required',
@@ -40,27 +42,44 @@ class PricingListForm extends Component
             'mrp_rate' => 'required',
         ])->validate();
 
+
         $item_exist = DB::table('INV_PRICE_SCHEDULE_MST')
-                    ->where('item_code', $this->state['item_code'])
-                    ->exists();
+            ->where('item_code', $this->state['item_code'])
+            ->exists();
 
-        if($item_exist){
+        if ($item_exist) {
             session()->flash('error', 'This product alrady has the priceing list. check it form the list');
+        } else {
 
-        }else{
+            if ($this->state['mrp_rate'] < $this->state['pr_rate']) {
+                session()->flash('error', 'MRP rate must be grater than priching rate');
+            } else {
+                DB::table('INV_PRICE_SCHEDULE_MST')->insert($this->state);
 
-            DB::table('INV_PRICE_SCHEDULE_MST')->insert($this->state);
+                session()->flash('status', 'Pricing list added successfully');
 
-            session()->flash('status', 'Pricing list added successfully');
-
-            $this->reset();
-            $this->dispatch('refresh-product-varient-list');
+                $this->reset();
+                $this->dispatch('refresh-product-varient-list');
+            }
         }
-
     }
 
-    public function mount(){
+    public function vatApply()
+    {
+        if ($this->state['vat_apply'] == true) {
+            $this->state['vat_apply'] = 1;
+        } else {
+            $this->state['vat_apply'] = 0;
+            $this->state['vat_amt'] =  '';
+            $this->state['vat_rate'] =  '';
+        }
+    }
+
+
+    public function mount()
+    {
         $this->state['vat_rate'] = '';
+        $this->state['vat_apply'] = false;
     }
 
     public function render()

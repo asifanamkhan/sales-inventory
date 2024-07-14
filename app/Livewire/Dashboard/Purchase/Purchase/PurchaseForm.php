@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\Purchase\Purchase;
 
+use App\Service\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -259,6 +260,7 @@ class PurchaseForm extends Component
                 $this->state['emp_id'] = Auth::user()->id;
                 $this->state['comp_id'] = 1;
                 $this->state['branch_id'] = 1;
+                $this->state['tot_due_amt'] = $this->due_amt;
 
                 $tran_mst_id = DB::table('INV_PURCHASE_MST')
                 ->insertGetId($this->state, 'tran_mst_id');
@@ -277,6 +279,10 @@ class PurchaseForm extends Component
                     ]);
                 }
 
+                $ref_memo_no = DB::table('INV_PURCHASE_MST')
+                        ->where('tran_mst_id', $tran_mst_id)
+                        ->first();
+
 
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
@@ -289,7 +295,9 @@ class PurchaseForm extends Component
                     'vat_amt' => $this->state['tot_vat_amt'],
                     'net_payable_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
-                    'user_id' => $this->state['user_name']
+                    'user_id' => $this->state['user_name'],
+                    'ref_memo_no' => $ref_memo_no->memo_no,
+                    'payment_status' => Payment::PaymentCheck($this->due_amt),
                 ];
                 if ($this->paymentState['pay_mode'] == 2) {
                     $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';

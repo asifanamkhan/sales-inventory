@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\Purchase\Return;
 
+use App\Service\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -253,6 +254,7 @@ class PurchaseReturnForm extends Component
                 $this->state['emp_id'] = Auth::user()->id;
                 $this->state['comp_id'] = 1;
                 $this->state['branch_id'] = 1;
+                $this->state['tot_due_amt'] = $this->due_amt;
 
                 $tran_mst_id = DB::table('INV_PURCHASE_RET_MST')->insertGetId($this->state, 'tran_mst_id');
 
@@ -273,6 +275,7 @@ class PurchaseReturnForm extends Component
                     }
                 }
 
+
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
                     'tran_type' => 'PRT',
@@ -285,8 +288,9 @@ class PurchaseReturnForm extends Component
                     'net_payable_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
                     'user_id' => $this->state['user_name'],
-                    'ref_memo_no' => $this->state['ref_memo_no']
-                    
+                    'ref_memo_no' => $this->state['ref_memo_no'],
+                    'payment_status' => Payment::PaymentCheck($this->due_amt),
+
                 ];
                 if ($this->paymentState['pay_mode'] == 2) {
                     $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
