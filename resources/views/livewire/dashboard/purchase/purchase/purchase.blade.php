@@ -46,20 +46,20 @@
             @endpermission
 
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="font-size: 0.9em !important;">
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
                         <td style="">#</td>
-                        <td style="width:10%">Date</td>
+                        <td >Date</td>
                         <td>Memo no</td>
                         <td>Supplier</td>
-                        <td style="width:10%">PR status</td>
-                        <td>Grand amt</td>
-                        <td>Returned amt</td>
-                        <td>Paid amt</td>
-                        <td>Due amt</td>
-                        <td>Payment status</td>
+                        <td style="text-align: center" >PR status</td>
+                        <td style="text-align: center">Grand amt</td>
+                        <td style="text-align: center">Returned</td>
+                        <td style="text-align: center">Paid amt</td>
+                        <td style="text-align: center">Due amt</td>
+                        <td style="text-align: center">Payment</td>
                         <td class="text-center">Action</td>
                     </tr>
                 </thead>
@@ -68,7 +68,9 @@
                     @foreach ($this->resultPurchase as $key => $purchase)
                     <tr wire:key='{{ $key }}'>
                         <td>{{ $this->resultPurchase->firstItem() + $key }}</td>
-                        <td>{{ date('d-M-Y', strtotime($purchase->tran_date)) }}</td>
+                        <td>
+                            {{ date('d-M-y', strtotime($purchase->tran_date)) }}
+                        </td>
                         <td>{{ $purchase->memo_no }}</td>
                         <td>{{ $purchase->p_name }}</td>
                         <td>
@@ -87,7 +89,7 @@
                             </div> --}}
 
                             <select style="
-
+                                font-size: 0.9em !important;
                             @if ($purchase->status == 1)
                                 background: #D4EDDA;
                             @elseif($purchase->status == 2)
@@ -95,7 +97,7 @@
                             @elseif($purchase->status == 3)
                                 background: #FFF3CD;
                             @elseif($purchase->status == 4)
-                                background: #F8D7DA;
+                                background: #FFF3CD;
                             @endif
 
                             "
@@ -130,13 +132,31 @@
                             {{ number_format($purchase->rt_amt, 2, '.', '') }}
                         </td>
                         <td style="text-align: right">
-                            {{ number_format($purchase->rt_amt, 2, '.', '') }}
+                            {{ number_format($purchase->tot_paid_amt, 2, '.', '') }}
                         </td>
                         <td style="text-align: right">
-                            {{ number_format($purchase->rt_amt, 2, '.', '') }}
+                            {{ number_format((App\Service\Payment::dueAmount($purchase->tot_payable_amt, $purchase->rt_amt, $purchase->tot_paid_amt)), 2, '.', '') }}
                         </td>
                         <td style="text-align: right">
-                            DUE
+                            @php
+                                $pay_status = App\Service\Payment::paymentSatus($purchase->tot_payable_amt, $purchase->rt_amt, $purchase->tot_paid_amt);
+                            @endphp
+                            <div class="d-flex justify-content-center align-items-center">
+                                <span
+                                style="
+                                font-size: 0.9em;
+                                @if($pay_status == 'PAID')
+                                background: #D4EDDA;
+                                color: #155724;
+                                @else
+                                background: #F8D7DA;
+                                color: #721c24;
+                                @endif
+                                "
+                                 class="badge badge-danger badge-pill">
+                                    {{ $pay_status }}
+                                </span>
+                            </div>
                         </td>
                         <td style="">
                             <div class="d-flex justify-content-center gap-2">
