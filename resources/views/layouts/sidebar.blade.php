@@ -8,7 +8,7 @@
         </li>
         <li>
             <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
-                <i class="fa fa-user"></i> Administrator
+                <i class="fa-solid fa-screwdriver-wrench"></i> Administrator
             </a>
             <ul class="collapse list-unstyled
         {{ request()->routeIs('role') ? 'show' : ' ' }}
@@ -53,7 +53,7 @@
 
         <li>
             <a href="#HRMSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
-                <i class="fa fa-users"></i> HRM settings
+                <i class="fa-solid fa-user-gear"></i> HRM settings
             </a>
             <ul class="collapse list-unstyled
         {{ request()->routeIs('branch') ? 'show' : ' ' }}
@@ -126,7 +126,7 @@
 
         <li>
             <a href="#productSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
-                <i class="fa-brands fa-product-hunt"></i> Product settings
+                <i class="fa-solid fa-gear"></i> Product settings
             </a>
             <ul class="collapse list-unstyled
             {{ request()->routeIs('product-group') ? 'show' : ' ' }}
@@ -254,7 +254,7 @@
 
         <li>
             <a href="#misReportSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
-                <i class="fa fa-list"></i> MIS reports
+                <i class="fa-solid fa-chart-line"></i> MIS reports
             </a>
             <ul class="collapse list-unstyled
         {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
