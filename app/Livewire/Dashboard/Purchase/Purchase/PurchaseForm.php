@@ -261,6 +261,7 @@ class PurchaseForm extends Component
                 $this->state['comp_id'] = 1;
                 $this->state['branch_id'] = 1;
                 $this->state['tot_due_amt'] = $this->due_amt;
+                $this->state['tot_paid_amt'] = $this->pay_amt;
 
                 $tran_mst_id = DB::table('INV_PURCHASE_MST')
                 ->insertGetId($this->state, 'tran_mst_id');
@@ -293,7 +294,8 @@ class PurchaseForm extends Component
                     'tot_payable_amt' => $this->state['tot_payable_amt'],
                     'discount' => $this->state['tot_discount'],
                     'vat_amt' => $this->state['tot_vat_amt'],
-                    'net_payable_amt' => $this->pay_amt ?? 0,
+                    'net_payable_amt' => $this->state['net_payable_amt'],
+                    'tot_paid_amt' => $this->pay_amt ?? 0,
                     'due_amt' => $this->due_amt,
                     'user_id' => $this->state['user_name'],
                     'ref_memo_no' => $ref_memo_no->memo_no,

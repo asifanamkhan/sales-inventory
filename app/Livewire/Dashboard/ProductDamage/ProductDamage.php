@@ -6,11 +6,13 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use Livewire\Attributes\On;
 
 class ProductDamage extends Component
 {
     use WithPagination;
+    #[Title('Product damage')]
 
     public $search;
     public $pagination = 10;
@@ -41,7 +43,6 @@ class ProductDamage extends Component
     }
     public function render()
     {
-        return view('livewire.dashboard.product-damage.product-damage')
-            ->title('Product damage');
+        return view('livewire.dashboard.product-damage.product-damage');
     }
 }

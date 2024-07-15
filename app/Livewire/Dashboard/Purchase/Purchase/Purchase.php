@@ -26,7 +26,10 @@ class Purchase extends Component
             ->leftJoin('INV_SUPPLIER_INFO as s', function ($join) {
                 $join->on('s.p_code', '=', 'p.p_code');
             })
-            ->select(['p.*','s.p_name']);
+            ->leftJoin('INV_PURCHASE_RET_MST as sr', function ($join) {
+                $join->on('sr.ref_memo_no', '=', 'p.memo_no');
+            })
+            ->select(['p.*','s.p_name','sr.tot_payable_amt as rt_amt']);
 
             if ($this->search) {
                 $purchases
