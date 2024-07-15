@@ -41,7 +41,7 @@
                 <thead>
                     <tr class="bg-sidebar">
                         <td  style="width: 5%">#</td>
-                        <td >Image</td>
+                        <td style="width: 7%">Image</td>
                         <td >Product name</td>
                         <td >Category name</td>
                         <td >Brand name</td>
@@ -57,14 +57,15 @@
                             <div class="">
                                 @if ($product->photo)
                                 @php
-                                    $photo = json_decode($product->photo)[0]
+                                    $photo = json_decode($product->photo)[0];
+
                                 @endphp
                                 <a target='_blank' href="{{ asset('storage/app/upload/product/'.$photo) }}">
                                     <img class="" style="height: 40px; width:50px" src="{{ asset('storage/app/upload/product/'.$photo) }}" alt="">
                                 </a>
                                 @else
-                                <img class="" style="height: 40px; width:50px" src="" alt="">
-                            @endif
+                                    <img class="" style="height: 40px; width:50px" src="{{ asset('public/img/no-img.png') }}" alt="">
+                                @endif
                             </div>
 
                         </td>
