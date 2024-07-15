@@ -57,6 +57,6 @@ class CustomerCreate extends Component
     public function render()
     {
         $this->category_type();
-        return view('livewire.dashboard.hrm.customer.customer-create');
+        return view('livewire.dashboard.hrm.customer.customer-create')->title('Create customer');
     }
 }

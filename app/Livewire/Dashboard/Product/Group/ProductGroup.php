@@ -58,6 +58,6 @@ class ProductGroup extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.product.group.product-group');
+        return view('livewire.dashboard.product.group.product-group')->title('Group');
     }
 }

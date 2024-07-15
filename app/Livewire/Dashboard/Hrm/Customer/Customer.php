@@ -38,6 +38,6 @@ class Customer extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.hrm.customer.customer');
+        return view('livewire.dashboard.hrm.customer.customer')->title('Customer');
     }
 }

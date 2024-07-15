@@ -8,6 +8,6 @@ class SalesReturnEdit extends Component
 {
     public function render()
     {
-        return view('livewire.dashboard.sales.sales-return.sales-return-edit');
+        return view('livewire.dashboard.sales.sales-return.sales-return-edit')->title('Sales return edit');
     }
 }

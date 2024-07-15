@@ -38,6 +38,6 @@ class Supplier extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.hrm.supplier.supplier');
+        return view('livewire.dashboard.hrm.supplier.supplier')->title('Supplier');
     }
 }

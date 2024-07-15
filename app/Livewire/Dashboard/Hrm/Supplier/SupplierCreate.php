@@ -59,10 +59,10 @@ class SupplierCreate extends Component
             ->get();
     }
 
-   
+
     public function render()
     {
         $this->category_type();
-        return view('livewire.dashboard.hrm.supplier.supplier-create');
+        return view('livewire.dashboard.hrm.supplier.supplier-create')->title('Create customer');
     }
 }

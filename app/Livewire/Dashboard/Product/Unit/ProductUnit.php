@@ -58,6 +58,6 @@ class ProductUnit extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.product.unit.product-unit');
+        return view('livewire.dashboard.product.unit.product-unit')->title('Unit');
     }
 }

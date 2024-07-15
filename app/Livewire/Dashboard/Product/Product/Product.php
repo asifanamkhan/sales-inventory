@@ -30,14 +30,14 @@ class Product extends Component
             ->leftJoin('INV_CATAGORIES_INFO as c', function ($join) {
                 $join->on('c.tran_mst_id', '=', 'p.catagories_id');
             })
-            ->select(['p.u_code','b.brand_name','c.catagories_name','p.item_name','p.photo']);
+            ->select(['p.u_code', 'b.brand_name', 'c.catagories_name', 'p.item_name', 'p.photo']);
 
-            if ($this->search) {
-                $products
-                    ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->search) . '%');
-            }
-            // $p =   $products->get();
-            // dd($p);
+        if ($this->search) {
+            $products
+                ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->search) . '%');
+        }
+        // $p =   $products->get();
+        // dd($p);
 
         return $products->paginate($this->pagination);
     }
@@ -49,6 +49,6 @@ class Product extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.product.product.product');
+        return view('livewire.dashboard.product.product.product')->title('Product');
     }
 }

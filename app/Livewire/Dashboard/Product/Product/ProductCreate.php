@@ -8,6 +8,6 @@ class ProductCreate extends Component
 {
     public function render()
     {
-        return view('livewire.dashboard.product.product.product-create');
+        return view('livewire.dashboard.product.product.product-create')->title('Product create');
     }
 }

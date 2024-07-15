@@ -44,6 +44,6 @@ class PurchaseReturn extends Component
     }
     public function render()
     {
-        return view('livewire.dashboard.purchase.return.purchase-return');
+        return view('livewire.dashboard.purchase.return.purchase-return')->title('Purchase return');
     }
 }

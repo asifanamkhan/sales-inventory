@@ -8,6 +8,6 @@ class SalesReturnCreate extends Component
 {
     public function render()
     {
-        return view('livewire.dashboard.sales.sales-return.sales-return-create');
+        return view('livewire.dashboard.sales.sales-return.sales-return-create')->title('Sales return create');
     }
 }

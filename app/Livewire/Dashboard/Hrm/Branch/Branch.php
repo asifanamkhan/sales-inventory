@@ -50,6 +50,6 @@ class Branch extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.hrm.branch.branch')->title('Branch');;
+        return view('livewire.dashboard.hrm.branch.branch')->title('Branch');
     }
 }
