@@ -10,9 +10,9 @@
 
     <form wire:submit="@if($editForm) update @else store @endif" action="">
         <div class="row">
-            
+
             <div class="col-md-10 offset-1 form-group mb-3">
-                <div class="text-center mb-3">
+                <div class="text-center mb-3 d-flex justify-content-center">
                     @if($editForm)
                     @if (@$state['photo'])
                     <img src="{{ $state['photo']->temporaryUrl() ?? '' }}" alt=""
@@ -21,7 +21,7 @@
                     <img src="{{ asset('storage/app/'.$state['old_photo']) }}" alt=""
                         style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
                     @else
-                    <img src="{{ asset('public/img/avatar.jpg') }}" alt=""
+                    <img src="{{ asset('public/img/no-img.png') }}" alt=""
                         style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
                     @endif
                     @else
@@ -29,7 +29,7 @@
                     <img src="{{ $state['photo']->temporaryUrl() ?? '' }}" alt=""
                         style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
                     @else
-                    <img src="{{ asset('public/img/avatar.jpg') }}" alt=""
+                    <img src="{{ asset('public/img/no-img.png') }}" alt=""
                         style="border-radius: 50% !important; width:150px; height: 150px" class="img-fluid img-thumbnail">
                     @endif
                     @endif
