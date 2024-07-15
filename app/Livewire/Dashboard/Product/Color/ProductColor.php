@@ -56,6 +56,6 @@ class ProductColor extends Component
     }
     public function render()
     {
-        return view('livewire.dashboard.product.color.product-color');
+        return view('livewire.dashboard.product.color.product-color')->title('Color');
     }
 }

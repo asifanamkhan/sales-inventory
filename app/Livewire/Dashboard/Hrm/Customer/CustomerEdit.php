@@ -80,6 +80,6 @@ class CustomerEdit extends Component
     public function render()
     {
         $this->category_type();
-        return view('livewire.dashboard.hrm.customer.customer-edit');
+        return view('livewire.dashboard.hrm.customer.customer-edit')->title('Customer edit');
     }
 }

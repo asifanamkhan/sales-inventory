@@ -45,6 +45,6 @@ class Purchase extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.purchase.purchase.purchase');
+        return view('livewire.dashboard.purchase.purchase.purchase')->title('Purchase');
     }
 }

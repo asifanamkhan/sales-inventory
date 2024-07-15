@@ -51,7 +51,7 @@ class SupplierEdit extends Component
         $this->state['photo'] = '';
     }
 
-   
+
     public function mount($supplier_id)
     {
         $this->supplier_id = $supplier_id;
@@ -82,6 +82,6 @@ class SupplierEdit extends Component
     public function render()
     {
         $this->category_type();
-        return view('livewire.dashboard.hrm.supplier.supplier-edit');
+        return view('livewire.dashboard.hrm.supplier.supplier-edit')->title('Edit customer');
     }
 }

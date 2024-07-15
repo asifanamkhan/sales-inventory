@@ -8,6 +8,6 @@ class PurchaseReturnCreate extends Component
 {
     public function render()
     {
-        return view('livewire.dashboard.purchase.return.purchase-return-create');
+        return view('livewire.dashboard.purchase.return.purchase-return-create')->title('Purchase return create');
     }
 }

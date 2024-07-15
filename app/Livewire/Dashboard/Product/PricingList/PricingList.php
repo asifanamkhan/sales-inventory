@@ -34,13 +34,13 @@ class PricingList extends Component
             ->leftJoin('INV_COLOR_INFO as cl', function ($join) {
                 $join->on('cl.tran_mst_id', '=', 'c.color_code');
             })
-            ->select(['p.*','c.item_name','cl.color_name','s.item_size_name']);
+            ->select(['p.*', 'c.item_name', 'cl.color_name', 's.item_size_name']);
 
-            if ($this->search) {
-                $products
-                    ->where(DB::raw('lower(c.item_name)'), 'like', '%' . strtolower($this->search) . '%');
-            }
-            
+        if ($this->search) {
+            $products
+                ->where(DB::raw('lower(c.item_name)'), 'like', '%' . strtolower($this->search) . '%');
+        }
+
 
         return $products->paginate($this->pagination);
     }
@@ -51,6 +51,6 @@ class PricingList extends Component
     }
     public function render()
     {
-        return view('livewire.dashboard.product.pricing-list.pricing-list');
+        return view('livewire.dashboard.product.pricing-list.pricing-list')->title('product pricing list');
     }
 }

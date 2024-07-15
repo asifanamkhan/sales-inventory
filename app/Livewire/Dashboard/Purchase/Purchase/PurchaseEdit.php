@@ -8,6 +8,6 @@ class PurchaseEdit extends Component
 {
     public function render()
     {
-        return view('livewire.dashboard.purchase.purchase.purchase-edit');
+        return view('livewire.dashboard.purchase.purchase.purchase-edit')->title('Purchase edit');
     }
 }

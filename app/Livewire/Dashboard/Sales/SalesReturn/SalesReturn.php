@@ -44,6 +44,6 @@ class SalesReturn extends Component
     }
     public function render()
     {
-        return view('livewire.dashboard.sales.sales-return.sales-return');
+        return view('livewire.dashboard.sales.sales-return.sales-return')->title('Sales return');
     }
 }

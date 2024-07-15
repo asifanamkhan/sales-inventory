@@ -58,7 +58,6 @@ class ProductBrand extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.product.brand.product-brand');
+        return view('livewire.dashboard.product.brand.product-brand')->title('Brand');
     }
-
 }

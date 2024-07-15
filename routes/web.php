@@ -20,6 +20,9 @@ use App\Livewire\Dashboard\Product\Group\ProductGroup;
 use App\Livewire\Dashboard\Product\PricingList\PricingList;
 use App\Livewire\Dashboard\Product\Product\{Product, ProductCreate, ProductEdit};
 use App\Livewire\Dashboard\Product\Unit\ProductUnit;
+use App\Livewire\Dashboard\ProductDamage\ProductDamage;
+use App\Livewire\Dashboard\ProductDamage\ProductDamageCreate;
+use App\Livewire\Dashboard\ProductDamage\ProductDamageEdit;
 use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, PurchaseEdit};
 use App\Livewire\Dashboard\Purchase\Return\{PurchaseReturn, PurchaseReturnCreate, PurchaseReturnEdit};
 use App\Livewire\Dashboard\Sales\Sales\{Sales, SalesCreate, SalesEdit};
@@ -110,5 +113,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sale-return/{sale_return_id}/edit', SalesReturnEdit::class)->name('sale-return-edit');
 
     // ------------- sale end ----------------
+
+     // ------------- sale start ----------------
+
+     Route::get('product-damage', ProductDamage::class)->name('product-damage');
+     Route::get('product-damage/create', ProductDamageCreate::class)->name('product-damage-create');
+     Route::get('product-damage/{product_damage_id}/edit', ProductDamageEdit::class)->name('product-damage-edit');
+
+     // ------------- sale end ----------------
 
 });

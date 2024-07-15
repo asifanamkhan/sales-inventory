@@ -3,7 +3,8 @@
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
-        <h3 style="padding: 0px 5px 10px 5px;">Create new purchase </h3>
+        <h3 style="padding: 0px 5px 10px 5px;">
+            <i class="fa fa-plus"></i> Create new purchase </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
 

@@ -4,18 +4,18 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa fa-edit"></i> Product edit</h3>
+            <i class="fa fa-plus"></i> Create new product damage </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Product</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product') }}">product</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product-create') }}"
+
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product-damage') }}">product damage</a></li>
+                <li class="breadcrumb-item active"><a href="{{ route('product-damage-create') }}"
                         style="color: #3C50E0">create</a></li>
             </ol>
         </nav>
     </div>
     <div class="card p-4" wire:ignore.self>
-        <livewire:dashboard.product.product.product-form product_u_code="{{ $product_u_code }}" />
+        <livewire:dashboard.product-damage.product-damage-form :product_damage_id=false />
     </div>
 </div>
 

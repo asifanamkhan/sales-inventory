@@ -44,6 +44,6 @@ class Sales extends Component
     }
     public function render()
     {
-        return view('livewire.dashboard.sales.sales.sales');
+        return view('livewire.dashboard.sales.sales.sales')->title('Sales');
     }
 }
