@@ -1,10 +1,12 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" >
+
+    <div wire:loading class="spinner-border text-primary custom-loading">
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-solid fa-cart-shopping"></i> Purchase</h3>
+            <i class="fa-solid fa-cart-shopping"></i> Purchase
+        </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Purchase</a></li>
@@ -39,7 +41,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a href='{{ route('purchase-create') }}' type="button" class="btn btn-primary">Create new purchase</a>
+                <a href='{{route('purchase-create') }}' type="button" class="btn btn-primary">Create new purchase</a>
             </div>
             @endpermission
 
@@ -48,13 +50,17 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td  style="width: 5%">#</td>
-                        <td >Date</td>
-                        <td >Memo</td>
-                        <td >Supplier</td>
-                        <td >Information</td>
-                        <td >Status</td>
-                        <td class="text-center" >Action</td>
+                        <td style="">#</td>
+                        <td style="width:10%">Date</td>
+                        <td>Memo no</td>
+                        <td>Supplier</td>
+                        <td style="width:10%">PR status</td>
+                        <td>Grand amt</td>
+                        <td>Returned amt</td>
+                        <td>Paid amt</td>
+                        <td>Due amt</td>
+                        <td>Payment status</td>
+                        <td class="text-center">Action</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,24 +72,76 @@
                         <td>{{ $purchase->memo_no }}</td>
                         <td>{{ $purchase->p_name }}</td>
                         <td>
-                            <div class="d-flex">
-                                <span style="width: 40%">Qty:</span>
-                                <span style="width: 60%; text-align:right">
-                                    {{ number_format($purchase->total_qty, 2, '.', '')  }}
+                            {{-- <div class="d-flex justify-content-center align-items-center">
+                                <span @php if ($purchase->status==1)
+                                    $style='background:#D4EDDA; color:#275724';
+                                    elseif($purchase->status==2 || $purchase->status==3)
+                                    $style='background:#FFF3CD; color:#909173';
+                                    elseif($purchase->status==4)
+                                    $style='background:#F8D7DA; color:#881C24';
+
+                                    @endphp
+                                    style="{{ $style }}" class="badge badge-danger badge-pill">
+                                    {{ App\Service\Purchase:: purchaseStatus($purchase->status) }}
                                 </span>
-                            </div>
-                            <div class="d-flex">
-                                <span style="width: 40%">Amount:</span>
-                                <span style="width: 60%; text-align:right">
-                                    {{ number_format($purchase->tot_payable_amt, 2, '.', '')  }}
-                                </span>
-                            </div>
+                            </div> --}}
+
+                            <select style="
+
+                            @if ($purchase->status == 1)
+                                background: #D4EDDA;
+                            @elseif($purchase->status == 2)
+                                background: #FFF3CD;
+                            @elseif($purchase->status == 3)
+                                background: #FFF3CD;
+                            @elseif($purchase->status == 4)
+                                background: #F8D7DA;
+                            @endif
+
+                            "
+                            class='form-control select-status' name="" id="">
+                                <option
+                                    @if ($purchase->status == 1)
+                                        selected
+                                    @endif value="1">Recieved
+                                </option>
+                                <option
+                                    @if ($purchase->status == 2)
+                                        selected
+                                    @endif value="2">Partial
+                                </option>
+                                <option
+                                    @if ($purchase->status == 3)
+                                        selected
+                                    @endif value="2">Pending
+                                </option>
+                                <option
+                                    @if ($purchase->status == 4)
+                                        selected
+                                    @endif value="2">Ordered
+                                </option>
+                            </select>
 
                         </td>
-                        <td>{{ $purchase->status }}</td>
+                        <td style="text-align: right">
+                            {{ number_format($purchase->tot_payable_amt, 2, '.', '') }}
+                        </td>
+                        <td style="text-align: right">
+                            {{ number_format($purchase->rt_amt, 2, '.', '') }}
+                        </td>
+                        <td style="text-align: right">
+                            {{ number_format($purchase->rt_amt, 2, '.', '') }}
+                        </td>
+                        <td style="text-align: right">
+                            {{ number_format($purchase->rt_amt, 2, '.', '') }}
+                        </td>
+                        <td style="text-align: right">
+                            DUE
+                        </td>
                         <td style="">
                             <div class="d-flex justify-content-center gap-2">
-                                <a wire:navigate href="{{ route('purchase-edit',$purchase->tran_mst_id) }}" class="btn btn-sm btn-success">
+                                <a wire:navigate href="{{ route('purchase-edit',$purchase->tran_mst_id) }}"
+                                    class="btn btn-sm btn-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
                                         viewBox="0 0 50 50">
                                         <path fill="white"
@@ -114,5 +172,3 @@
 <script>
 
 </script>
-
-
