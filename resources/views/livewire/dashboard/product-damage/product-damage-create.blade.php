@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
 
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product-damage') }}">product damage</a></li>
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('product-damage') }}">Product damage</a></li>
                 <li class="breadcrumb-item active"><a href="{{ route('product-damage-create') }}"
                         style="color: #3C50E0">create</a></li>
             </ol>
