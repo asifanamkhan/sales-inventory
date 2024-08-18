@@ -27,13 +27,14 @@ use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, Purchase
 use App\Livewire\Dashboard\Purchase\Return\{PurchaseReturn, PurchaseReturnCreate, PurchaseReturnEdit};
 use App\Livewire\Dashboard\Sales\Sales\{Sales, SalesCreate, SalesEdit};
 use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnEdit};
-
+use Illuminate\Support\Facades\DB;
 
 Livewire::setUpdateRoute(function ($handle) {
     return Route::post('/sales-inventory/livewire/update', $handle);
 });
 
 require __DIR__ . '/auth.php';
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
