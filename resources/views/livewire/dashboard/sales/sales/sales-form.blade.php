@@ -155,7 +155,7 @@
                 </div>
             </div>
 
-            <div class="col-md-12 mt-4 table-responsive">
+            <div class="col-md-12 mt-4 responsive-table">
                 <table class="table table-bordered">
                     <thead>
                         <tr class="bg-sidebar">

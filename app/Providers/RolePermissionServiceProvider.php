@@ -27,6 +27,7 @@ class RolePermissionServiceProvider extends ServiceProvider
                 'layouts.*'
             ],
             function ($view) {
+
                 if (Auth::check()) {
                     $submodule_access = DB::table('USR_ROLE_DETAIL')
                         ->whereIn('role_id', json_decode(Auth::user()->roles))
@@ -44,11 +45,14 @@ class RolePermissionServiceProvider extends ServiceProvider
                             }
                         }
 
-                        if ($permission_status == 1) {
-                            return true;
-                        } else {
-                            return false;
-                        }
+
+                        // if ($permission_status == 1) {
+                        //     return true;
+
+                        // } else {
+
+                        //     return false;
+                        // }
                     });
                 }
             }

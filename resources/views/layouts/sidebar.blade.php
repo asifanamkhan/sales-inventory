@@ -182,6 +182,7 @@
             <ul class="collapse list-unstyled
             {{ request()->routeIs('purchase') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-create') ? 'show' : ' ' }}
+            {{ request()->routeIs('purchase-details') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-return') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-return-create') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-return-edit') ? 'show' : ' ' }}

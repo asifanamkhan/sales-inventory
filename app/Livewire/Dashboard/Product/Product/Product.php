@@ -47,6 +47,11 @@ class Product extends Component
         $this->resetPage();
     }
 
+    public function updatingPagination()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         return view('livewire.dashboard.product.product.product')->title('Product');
