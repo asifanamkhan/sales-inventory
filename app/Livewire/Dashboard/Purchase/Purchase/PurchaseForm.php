@@ -262,6 +262,7 @@ class PurchaseForm extends Component
                 $this->state['branch_id'] = 1;
                 $this->state['tot_due_amt'] = $this->due_amt;
                 $this->state['tot_paid_amt'] = $this->pay_amt;
+                $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
 
                 $tran_mst_id = DB::table('INV_PURCHASE_MST')
                 ->insertGetId($this->state, 'tran_mst_id');

@@ -17,7 +17,7 @@
     {{-- @endif --}}
     <div class="card p-4">
 
-        <div class="table-responsive">
+        <div class="responsive-table">
             <table class="table table-bordered table-hover">
                 <tr>
                     <th style="width: 25%; color:black">Role name</th>

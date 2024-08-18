@@ -9,11 +9,23 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
+
+//    Route::post('register', function(){
+//     User::create([
+//         'name' => 'admin',
+//         'email' => 'admin@gmail.com',
+//         'password' => '1234',
+//     ]);
+//    })->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
@@ -21,6 +33,17 @@ Route::middleware('guest')->group(function () {
                 ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    // Route::post('login', function(Request $request){
+    //     $credentials = $request->only('email', 'password');
+    //     // dd($credentials);
+    //     if (Auth::attempt($credentials)) {
+    //         $request->session()->regenerate();
+
+    //         return redirect()->intended('/');
+    //     }
+
+    //     return back()->withErrors(['login' => 'Invalid login or password']); // Redirect back with error message
+    // });
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
                 ->name('password.request');
