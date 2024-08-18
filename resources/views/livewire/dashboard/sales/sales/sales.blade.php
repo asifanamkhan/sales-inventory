@@ -46,7 +46,7 @@
             @endpermission
 
         </div>
-        <div class="table-responsive">
+        <div class="responsive-table">
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">

@@ -4,7 +4,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     background-color: rgb(241 245 249 / 1);
-    
+
 }
 
 p {
@@ -299,9 +299,15 @@ form-check-input:focus {
 
 /* select2 */
 
+
 .ql-container {
     /* min-height: 200px !important; */
 }
+/* .bg-success{
+    background: #D4EDDA;
+    color: #155724;
+} */
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES
@@ -318,5 +324,9 @@ form-check-input:focus {
 
     #sidebarCollapse span {
         display: none;
+    }
+
+    .responsive-table{
+        overflow-x: scroll;
     }
 }

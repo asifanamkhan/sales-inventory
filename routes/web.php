@@ -23,7 +23,7 @@ use App\Livewire\Dashboard\Product\Unit\ProductUnit;
 use App\Livewire\Dashboard\ProductDamage\ProductDamage;
 use App\Livewire\Dashboard\ProductDamage\ProductDamageCreate;
 use App\Livewire\Dashboard\ProductDamage\ProductDamageEdit;
-use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, PurchaseEdit};
+use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, PurchaseDetails, PurchaseEdit};
 use App\Livewire\Dashboard\Purchase\Return\{PurchaseReturn, PurchaseReturnCreate, PurchaseReturnEdit};
 use App\Livewire\Dashboard\Sales\Sales\{Sales, SalesCreate, SalesEdit};
 use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnEdit};
@@ -96,6 +96,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('purchase', Purchase::class)->name('purchase');
     Route::get('purchase/create', PurchaseCreate::class)->name('purchase-create');
     Route::get('purchase/{purchase_id}/edit', PurchaseEdit::class)->name('purchase-edit');
+    Route::get('purchase/{purchase_id}/details', PurchaseDetails::class)->name('purchase-details');
 
     Route::get('purchase-return', PurchaseReturn::class)->name('purchase-return');
     Route::get('purchase-return/create', PurchaseReturnCreate::class)->name('purchase-return-create');
@@ -115,12 +116,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // ------------- sale end ----------------
 
-     // ------------- sale start ----------------
+    // ------------- sale start ----------------
 
-     Route::get('product-damage', ProductDamage::class)->name('product-damage');
-     Route::get('product-damage/create', ProductDamageCreate::class)->name('product-damage-create');
-     Route::get('product-damage/{product_damage_id}/edit', ProductDamageEdit::class)->name('product-damage-edit');
+    Route::get('product-damage', ProductDamage::class)->name('product-damage');
+    Route::get('product-damage/create', ProductDamageCreate::class)->name('product-damage-create');
+    Route::get('product-damage/{product_damage_id}/edit', ProductDamageEdit::class)->name('product-damage-edit');
 
-     // ------------- sale end ----------------
+    // ------------- sale end ----------------
 
 });

@@ -46,7 +46,7 @@
 
             @if (count($sub_modules) > 0)
 
-            <div class="table-responsive">
+            <div class="responsive-table">
                 <div class="d-flex align-items-center m-2" style="justify-content: flex-end">
                     <label for="" style="margin-right: 10px; color: #3C50E0">All </label>
                     <input wire:model.live='allCheck.{{ (int)$this->module }}' class="form-check-input" type="checkbox">
