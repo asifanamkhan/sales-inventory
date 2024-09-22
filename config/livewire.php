@@ -39,8 +39,8 @@ return [
     */
 
     'layout' => 'layouts.app',
-    // 'asset_url'  => 'http://192.168.168.185/sales-inventory/public/vendor/livewire/livewire.js',
-    'asset_url'  => 'http://localhost/sales-inventory/public/vendor/livewire/livewire.js',
+    'asset_url'  => 'http://192.168.168.185/sales-inventory/public/vendor/livewire/livewire.js',
+    // 'asset_url'  => 'http://localhost/sales-inventory/public/vendor/livewire/livewire.js',
 
 
     /*
