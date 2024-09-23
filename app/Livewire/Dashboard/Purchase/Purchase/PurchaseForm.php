@@ -87,35 +87,54 @@ class PurchaseForm extends Component
 
     public function mount($purchase_id)
     {
-
         if ($purchase_id) {
-
             $tran_mst = DB::table('INV_PURCHASE_MST')
                 ->where('tran_mst_id', $purchase_id)
                 ->first();
-
+            // dd($tran_mst);
             $this->state['net_payable_amt'] = $tran_mst->net_payable_amt;
             $this->state['tot_payable_amt'] = $tran_mst->tot_payable_amt;
             $this->state['total_qty'] = $tran_mst->total_qty;
             $this->state['tot_discount'] = $tran_mst->tot_discount;
             $this->state['tot_vat_amt'] = $tran_mst->tot_vat_amt;
-            // $this->state['pay_amt'] = '';
+            $this->state['shipping_amt'] = $tran_mst->shipping_amt;
             $this->state['war_id'] = $tran_mst->war_id;
             $this->state['status'] = $tran_mst->status;
             $this->state['tran_date'] = Carbon::parse($tran_mst->tran_date)->toDateString();
 
-            // $this->purchaseCart[] = [
-            //     'item_name' => @$this->resultProducts[$key]->item_name,
-            //     'color_name' => @$this->resultProducts[$key]->color_name,
-            //     'item_size_name' => @$this->resultProducts[$key]->item_size_name,
-            //     'mrp_rate' => $pricing->mrp_rate,
-            //     'vat_amt' => $pricing->vat_amt,
-            //     'p_vat_amt' => $pricing->vat_amt ?? 0,
-            //     'line_total' => $line_total,
-            //     'qty' => 1,
-            //     'discount' => 0,
-            //     'st_group_item_id' => $search,
-            // ];
+            $this->pay_amt = $tran_mst->tot_paid_amt;
+            $this->due_amt = $tran_mst->tot_due_amt;
+
+            $this->paymentState['pay_mode'] = 1;
+
+            $resultDtls = DB::table('INV_PURCHASE_DTL as p')
+                ->where('p.tran_mst_id',$purchase_id)
+                ->leftJoin('VW_INV_ITEM_DETAILS as pr', function ($join) {
+                    $join->on('pr.st_group_item_id', '=', 'p.item_code');
+                })
+                ->get(['p.pr_rate','p.vat_amt','p.tot_payble_amt','p.item_qty','p.discount','p.item_code',
+                        'p.expire_date',
+                        'pr.item_name','pr.color_name','pr.item_size_name','pr.vat_amt as p_vat_amt'
+            ]);
+
+            // dd($resultDtls);
+
+            foreach($resultDtls as $resultDtl){
+                $this->purchaseCart[] = [
+                    'item_name' => $resultDtl->item_name,
+                    'color_name' => $resultDtl->color_name,
+                    'item_size_name' => $resultDtl->item_size_name,
+                    'mrp_rate' => $resultDtl->pr_rate,
+                    'vat_amt' => $resultDtl->vat_amt,
+                    'p_vat_amt' =>  $resultDtl->p_vat_amt ?? 0,
+                    'line_total' => $resultDtl->tot_payble_amt,
+                    'qty' => $resultDtl->item_qty,
+                    'discount' => $resultDtl->discount,
+                    'st_group_item_id' => $resultDtl->item_code,
+                    'expire_date'=> $resultDtl->expire_date ? Carbon::parse($resultDtl->expire_date)->toDateString() : ''
+                ];
+            }
+
 
             // dd($tran_mst->tran_date);
         } else {
@@ -128,6 +147,8 @@ class PurchaseForm extends Component
             $this->state['war_id'] = 1;
             $this->state['status'] = 1;
             $this->state['tran_date'] = Carbon::now()->toDateString();
+            $this->paymentState['pay_mode'] = 1;
+
         }
 
 
@@ -236,7 +257,6 @@ class PurchaseForm extends Component
         $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
         (float)$this->purchaseCart[$key]['vat_amt'] = ((float)$this->purchaseCart[$key]['p_vat_amt'] * $qty) ?? 0;
         $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
-
         $this->purchaseCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
 
         $this->grandCalculation();
@@ -265,7 +285,15 @@ class PurchaseForm extends Component
         $this->state['tot_discount'] = $total_discount ?? 0;
 
         $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total), 2, '.', '');
-        $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+
+        if($this->pay_amt <= $this->state['tot_payable_amt']){
+            $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+        }else{
+            $this->pay_amt = $this->state['tot_payable_amt'];
+            $this->due_amt = 0;
+            session()->flash('payment-error', 'Payment amt cant bigger than net amount');
+        }
+
     }
 
     public function save()

@@ -40,7 +40,7 @@
                             @csrf
                             <div class="form-group mb-3">
                                 <label for="">Email </label>
-                                <input name='email' type='email'
+                                <input name='email' type='email' value='admin@gmail.com'
                                     class="form-control @error('email') is-invalid @enderror">
                                 @error('email')
                                 <small class="form-text text-danger">{{ $message }}</small>
@@ -48,7 +48,7 @@
                             </div>
                             <div class="form-group mb-4">
                                 <label for="">Password </label>
-                                <input name='password' type='password' autocomplete="new-password"
+                                <input name='password' type='password' value='12345678' autocomplete="new-password"
                                     class="form-control @error('password') is-invalid @enderror">
                                 @error('password')
                                 <small class="form-text text-danger">{{ $message }}</small>
