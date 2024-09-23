@@ -259,6 +259,11 @@
                 </table>
             </div>
             <div class="col-md-5 mt-4">
+                @if (session('payment-error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ session('payment-error') }}
+                </div>
+                @endif
                 <div style="border: 1px solid #DEE2E6; padding: 0 !important">
                     <div>
                         <h4 class="h4 text-center pt-2 pb-2" style="background: #0080005c">
@@ -369,6 +374,11 @@
                             <td>
                                 <input type="number" style="text-align: right" class="form-control"
                                     wire:model='pay_amt' wire:input.debounce.500ms='grandCalculation'>
+                                    @if (session('payment-error'))
+                                        <div class="" role="alert">
+                                            <span style="color: red">{{ session('payment-error') }}</span>
+                                        </div>
+                                    @endif
                             </td>
                         </tr>
                         <tr style="text-align: right">

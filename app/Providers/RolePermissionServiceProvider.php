@@ -46,13 +46,13 @@ class RolePermissionServiceProvider extends ServiceProvider
                         }
 
 
-                        // if ($permission_status == 1) {
-                        //     return true;
+                        if ($permission_status == 1) {
+                            return true;
 
-                        // } else {
+                        } else {
 
-                        //     return false;
-                        // }
+                            return false;
+                        }
                     });
                 }
             }

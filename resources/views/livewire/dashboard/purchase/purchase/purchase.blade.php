@@ -262,7 +262,7 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{{ route('purchase-edit', $purchase->tran_mst_id) }}">
                                         <i class="fa fa-edit"></i> <span>Edit</span>
                                     </a>
                                     <a class="dropdown-item d-flex gap-1" wire:navigate href="{{ route('purchase-details', $purchase->tran_mst_id) }}">

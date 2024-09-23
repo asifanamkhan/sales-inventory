@@ -87,15 +87,71 @@ class PurchaseForm extends Component
 
     public function mount($purchase_id)
     {
-        $this->state['net_payable_amt'] = 0;
-        $this->state['tot_payable_amt'] = 0;
-        $this->state['total_qty'] = 0;
-        $this->state['tot_discount'] = 0;
-        $this->state['tot_vat_amt'] = 0;
-        // $this->state['pay_amt'] = '';
-        $this->state['war_id'] = 1;
-        $this->state['status'] = 1;
-        $this->state['tran_date'] = Carbon::now()->toDateString();
+        if ($purchase_id) {
+            $tran_mst = DB::table('INV_PURCHASE_MST')
+                ->where('tran_mst_id', $purchase_id)
+                ->first();
+            // dd($tran_mst);
+            $this->state['net_payable_amt'] = $tran_mst->net_payable_amt;
+            $this->state['tot_payable_amt'] = $tran_mst->tot_payable_amt;
+            $this->state['total_qty'] = $tran_mst->total_qty;
+            $this->state['tot_discount'] = $tran_mst->tot_discount;
+            $this->state['tot_vat_amt'] = $tran_mst->tot_vat_amt;
+            $this->state['shipping_amt'] = $tran_mst->shipping_amt;
+            $this->state['war_id'] = $tran_mst->war_id;
+            $this->state['status'] = $tran_mst->status;
+            $this->state['tran_date'] = Carbon::parse($tran_mst->tran_date)->toDateString();
+
+            $this->pay_amt = $tran_mst->tot_paid_amt;
+            $this->due_amt = $tran_mst->tot_due_amt;
+
+            $this->paymentState['pay_mode'] = 1;
+
+            $resultDtls = DB::table('INV_PURCHASE_DTL as p')
+                ->where('p.tran_mst_id',$purchase_id)
+                ->leftJoin('VW_INV_ITEM_DETAILS as pr', function ($join) {
+                    $join->on('pr.st_group_item_id', '=', 'p.item_code');
+                })
+                ->get(['p.pr_rate','p.vat_amt','p.tot_payble_amt','p.item_qty','p.discount','p.item_code',
+                        'p.expire_date',
+                        'pr.item_name','pr.color_name','pr.item_size_name','pr.vat_amt as p_vat_amt'
+            ]);
+
+            // dd($resultDtls);
+
+            foreach($resultDtls as $resultDtl){
+                $this->purchaseCart[] = [
+                    'item_name' => $resultDtl->item_name,
+                    'color_name' => $resultDtl->color_name,
+                    'item_size_name' => $resultDtl->item_size_name,
+                    'mrp_rate' => $resultDtl->pr_rate,
+                    'vat_amt' => $resultDtl->vat_amt,
+                    'p_vat_amt' =>  $resultDtl->p_vat_amt ?? 0,
+                    'line_total' => $resultDtl->tot_payble_amt,
+                    'qty' => $resultDtl->item_qty,
+                    'discount' => $resultDtl->discount,
+                    'st_group_item_id' => $resultDtl->item_code,
+                    'expire_date'=> $resultDtl->expire_date ? Carbon::parse($resultDtl->expire_date)->toDateString() : ''
+                ];
+            }
+
+
+            // dd($tran_mst->tran_date);
+        } else {
+            $this->state['net_payable_amt'] = 0;
+            $this->state['tot_payable_amt'] = 0;
+            $this->state['total_qty'] = 0;
+            $this->state['tot_discount'] = 0;
+            $this->state['tot_vat_amt'] = 0;
+            // $this->state['pay_amt'] = '';
+            $this->state['war_id'] = 1;
+            $this->state['status'] = 1;
+            $this->state['tran_date'] = Carbon::now()->toDateString();
+            $this->paymentState['pay_mode'] = 1;
+
+        }
+
+
         $this->paymentState['pay_mode'] = 1;
 
         $this->suppliersAll();
@@ -201,7 +257,6 @@ class PurchaseForm extends Component
         $discount = (float)$this->purchaseCart[$key]['discount'] ?? 0;
         (float)$this->purchaseCart[$key]['vat_amt'] = ((float)$this->purchaseCart[$key]['p_vat_amt'] * $qty) ?? 0;
         $vat = (float)$this->purchaseCart[$key]['vat_amt'] ?? 0;
-
         $this->purchaseCart[$key]['line_total'] = ((($qty * $mrp_rate) + $vat) -  $discount);
 
         $this->grandCalculation();
@@ -230,7 +285,15 @@ class PurchaseForm extends Component
         $this->state['tot_discount'] = $total_discount ?? 0;
 
         $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total), 2, '.', '');
-        $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+
+        if($this->pay_amt <= $this->state['tot_payable_amt']){
+            $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+        }else{
+            $this->pay_amt = $this->state['tot_payable_amt'];
+            $this->due_amt = 0;
+            session()->flash('payment-error', 'Payment amt cant bigger than net amount');
+        }
+
     }
 
     public function save()
@@ -265,7 +328,7 @@ class PurchaseForm extends Component
                 $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
 
                 $tran_mst_id = DB::table('INV_PURCHASE_MST')
-                ->insertGetId($this->state, 'tran_mst_id');
+                    ->insertGetId($this->state, 'tran_mst_id');
 
                 foreach ($this->purchaseCart as $key => $value) {
                     DB::table('INV_PURCHASE_DTL')->insert([
@@ -282,8 +345,8 @@ class PurchaseForm extends Component
                 }
 
                 $ref_memo_no = DB::table('INV_PURCHASE_MST')
-                        ->where('tran_mst_id', $tran_mst_id)
-                        ->first();
+                    ->where('tran_mst_id', $tran_mst_id)
+                    ->first();
 
 
                 $payment_info = [
@@ -328,8 +391,7 @@ class PurchaseForm extends Component
                 DB::commit();
 
                 session()->flash('status', 'New purchase created successfully');
-                return $this->redirect(route('purchase'), navigate:true);
-
+                return $this->redirect(route('purchase'), navigate: true);
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);

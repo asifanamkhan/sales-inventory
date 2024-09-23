@@ -24,11 +24,11 @@ class Purchase extends Component
     public $purchasePaidAmt = 0;
     public $purchaseRtAmt = 0;
     public $purchaseDueAmt = 0;
-    public $selectRows=[];
+    public $selectRows = [];
     public $selectPageRows = false;
 
-    public $searchMemo,$searchSupplier,$searchStatus,
-        $searchPayStatus,$searchDate,$firstFilterDate,$lastFilterDate;
+    public $searchMemo, $searchSupplier, $searchStatus,
+        $searchPayStatus, $searchDate, $firstFilterDate, $lastFilterDate;
 
 
     #[Computed]
@@ -60,18 +60,18 @@ class Purchase extends Component
         }
 
         if ($this->searchStatus) {
-            $purchases->where('p.status',$this->searchStatus );
+            $purchases->where('p.status', $this->searchStatus);
         }
         if ($this->searchPayStatus) {
-            $purchases->where('p.payment_status',$this->searchPayStatus );
+            $purchases->where('p.payment_status', $this->searchPayStatus);
         }
 
         if ($this->firstFilterDate) {
-            $purchases->where('p.tran_date','>=',$this->firstFilterDate );
+            $purchases->where('p.tran_date', '>=', $this->firstFilterDate);
         }
 
         if ($this->lastFilterDate) {
-            $purchases->where('p.tran_date','<=',$this->lastFilterDate );
+            $purchases->where('p.tran_date', '<=', $this->lastFilterDate);
         }
 
 
@@ -81,7 +81,8 @@ class Purchase extends Component
         return $purchases->paginate($this->pagination);
     }
 
-    public function dateFilter() {
+    public function dateFilter()
+    {
         $dates = explode('-', $this->searchDate);
         $this->firstFilterDate = Carbon::parse($dates[0])->format('Y-m-d');
         $this->lastFilterDate = Carbon::parse($dates[1])->format('Y-m-d');
@@ -92,13 +93,13 @@ class Purchase extends Component
         $this->resetPage();
     }
 
-    public function updatedSelectPageRows(){
-        if($this->selectPageRows){
+    public function updatedSelectPageRows()
+    {
+        if ($this->selectPageRows) {
             $this->selectRows = $this->resultPurchase->pluck('tran_mst_id')->toArray();
-        }else{
+        } else {
             $this->selectRows = [];
         }
-
     }
 
     public function mount()
@@ -117,6 +118,7 @@ class Purchase extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.purchase.purchase.purchase')->title('Purchase');
+        return view('livewire.dashboard.purchase.purchase.purchase')
+            ->title('Purchase');
     }
 }
