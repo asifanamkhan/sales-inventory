@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 class PurchaseForm extends Component
 {
     public $state = [];
+    public $edit_select = [];
+    public $purchase_id;
     public $document = [];
     public $paymentState = [];
     public $suppliers, $war_houses, $productsearch, $payment_methods;
@@ -88,6 +90,7 @@ class PurchaseForm extends Component
     public function mount($purchase_id)
     {
         if ($purchase_id) {
+            $this->purchase_id = $purchase_id;
             $tran_mst = DB::table('INV_PURCHASE_MST')
                 ->where('tran_mst_id', $purchase_id)
                 ->first();
@@ -100,12 +103,43 @@ class PurchaseForm extends Component
             $this->state['shipping_amt'] = $tran_mst->shipping_amt;
             $this->state['war_id'] = $tran_mst->war_id;
             $this->state['status'] = $tran_mst->status;
+            $this->state['p_code'] = $tran_mst->p_code;
+            $this->state['lc_no'] = $tran_mst->lc_no;
+            $this->state['remarks'] = $tran_mst->remarks;
             $this->state['tran_date'] = Carbon::parse($tran_mst->tran_date)->toDateString();
 
             $this->pay_amt = $tran_mst->tot_paid_amt;
             $this->due_amt = $tran_mst->tot_due_amt;
 
-            $this->paymentState['pay_mode'] = 1;
+            $this->edit_select['supplier_id'] = $tran_mst->p_code;
+            $this->edit_select['war_id'] = $tran_mst->war_id;
+
+            $resultPay = DB::table('ACC_PAYMENT_INFO')
+                ->where('tran_mst_id', $purchase_id)
+                ->first();
+
+            $this->paymentState['pay_mode'] = $resultPay->pay_mode;
+            
+            if($resultPay->pay_mode == 2){
+                $this->paymentState['bank_code'] = $resultPay->bank_code;
+                $this->paymentState['bank_ac_no'] = $resultPay->bank_ac_no;
+                $this->paymentState['chq_no'] = $resultPay->chq_no;
+                $this->paymentState['chq_date'] = Carbon::parse($resultPay->chq_date)->toDateString();
+            }
+            if($resultPay->pay_mode == 3){
+                $this->paymentState['card_no'] = $resultPay->card_no;
+            }
+            if($resultPay->pay_mode == 4){
+                $this->paymentState['mfs_id'] = $resultPay->mfs_id;
+                $this->paymentState['mfs_acc_no'] = $resultPay->mfs_acc_no;
+            }
+
+            if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+                $this->paymentState['online_trx_id'] = $resultPay->online_trx_id;
+                $this->paymentState['online_trx_dt'] = Carbon::parse($resultPay->online_trx_dt)->toDateString();
+            }
+
+            // dd($resultPay);
 
             $resultDtls = DB::table('INV_PURCHASE_DTL as p')
                 ->where('p.tran_mst_id',$purchase_id)
@@ -151,8 +185,6 @@ class PurchaseForm extends Component
 
         }
 
-
-        $this->paymentState['pay_mode'] = 1;
 
         $this->suppliersAll();
         $this->wirehouseAll();
@@ -327,8 +359,24 @@ class PurchaseForm extends Component
                 $this->state['tot_paid_amt'] = $this->pay_amt;
                 $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
 
-                $tran_mst_id = DB::table('INV_PURCHASE_MST')
+
+                if($this->purchase_id){
+                   DB::table('INV_PURCHASE_MST')
+                        ->where('tran_mst_id',$this->purchase_id)
+                        ->update($this->state);
+
+                    DB::table('INV_PURCHASE_DTL')
+                        ->where('tran_mst_id',$this->purchase_id)
+                        ->delete();
+
+                    $tran_mst_id = $this->purchase_id;
+
+                }else{
+
+                    $tran_mst_id = DB::table('INV_PURCHASE_MST')
                     ->insertGetId($this->state, 'tran_mst_id');
+                }
+
 
                 foreach ($this->purchaseCart as $key => $value) {
                     DB::table('INV_PURCHASE_DTL')->insert([
@@ -344,10 +392,10 @@ class PurchaseForm extends Component
                     ]);
                 }
 
+
                 $ref_memo_no = DB::table('INV_PURCHASE_MST')
                     ->where('tran_mst_id', $tran_mst_id)
                     ->first();
-
 
                 $payment_info = [
                     'tran_mst_id' => $tran_mst_id,
@@ -378,20 +426,27 @@ class PurchaseForm extends Component
 
                 if ($this->paymentState['pay_mode'] == 4) {
                     $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
+                    $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
                 }
                 if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
                     $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
                     $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                 }
 
-
-                DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
+                if($this->purchase_id){
+                    DB::table('ACC_PAYMENT_INFO')
+                        ->where('tran_mst_id',$this->purchase_id)
+                        ->update($payment_info);
+                }else{
+                    DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
+                }
 
 
                 DB::commit();
 
                 session()->flash('status', 'New purchase created successfully');
                 return $this->redirect(route('purchase'), navigate: true);
+
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);
@@ -404,5 +459,6 @@ class PurchaseForm extends Component
     public function render()
     {
         return view('livewire.dashboard.purchase.purchase.purchase-form');
-    }
+
+   }
 }

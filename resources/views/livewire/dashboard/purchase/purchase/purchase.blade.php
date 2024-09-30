@@ -97,8 +97,8 @@
 
                         </td>
                         <td style="">#</td>
-                        <td style="width:8%">Date</td>
-                        <td style="width:12%">Memo no</td>
+                        <td style="width:9%">Date</td>
+                        <td style="width:11%">Memo no</td>
                         <td style="width:15%">Supplier</td>
                         <td style="width:9% ;text-align: center">PR status</td>
                         <td style="text-align: center">Grand amt</td>
@@ -107,6 +107,7 @@
                         <td style="text-align: center">Due amt</td>
                         <td style="text-align: center">Payment</td>
                         <td class="text-center">Action</td>
+
                     </tr>
 
                 </thead>
@@ -136,6 +137,7 @@
                                 <option value="2">Partial</option>
                                 <option value="3">Pending</option>
                                 <option value="4">Ordered</option>
+                                <option value="5">Cancled</option>
                             </select>
                         </td>
                         <th></th>
@@ -188,7 +190,9 @@
                             @elseif($purchase->status == 3)
                                 background: #FFF3CD;
                             @elseif($purchase->status == 4)
-                                background: #FFF3CD;
+                                background: #CCE5FF;
+                            @elseif($purchase->status == 5)
+                                background: #F8D7DA;
                             @endif
 
                             " class='form-control select-status' name="" id="">
@@ -202,11 +206,15 @@
                                 </option>
                                 <option @if ($purchase->status == 3)
                                     selected
-                                    @endif value="2">Pending
+                                    @endif value="3">Pending
                                 </option>
                                 <option @if ($purchase->status == 4)
                                     selected
-                                    @endif value="2">Ordered
+                                    @endif value="4">Ordered
+                                </option>
+                                <option @if ($purchase->status == 5)
+                                    selected
+                                    @endif value="5">Cancled
                                 </option>
                             </select>
 
@@ -258,7 +266,7 @@
                                 <a class="btn btn-sm btn-primary dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    Action &nbsp;&nbsp;&nbsp;&nbsp;
+                                    Action &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -280,7 +288,7 @@
                                         <i class="fas fa-print"></i> Print
                                     </a>
                                     <a class="dropdown-item" href="#">
-                                        <i class="fa-solid fa-rotate-left"></i> Purchase return
+                                        <i class="fa-solid fa-rotate-left"></i> Return
                                     </a>
                                     <a class="dropdown-item" href="#">
                                         <i class="fa-regular fa-copy"></i> Duplicate

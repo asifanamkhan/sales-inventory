@@ -308,6 +308,10 @@ form-check-input:focus {
     color: #155724;
 } */
 
+.daterangepicker td.active, .daterangepicker td.active:hover{
+    background-color: #3C50E0 !important;
+}
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES

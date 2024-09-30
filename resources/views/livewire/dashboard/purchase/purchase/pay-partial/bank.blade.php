@@ -6,11 +6,10 @@
         <select class="form-select select2" id='bank_id'>
             <option value="">Select bank</option>
             @forelse ($banks as $bank)
-            <option {{-- @if ($supplier->st_group_id ==
-                @$edit_select['edit_group_id'])
+            <option
+            @if (@$bank_code == $bank->bank_code)
                 selected
-                @endif
-                --}}
+            @endif
                 value="{{ $bank->bank_code }}">{{ $bank->bank_name }}
             </option>
             @empty
