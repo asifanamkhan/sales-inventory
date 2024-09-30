@@ -8,9 +8,13 @@ use Livewire\Component;
 class Bank extends Component
 {
     public $banks;
+    public $bank_code;
 
 
-    public function mount(){
+    public function mount($bank_code){
+
+        $this->bank_code = $bank_code ?? '';
+        
         $this->banks = DB::table('ACC_BANK_INFO')
         ->distinct('bank_name')
         ->orderBy('bank_name', 'ASC')

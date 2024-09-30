@@ -182,17 +182,24 @@
             <ul class="collapse list-unstyled
             {{ request()->routeIs('purchase') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-create') ? 'show' : ' ' }}
+            {{ request()->routeIs('purchase-edit') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-details') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-return') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-return-create') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-return-edit') ? 'show' : ' ' }}
 
         " id="purchaseSubmenu">
-                <li class="{{ request()->routeIs('purchase') ? 'active' : ' ' }}">
+                <li class="
+                {{ request()->routeIs('purchase') ? 'active' : ' ' }}
+                {{ request()->routeIs('purchase-edit') ? 'active' : ' ' }}
+                {{ request()->routeIs('purchase-details') ? 'active' : ' ' }}
+                 ">
                     <a class="list" wire:navigate href="{{ route('purchase') }}"> - Purchase list</a>
                 </li>
-                <li class="{{ request()->routeIs('purchase-create') ? 'active' : ' ' }}">
-                    <a class="list" href="{{ route('purchase-create') }}"> - Purchase entry</a>
+                <li class="
+                {{ request()->routeIs('purchase-create') ? 'active' : ' ' }}
+                 ">
+                    <a class="list" wire:navigate href="{{ route('purchase-create') }}"> - Purchase entry</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('purchase-return') ? 'active' : ' ' }}
@@ -227,7 +234,7 @@
                 {{ request()->routeIs('sale-return-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('sale-return-edit') ? 'active' : ' ' }}
                 ">
-                    <a class="list" wire:navigate  href="{{ route('sale-return') }}"> - Sales return</a>
+                    <a class="list" wire:navigate href="{{ route('sale-return') }}"> - Sales return</a>
                 </li>
             </ul>
         </li>

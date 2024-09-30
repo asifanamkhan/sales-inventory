@@ -18,6 +18,9 @@ class Purchase
         elseif($prams == 4){
             $value = 'Ordered';
         }
+        elseif($prams == 5){
+            $value = 'Cancled';
+        }
 
         return $value;
     }
