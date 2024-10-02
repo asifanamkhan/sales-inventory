@@ -16,6 +16,20 @@
         </nav>
     </div>
     <div class="card p-4">
+        <div class="row mb-3">
+            <div class="col-auto ">
+                <a href='{{ route('purchase-edit', $purchase_id) }}' class="btn btn-warning">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    Edit
+                </a>
+            </div>
+            <div class="col-auto">
+                <button wire:click='print' class="btn btn-success">
+                    <i class="fa-solid fa-print"></i>
+                    Print
+                </button>
+            </div>
+        </div>
         <div class="responsive-table" style="font-size: 0.9em !important;">
             <div class="responsive-table" style="font-size: 0.9em !important;">
                 <table class="table table-bordered">
@@ -45,9 +59,9 @@
                             <tr />
                         <tr style="font-size: 16px; font-weight: 500">
                             <td>Supplier :</td>
-                            <td>{{ $purchase_mst->p_code }}</td>
+                            <td>{{ $purchase_mst->p_name }}</td>
                             <td>Warehouse :</td>
-                            <td>{{ $purchase_mst->war_id }}</td>
+                            <td>{{ $purchase_mst->war_name }}</td>
                             <td>Lc No :</td>
                             <td>{{ $purchase_mst->lc_no }}</td>
                         </tr>

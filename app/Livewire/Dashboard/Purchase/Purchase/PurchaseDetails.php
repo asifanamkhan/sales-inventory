@@ -4,6 +4,8 @@ namespace App\Livewire\Dashboard\Purchase\Purchase;
 
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class PurchaseDetails extends Component
 {
@@ -19,9 +21,15 @@ class PurchaseDetails extends Component
     public function mount($purchase_id)
     {
         $this->purchase_id = $purchase_id;
-        $this->purchase_mst = DB::table('INV_PURCHASE_MST')
-            ->where('tran_mst_id', $purchase_id)
-            ->first();
+        $this->purchase_mst = DB::table('INV_PURCHASE_MST as p')
+            ->where('p.tran_mst_id', $purchase_id)
+            ->leftJoin('INV_SUPPLIER_INFO as s', function ($join) {
+                $join->on('s.p_code', '=', 'p.p_code');
+            })
+            ->leftJoin('INV_WAREHOUSE_INFO as w', function ($join) {
+                $join->on('w.war_id', '=', 'p.war_id');
+            })
+            ->first(['p.*', 's.p_name', 'w.war_name']);
 
         $this->purchase_dtl = DB::table('INV_PURCHASE_DTL as p')
             ->where('p.tran_mst_id', $purchase_id)
@@ -69,5 +77,17 @@ class PurchaseDetails extends Component
             ]);
 
         // dd($this->payment_info);
+    }
+
+    public function print()
+    {
+        // dd(1);
+        $pdf = Pdf::loadHTML('<h1>Hello world!</h1>');
+
+        return response()->streamDownload(function () use($pdf) {
+            echo  $pdf->stream();
+        }, 'report.pdf');
+
+
     }
 }
