@@ -17,7 +17,7 @@ class PurchaseController extends Controller
 
         if($company->logo){
             $logo = json_decode($company->logo)[0];
-            $imagedata = file_get_contents(asset('storage/app/upload/company/'.$logo));
+            $imagedata = file_get_contents(storage_path('app/upload/company/'.$logo));
             $base64Logo = base64_encode($imagedata);
         }
 
@@ -33,11 +33,11 @@ class PurchaseController extends Controller
         $base64PaymentImg = '';
 
         if($tran_mst->payment_status == 'PAID'){
-            $imData = file_get_contents(asset('public/img/paid.jpg'));
+            $imData = file_get_contents(public_path('img/paid.jpg'));
             $base64PaymentImg = base64_encode($imData);
 
         }else{
-            $imData = file_get_contents(asset('public/img/due.jpg'));
+            $imData = file_get_contents(public_path('img/due.jpg'));
             $base64PaymentImg = base64_encode($imData);
         }
 
