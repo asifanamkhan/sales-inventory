@@ -24,10 +24,10 @@
                 </a>
             </div>
             <div class="col-auto">
-                <button wire:click='print' class="btn btn-success">
+                <a target="_blank" href="{{ route('purchase-invoice', $purchase_id) }}" class="btn btn-success">
                     <i class="fa-solid fa-print"></i>
                     Print
-                </button>
+                </a>
             </div>
         </div>
         <div class="responsive-table" style="font-size: 0.9em !important;">
@@ -128,7 +128,7 @@
                             <td></td>
                             <td>{{ number_format($purchase_mst->tot_discount, 2, '.', '') }}</td>
                             <td>{{ $purchase_mst->tot_vat_amt }}</td>
-                            <td style="text-align: right">{{ $purchase_mst->tot_payable_amt }}</td>
+                            <td style="text-align: right">{{ $purchase_mst->net_payable_amt }}</td>
                         </tr>
 
 

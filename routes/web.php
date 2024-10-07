@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -97,6 +98,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('purchase/create', PurchaseCreate::class)->name('purchase-create');
     Route::get('purchase/{purchase_id}/edit', PurchaseEdit::class)->name('purchase-edit');
     Route::get('purchase/{purchase_id}/details', PurchaseDetails::class)->name('purchase-details');
+    Route::get('purchase-invoice/{purchase_id}', [PurchaseController::class, 'invoice'])->name('purchase-invoice');
 
     Route::get('purchase-return', PurchaseReturn::class)->name('purchase-return');
     Route::get('purchase-return/create', PurchaseReturnCreate::class)->name('purchase-return-create');
