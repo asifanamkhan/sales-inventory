@@ -88,6 +88,11 @@
             </div>
             @endpermission
 
+             {{-- modal --}}
+             <x-large-modal class='payment'>
+                <livewire:dashboard.purchase.purchase.pay-partial.payment>
+            </x-large-modal>
+
         </div>
         <div class="responsive-table" style="font-size: 0.9em !important;">
             <table class="table table-bordered table-hover">
@@ -281,10 +286,10 @@
                                         </svg>
                                         <span>Details</span>
                                     </a>
-                                    <a class="dropdown-item" href="#">
+                                    <a @click="$dispatch('purchase-payment', {id: {{ $purchase->tran_mst_id }}})" data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
                                         <i class="fa fa-credit-card"></i> Add payment
                                     </a>
-                                    <a class="dropdown-item" href="#">
+                                    <a target="_blank" class="dropdown-item" href="{{ route('purchase-invoice', $purchase->tran_mst_id) }}">
                                         <i class="fas fa-print"></i> Print
                                     </a>
                                     <a class="dropdown-item" href="#">
