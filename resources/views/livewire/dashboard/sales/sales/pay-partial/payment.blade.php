@@ -16,30 +16,30 @@
             {{ session('warning') }}
         </div>
         @endif
-        @if ($purchase_mst)
+        @if ($sale_mst)
         <div class="row" style="padding: 0px 8px 2px">
             <p class="col-auto">
-                Total purchase:
+                Total sale:
                 <span class="badge bg-primary">
-                    {{ number_format($purchase_mst['tot_payable_amt'], 2, '.', ',') }}
+                    {{ number_format($sale_mst['tot_payable_amt'], 2, '.', ',') }}
                 </span>
             </p>
             <p class="col-auto">
                 Return:
                 <span class="badge bg-warning">
-                    {{ number_format($purchase_mst['prt_amt'], 2, '.', ',') }}
+                    {{ number_format($sale_mst['prt_amt'], 2, '.', ',') }}
                 </span>
             </p>
             <p class="col-auto">
                 Total paid:
                 <span class='badge bg-success'>
-                    {{ number_format($purchase_mst['tot_paid_amt'], 2, '.', ',') }}
+                    {{ number_format($sale_mst['tot_paid_amt'], 2, '.', ',') }}
                 </span>
             </p>
             <p class="col-auto">
                 Total due:
                 <span class='badge bg-danger'>
-                    {{ number_format($purchase_mst['tot_due_amt'], 2, '.', ',') }}
+                    {{ number_format($sale_mst['tot_due_amt'], 2, '.', ',') }}
                 </span>
             </p>
         </div>
@@ -67,7 +67,7 @@
 
                 <div class='row'>
                     <div class="col-md-6">
-                        <livewire:dashboard.purchase.purchase.pay-partial.bank
+                        <livewire:dashboard.sales.sales.pay-partial.bank
                             :bank_code="$paymentState['bank_code'] ?? null" />
                     </div>
                     <div class="col-md-6">
@@ -94,7 +94,7 @@
                 @if ($paymentState['pay_mode'] == 4)
                 <div class="row">
                     <div class="col-md-6">
-                        <livewire:dashboard.purchase.purchase.pay-partial.mobile-bank
+                        <livewire:dashboard.sales.sales.pay-partial.mobile-bank
                             :mfs_id="$paymentState['mfs_id'] ?? null " />
                     </div>
                     <div class="col-md-6">
@@ -210,11 +210,11 @@
         });
     });
 
-    $wire.on('set_bank_code_purchase',(event)=>{
+    $wire.on('set_bank_code_sale',(event)=>{
         @this.set('paymentState.bank_code', event.id, false);
     });
 
-    $wire.on('set_mfs_code_purchase',(event)=>{
+    $wire.on('set_mfs_code_sale',(event)=>{
         @this.set('paymentState.mfs_id', event.id, false);
     });
 </script>

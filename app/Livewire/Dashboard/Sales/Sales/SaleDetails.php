@@ -1,44 +1,38 @@
 <?php
 
-namespace App\Livewire\Dashboard\Purchase\Purchase;
+namespace App\Livewire\Dashboard\Sales\Sales;
 
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use Barryvdh\DomPDF\Facade\Pdf;
 
-
-class PurchaseDetails extends Component
+class SaleDetails extends Component
 {
-    public $purchase_mst;
-    public $purchase_dtl;
-    public $purchase_id;
+    public $sale_mst;
+    public $sale_dtl;
+    public $sale_id;
     public $payment_info;
 
-    public function render()
+
+    public function mount($sale_id)
     {
-        return view('livewire.dashboard.purchase.purchase.purchase-details');
-    }
-    public function mount($purchase_id)
-    {
-        $this->purchase_id = $purchase_id;
-        $this->purchase_mst = DB::table('INV_PURCHASE_MST as p')
-            ->where('p.tran_mst_id', $purchase_id)
-            ->leftJoin('INV_SUPPLIER_INFO as s', function ($join) {
-                $join->on('s.p_code', '=', 'p.p_code');
+        $this->sale_id = $sale_id;
+        $this->sale_mst = DB::table('INV_SALES_MST as p')
+            ->where('p.tran_mst_id', $sale_id)
+            ->leftJoin('INV_CUSTOMER_INFO as s', function ($join) {
+                $join->on('s.customer_id', '=', 'p.customer_id');
             })
             ->leftJoin('INV_WAREHOUSE_INFO as w', function ($join) {
                 $join->on('w.war_id', '=', 'p.war_id');
             })
-            ->first(['p.*', 's.p_name', 'w.war_name']);
+            ->first(['p.*', 's.customer_name as p_name', 'w.war_name']);
 
-        $this->purchase_dtl = DB::table('INV_PURCHASE_DTL as p')
-            ->where('p.tran_mst_id', $purchase_id)
+        $this->sale_dtl = DB::table('INV_SALES_DTL as p')
+            ->where('p.tran_mst_id', $sale_id)
             ->leftJoin('VW_INV_ITEM_DETAILS as pr', function ($join) {
                 $join->on('pr.st_group_item_id', '=', 'p.item_code');
             })
             ->get([
-                'p.pr_rate',
-                'p.expire_date',
+                'p.mrp_rate',
                 'p.vat_amt',
                 'p.tot_payble_amt',
                 'p.item_qty',
@@ -51,7 +45,7 @@ class PurchaseDetails extends Component
             ]);
 
         $this->payment_info = DB::table('ACC_PAYMENT_INFO as p')
-        ->where('p.ref_memo_no', $this->purchase_mst->memo_no)
+            ->where('p.ref_memo_no', $this->sale_mst->memo_no)
             ->leftJoin('ACC_PAYMENT_MODE as pm', function ($join) {
                 $join->on('pm.p_mode_id', '=', 'p.pay_mode');
             })
@@ -77,16 +71,8 @@ class PurchaseDetails extends Component
 
         // dd($this->payment_info);
     }
-
-    public function print()
+    public function render()
     {
-        // dd(1);
-        $pdf = Pdf::loadHTML('<h1>Hello world!</h1>');
-
-        return response()->streamDownload(function () use($pdf) {
-            echo  $pdf->stream();
-        }, 'report.pdf');
-
-
+        return view('livewire.dashboard.sales.sales.sale-details');
     }
 }

@@ -232,9 +232,9 @@
                         </td>
                         <td style="text-align: right">
                             @php
-                            $rt_total += (float)$purchase->rt_amt;
+                            $rt_total += (float)$purchase->prt_amt;
                             @endphp
-                            {{ number_format($purchase->rt_amt, 2, '.', '') }}
+                            {{ number_format($purchase->prt_amt, 2, '.', '') }}
                         </td>
                         <td style="text-align: right">
                             @php
@@ -244,7 +244,7 @@
                         </td>
                         <td style="text-align: right">
                             @php
-                            $due = App\Service\Payment::dueAmount($purchase->tot_payable_amt, $purchase->rt_amt,
+                            $due = App\Service\Payment::dueAmount($purchase->tot_payable_amt, $purchase->prt_amt,
                             $purchase->tot_paid_amt);
                             $due_total += (float)$due;
                             @endphp
@@ -271,7 +271,7 @@
                                 <a class="btn btn-sm btn-primary dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    Action &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    Action &nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -287,7 +287,7 @@
                                         <span>Details</span>
                                     </a>
                                     <a @click="$dispatch('purchase-payment', {id: {{ $purchase->tran_mst_id }}})" data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
-                                        <i class="fa fa-credit-card"></i> Add payment
+                                        <i class="fa fa-credit-card"></i> Make payment
                                     </a>
                                     <a target="_blank" class="dropdown-item" href="{{ route('purchase-invoice', $purchase->tran_mst_id) }}">
                                         <i class="fas fa-print"></i> Print

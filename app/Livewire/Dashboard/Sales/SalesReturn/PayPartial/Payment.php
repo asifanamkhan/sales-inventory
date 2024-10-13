@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Livewire\Dashboard\Purchase\Purchase\PayPartial;
+namespace App\Livewire\Dashboard\Sales\SalesReturn\PayPartial;
 
+use Livewire\Component;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
@@ -17,8 +17,8 @@ class Payment extends Component
 
     public $search;
     public $pagination = 10;
-    public $payment_methods, $purchase_mst;
-    public $purchase_id;
+    public $payment_methods, $sale_mst;
+    public $sale_id;
     public $paymentState = [];
 
     public function paymentMethodAll()
@@ -26,21 +26,18 @@ class Payment extends Component
         return $this->payment_methods = DB::table('ACC_PAYMENT_MODE')
             ->get(['p_mode_id', 'p_mode_name']);
     }
-    public function render()
+
+
+    #[On('sale-return-payment')]
+    public function salePayment($id)
     {
-        return view('livewire.dashboard.purchase.purchase.pay-partial.payment');
+        $this->sale_id = $id;
+        $this->saleMst($id);
     }
 
-    #[On('purchase-payment')]
-    public function purchasePayment($id)
+    public function saleMst($id)
     {
-        $this->purchase_id = $id;
-        $this->purchaseMst($id);
-    }
-
-    public function purchaseMst($id)
-    {
-        $this->purchase_mst = (array)DB::table('INV_PURCHASE_MST as p')
+        $this->sale_mst = (array)DB::table('INV_SALES_RET_MST as p')
             ->where('p.tran_mst_id', $id)
             ->first(['p.*']);
     }
@@ -48,13 +45,16 @@ class Payment extends Component
     #[Computed]
     public function resultPayments()
     {
-        // $this->purchase_mst = (array)DB::table('INV_PURCHASE_MST as p')
-        //     ->where('p.tran_mst_id', $this->purchase_id)
+        // $this->saleMst($this->sale_id);
+
+        // dd($this->sale_mst);
+        // $this->sale_mst = (array)DB::table('INV_PURCHASE_MST as p')
+        //     ->where('p.tran_mst_id', $this->sale_id)
         //     ->first(['p.*']);
 
         $payments = DB::table('ACC_PAYMENT_INFO as p')
-            ->where('p.ref_memo_no', @$this->purchase_mst['memo_no'])
-            ->where('p.tran_mst_id', $this->purchase_id)
+            ->where('p.tran_mst_id', $this->sale_id)
+            ->where('p.ref_memo_no', @$this->sale_mst['memo_no'])
             ->leftJoin('ACC_PAYMENT_MODE as pm', function ($join) {
                 $join->on('pm.p_mode_id', '=', 'p.pay_mode');
             });
@@ -92,33 +92,34 @@ class Payment extends Component
             'pay_mode' => 'required',
 
         ])->validate();
-
-        if ((float)$this->paymentState['tot_paid_amt'] == 0 || (float)$this->paymentState['tot_paid_amt'] > (float)$this->purchase_mst['tot_due_amt']) {
+        // dd((float)$this->paymentState['tot_paid_amt'], (float)$this->sale_mst['tot_due_amt']);
+        if ((float)$this->paymentState['tot_paid_amt'] ==0 || (float)$this->paymentState['tot_paid_amt'] > (float)$this->sale_mst['tot_due_amt']) {
             session()->flash('error', 'Payment amount is greater than due amount');
+            $this->paymentState['tot_paid_amt'] = (float)$this->sale_mst['tot_due_amt'];
         } else {
             DB::beginTransaction();
             try {
-                $due_amt = (float)$this->purchase_mst['tot_due_amt'] - (float)$this->paymentState['tot_paid_amt'];
-                DB::table('INV_PURCHASE_MST as p')
-                    ->where('p.tran_mst_id', $this->purchase_id)
+                $due_amt = (float)$this->sale_mst['tot_due_amt'] - (float)$this->paymentState['tot_paid_amt'];
+                DB::table('INV_SALES_RET_MST as p')
+                    ->where('p.tran_mst_id', $this->sale_id)
                     ->update([
                         'tot_due_amt' => $due_amt,
-                        'tot_paid_amt' => (float)$this->purchase_mst['tot_paid_amt'] + (float)$this->paymentState['tot_paid_amt'],
+                        'tot_paid_amt' => (float)$this->sale_mst['tot_paid_amt'] + (float)$this->paymentState['tot_paid_amt'],
                     ]);
                 $payment_info = [
-                    'tran_mst_id' => $this->purchase_id,
-                    'tran_type' => 'PR',
+                    'tran_mst_id' => $this->sale_id,
+                    'tran_type' => 'SRT',
                     'payment_date' => Carbon::now()->toDateString(),
-                    'p_code' => $this->purchase_mst['p_code'],
+                    'p_code' => $this->sale_mst['customer_id'],
                     'pay_mode' => $this->paymentState['pay_mode'],
-                    'tot_payable_amt' => $this->purchase_mst['tot_payable_amt'],
-                    'discount' => $this->purchase_mst['tot_discount'],
-                    'vat_amt' => $this->purchase_mst['tot_vat_amt'],
-                    'net_payable_amt' => $this->purchase_mst['net_payable_amt'],
+                    'tot_payable_amt' => $this->sale_mst['tot_payable_amt'],
+                    'discount' => $this->sale_mst['tot_discount'],
+                    'vat_amt' => $this->sale_mst['tot_vat_amt'],
+                    'net_payable_amt' => $this->sale_mst['net_payable_amt'],
                     'tot_paid_amt' => $this->paymentState['tot_paid_amt'] ?? 0,
                     'due_amt' => $due_amt,
-                    'user_id' => $this->purchase_mst['user_name'],
-                    'ref_memo_no' => $this->purchase_mst['memo_no'],
+                    'user_id' => $this->sale_mst['user_name'],
+                    'ref_memo_no' => $this->sale_mst['memo_no'],
                     'payment_status' => PurchasePayment::PaymentCheck(($due_amt)),
                 ];
 
@@ -128,6 +129,7 @@ class Payment extends Component
                     $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
                     $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
                 }
+
                 if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
                     $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
                 }
@@ -146,15 +148,20 @@ class Payment extends Component
                 DB::commit();
 
                 session()->flash('status', 'New Payment made successfully');
-                $this->dispatch('purchase-all');
+                $this->dispatch('sale-return-all');
                 $this->paymentState['tot_paid_amt'] = 0;
-                $this->purchaseMst($this->purchase_id);
+                $this->saleMst($this->sale_id);
                 $this->paymentState['pay_mode'] = 1;
-                
+
+
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);
             }
         }
+    }
+    public function render()
+    {
+        return view('livewire.dashboard.sales.sales-return.pay-partial.payment');
     }
 }

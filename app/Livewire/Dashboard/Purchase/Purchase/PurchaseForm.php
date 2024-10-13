@@ -119,17 +119,17 @@ class PurchaseForm extends Component
                 ->first();
 
             $this->paymentState['pay_mode'] = $resultPay->pay_mode;
-            
-            if($resultPay->pay_mode == 2){
+
+            if ($resultPay->pay_mode == 2) {
                 $this->paymentState['bank_code'] = $resultPay->bank_code;
                 $this->paymentState['bank_ac_no'] = $resultPay->bank_ac_no;
                 $this->paymentState['chq_no'] = $resultPay->chq_no;
                 $this->paymentState['chq_date'] = Carbon::parse($resultPay->chq_date)->toDateString();
             }
-            if($resultPay->pay_mode == 3){
+            if ($resultPay->pay_mode == 3) {
                 $this->paymentState['card_no'] = $resultPay->card_no;
             }
-            if($resultPay->pay_mode == 4){
+            if ($resultPay->pay_mode == 4) {
                 $this->paymentState['mfs_id'] = $resultPay->mfs_id;
                 $this->paymentState['mfs_acc_no'] = $resultPay->mfs_acc_no;
             }
@@ -142,18 +142,27 @@ class PurchaseForm extends Component
             // dd($resultPay);
 
             $resultDtls = DB::table('INV_PURCHASE_DTL as p')
-                ->where('p.tran_mst_id',$purchase_id)
+                ->where('p.tran_mst_id', $purchase_id)
                 ->leftJoin('VW_INV_ITEM_DETAILS as pr', function ($join) {
                     $join->on('pr.st_group_item_id', '=', 'p.item_code');
                 })
-                ->get(['p.pr_rate','p.vat_amt','p.tot_payble_amt','p.item_qty','p.discount','p.item_code',
-                        'p.expire_date',
-                        'pr.item_name','pr.color_name','pr.item_size_name','pr.vat_amt as p_vat_amt'
-            ]);
+                ->get([
+                    'p.pr_rate',
+                    'p.vat_amt',
+                    'p.tot_payble_amt',
+                    'p.item_qty',
+                    'p.discount',
+                    'p.item_code',
+                    'p.expire_date',
+                    'pr.item_name',
+                    'pr.color_name',
+                    'pr.item_size_name',
+                    'pr.vat_amt as p_vat_amt'
+                ]);
 
             // dd($resultDtls);
 
-            foreach($resultDtls as $resultDtl){
+            foreach ($resultDtls as $resultDtl) {
                 $this->purchaseCart[] = [
                     'item_name' => $resultDtl->item_name,
                     'color_name' => $resultDtl->color_name,
@@ -165,7 +174,7 @@ class PurchaseForm extends Component
                     'qty' => $resultDtl->item_qty,
                     'discount' => $resultDtl->discount,
                     'st_group_item_id' => $resultDtl->item_code,
-                    'expire_date'=> $resultDtl->expire_date ? Carbon::parse($resultDtl->expire_date)->toDateString() : ''
+                    'expire_date' => $resultDtl->expire_date ? Carbon::parse($resultDtl->expire_date)->toDateString() : ''
                 ];
             }
 
@@ -182,7 +191,6 @@ class PurchaseForm extends Component
             $this->state['status'] = 1;
             $this->state['tran_date'] = Carbon::now()->toDateString();
             $this->paymentState['pay_mode'] = 1;
-
         }
 
 
@@ -318,14 +326,13 @@ class PurchaseForm extends Component
 
         $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total), 2, '.', '');
 
-        if($this->pay_amt <= $this->state['tot_payable_amt']){
+        if ($this->pay_amt <= $this->state['tot_payable_amt']) {
             $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
-        }else{
+        } else {
             $this->pay_amt = $this->state['tot_payable_amt'];
             $this->due_amt = 0;
             session()->flash('payment-error', 'Payment amt cant bigger than net amount');
         }
-
     }
 
     public function save()
@@ -360,21 +367,20 @@ class PurchaseForm extends Component
                 $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
 
 
-                if($this->purchase_id){
-                   DB::table('INV_PURCHASE_MST')
-                        ->where('tran_mst_id',$this->purchase_id)
+                if ($this->purchase_id) {
+                    DB::table('INV_PURCHASE_MST')
+                        ->where('tran_mst_id', $this->purchase_id)
                         ->update($this->state);
 
                     DB::table('INV_PURCHASE_DTL')
-                        ->where('tran_mst_id',$this->purchase_id)
+                        ->where('tran_mst_id', $this->purchase_id)
                         ->delete();
 
                     $tran_mst_id = $this->purchase_id;
-
-                }else{
+                } else {
 
                     $tran_mst_id = DB::table('INV_PURCHASE_MST')
-                    ->insertGetId($this->state, 'tran_mst_id');
+                        ->insertGetId($this->state, 'tran_mst_id');
                 }
 
 
@@ -392,61 +398,61 @@ class PurchaseForm extends Component
                     ]);
                 }
 
+                if ($this->pay_amt && $this->pay_amt > 0) {
+                    $ref_memo_no = DB::table('INV_PURCHASE_MST')
+                        ->where('tran_mst_id', $tran_mst_id)
+                        ->first();
 
-                $ref_memo_no = DB::table('INV_PURCHASE_MST')
-                    ->where('tran_mst_id', $tran_mst_id)
-                    ->first();
+                    $payment_info = [
+                        'tran_mst_id' => $tran_mst_id,
+                        'tran_type' => 'PR',
+                        'payment_date' => $this->state['tran_date'],
+                        'p_code' => $this->state['p_code'],
+                        'pay_mode' => $this->paymentState['pay_mode'],
+                        'tot_payable_amt' => $this->state['tot_payable_amt'],
+                        'discount' => $this->state['tot_discount'],
+                        'vat_amt' => $this->state['tot_vat_amt'],
+                        'net_payable_amt' => $this->state['net_payable_amt'],
+                        'tot_paid_amt' => $this->pay_amt ?? 0,
+                        'due_amt' => $this->due_amt,
+                        'user_id' => $this->state['user_name'],
+                        'ref_memo_no' => $ref_memo_no->memo_no,
+                        'payment_status' => Payment::PaymentCheck($this->due_amt),
+                    ];
+                    if ($this->paymentState['pay_mode'] == 2) {
+                        $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
+                        $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
+                        $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
+                        $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                    }
 
-                $payment_info = [
-                    'tran_mst_id' => $tran_mst_id,
-                    'tran_type' => 'PR',
-                    'payment_date' => $this->state['tran_date'],
-                    'p_code' => $this->state['p_code'],
-                    'pay_mode' => $this->paymentState['pay_mode'],
-                    'tot_payable_amt' => $this->state['tot_payable_amt'],
-                    'discount' => $this->state['tot_discount'],
-                    'vat_amt' => $this->state['tot_vat_amt'],
-                    'net_payable_amt' => $this->state['net_payable_amt'],
-                    'tot_paid_amt' => $this->pay_amt ?? 0,
-                    'due_amt' => $this->due_amt,
-                    'user_id' => $this->state['user_name'],
-                    'ref_memo_no' => $ref_memo_no->memo_no,
-                    'payment_status' => Payment::PaymentCheck($this->due_amt),
-                ];
-                if ($this->paymentState['pay_mode'] == 2) {
-                    $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
-                    $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
-                    $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
-                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                    if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
+                        $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
+                    }
+
+                    if ($this->paymentState['pay_mode'] == 4) {
+                        $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
+                        $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
+                    }
+                    if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+                        $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
+                        $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
+                    }
+
+                    if ($this->purchase_id) {
+                        DB::table('ACC_PAYMENT_INFO')
+                            ->where('tran_mst_id', $this->purchase_id)
+                            ->update($payment_info);
+                    } else {
+
+                        DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
+                    }
                 }
-
-                if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
-                    $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
-                }
-
-                if ($this->paymentState['pay_mode'] == 4) {
-                    $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
-                    $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
-                }
-                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
-                    $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
-                    $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
-                }
-
-                if($this->purchase_id){
-                    DB::table('ACC_PAYMENT_INFO')
-                        ->where('tran_mst_id',$this->purchase_id)
-                        ->update($payment_info);
-                }else{
-                    DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
-                }
-
 
                 DB::commit();
 
                 session()->flash('status', 'New purchase created successfully');
                 return $this->redirect(route('purchase'), navigate: true);
-
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);
@@ -459,6 +465,5 @@ class PurchaseForm extends Component
     public function render()
     {
         return view('livewire.dashboard.purchase.purchase.purchase-form');
-
-   }
+    }
 }

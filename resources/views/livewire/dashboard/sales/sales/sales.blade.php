@@ -15,6 +15,30 @@
             </ol>
         </nav>
     </div>
+
+    <div class="row" style="padding: 0px 8px 2px">
+        <p class="col-auto">
+            Total purchase:
+            <span class="badge bg-primary">
+                {{ number_format($saleGrantAmt, 2, '.', ',') }}
+            </span>
+        </p>
+        <p class="col-auto">
+            Total purchase return:
+            <span class="badge bg-warning">
+                {{ number_format($saleRtAmt, 2, '.', ',') }}
+            </span>
+        </p>
+        <p class="col-auto">
+            Total paid:
+            <span class='badge bg-success'>{{ number_format($salePaidAmt, 2, '.', ',') }}</span>
+        </p>
+        <p class="col-auto">
+            Total due:
+            <span class='badge bg-danger'>{{ number_format($saleDueAmt, 2, '.', ',') }}</span>
+        </p>
+    </div>
+
     @if (session('status'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('status') }}
@@ -39,68 +63,211 @@
                     <option value="100">100</option>
                 </select>
             </div>
+            <div class="col-auto d-flex align-items-center gap-1">
+                <input type="text" wire:model='searchDate' class="form-control date-range" id="date-filter">
+                <button wire:click='dateFilter' class="btn btn-success">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
             @permission(1,'visible_flag')
-            <div class="col-auto">
-                <a wire:navigate href='{{ route('sale-create') }}' type="button" class="btn btn-primary">Create new Sale</a>
+            <div class="col-auto" style="text-align: right">
+                <a href='{{ route('sale-create') }}' type="button" class="btn btn-primary">Create new Sale</a>
             </div>
             @endpermission
-
+        {{-- modal --}}
+        <x-large-modal class='payment'>
+            <livewire:dashboard.sales.sales.pay-partial.payment>
+        </x-large-modal>
         </div>
         <div class="responsive-table">
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td  style="width: 5%">#</td>
-                        <td >Date</td>
-                        <td >Memo</td>
-                        <td >Customer</td>
-                        <td >Information</td>
-                        <td >Status</td>
-                        <td class="text-center" >Action</td>
+                        <td style="">
+
+                        </td>
+                        <td style="">#</td>
+                        <td style="width:9%">Date</td>
+                        <td style="width:11%">Memo no</td>
+                        <td style="width:15%">Customer</td>
+                        <td style="width:9% ;text-align: center">SL status</td>
+                        <td style="text-align: center">Grand amt</td>
+                        <td style="text-align: center">Returned</td>
+                        <td style="text-align: center">Paid amt</td>
+                        <td style="text-align: center">Due amt</td>
+                        <td style="text-align: center">Payment</td>
+                        <td class="text-center">Action</td>
+
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td>
+                            <input wire:model.live.debounce.500ms='selectPageRows' type="checkbox"
+                                class="form-check-input">
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <input placeholder="search" wire:model.live.debounce.500ms='searchMemo' type="text" class="form-control">
+                        </td>
+                        <td>
+                            <input placeholder="search" wire:model.live.debounce.500ms='searchSupplier' type="text"
+                                class="form-control">
+                        </td>
+                        <td>
+                            <select wire:model.live.debounce='searchStatus' class="form-select">
+                                <option value="">ALL</option>
+                                <option value="1">Complete</option>
+                                <option value="3">Pending</option>
+                                <option value="5">Cancled</option>
+                            </select>
+                        </td>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            <select wire:model.live='searchPayStatus' class="form-select">
+                                <option value="">ALL</option>
+                                <option value="PAID">PAID</option>
+                                <option value="DUE">DUE</option>
+                            </select>
+                        </th>
+                        <th></th>
+                    </tr>
                     @if (count($this->resultSale) > 0)
                     @foreach ($this->resultSale as $key => $sale)
                     <tr wire:key='{{ $key }}'>
-                        <td>{{ $this->resultSale->firstItem() + $key }}</td>
-                        <td>{{ date('d-M-Y', strtotime($sale->tran_date)) }}</td>
-                        <td>{{ $sale->memo_no }}</td>
-                        <td>{{ $sale->customer_name }}</td>
                         <td>
-                            <div class="d-flex">
-                                <span style="width: 40%">Qty:</span>
-                                <span style="width: 60%; text-align:right">
-                                    {{ number_format($sale->total_qty, 2, '.', '')  }}
+                            <input wire:model='selectRows' id='{{ $sale->tran_mst_id }}'
+                                value="{{ $sale->tran_mst_id }}" type="checkbox" class="form-check-input">
+                        </td>
+                        <td>{{ $this->resultSale->firstItem() + $key }}</td>
+                        <td>
+                            {{ date('d-M-y', strtotime($sale->tran_date)) }}
+                        </td>
+                        <td>{{ $sale->memo_no }}</td>
+                        <td>{{ $sale->p_name }}</td>
+                        <td>
+                            {{-- <div class="d-flex justify-content-center align-items-center">
+                                <span @php if ($sale->status==1)
+                                    $style='background:#D4EDDA; color:#275724';
+                                    elseif($sale->status==2 || $sale->status==3)
+                                    $style='background:#FFF3CD; color:#909173';
+                                    elseif($sale->status==4)
+                                    $style='background:#F8D7DA; color:#881C24';
+
+                                    @endphp
+                                    style="{{ $style }}" class="badge badge-danger badge-pill">
+                                    {{ App\Service\Purchase:: purchaseStatus($sale->status) }}
                                 </span>
-                            </div>
-                            <div class="d-flex">
-                                <span style="width: 40%">Amount:</span>
-                                <span style="width: 60%; text-align:right">
-                                    {{ number_format($sale->tot_payable_amt, 2, '.', '')  }}
-                                </span>
-                            </div>
+                            </div> --}}
+
+                            <select style="
+                                font-size: 0.9em !important;
+                            @if ($sale->status == 1)
+                                background: #D4EDDA;
+                            @elseif($sale->status == 2)
+                                background: #FFF3CD;
+                            @elseif($sale->status == 3)
+                                background: #FFF3CD;
+                            @endif
+                            " class='form-control select-status' name="" id="">
+                                <option @if ($sale->status == 1)
+                                    selected
+                                    @endif value="1">Complete
+                                </option>
+                                <option @if ($sale->status == 2)
+                                    selected
+                                    @endif value="2">Pending
+                                </option>
+                                <option @if ($sale->status == 5)
+                                    selected
+                                    @endif value="3">Cancled
+                                </option>
+                            </select>
 
                         </td>
-                        <td>{{ $sale->status }}</td>
+                        <td style="text-align: right">
+                            @php
+                            $grand_total += (float)$sale->tot_payable_amt;
+                            @endphp
+                            {{ number_format($sale->tot_payable_amt, 2, '.', '') }}
+                        </td>
+                        <td style="text-align: right">
+                            @php
+                            $rt_total += (float)$sale->prt_amt;
+                            @endphp
+                            {{ number_format($sale->prt_amt, 2, '.', '') }}
+                        </td>
+                        <td style="text-align: right">
+                            @php
+                            $paid_total += (float)$sale->tot_paid_amt;
+                            @endphp
+                            {{ number_format($sale->tot_paid_amt, 2, '.', '') }}
+                        </td>
+                        <td style="text-align: right">
+                            @php
+                            $due = App\Service\Payment::dueAmount($sale->tot_payable_amt, $sale->prt_amt,
+                            $sale->tot_paid_amt);
+                            $due_total += (float)$due;
+                            @endphp
+                            {{ number_format($due, 2, '.', '') }}
+                        </td>
+                        <td style="text-align: right">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <span style="
+                                font-size: 0.9em;
+                                @if($sale->payment_status == 'PAID')
+                                background: #D4EDDA;
+                                color: #155724;
+                                @else
+                                background: #F8D7DA;
+                                color: #721c24;
+                                @endif
+                                " class="badge badge-pill">
+                                    {{ $sale->payment_status }}
+                                </span>
+                            </div>
+                        </td>
                         <td style="">
-                            <div class="d-flex justify-content-center gap-2">
-                                <a wire:navigate href="{{ route('sale-edit',$sale->tran_mst_id) }}" class="btn btn-sm btn-success">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
-                                        viewBox="0 0 50 50">
-                                        <path fill="white"
-                                            d="M 43.050781 1.9746094 C 41.800781 1.9746094 40.549609 2.4503906 39.599609 3.4003906 L 38.800781 4.1992188 L 45.699219 11.099609 L 46.5 10.300781 C 48.4 8.4007812 48.4 5.3003906 46.5 3.4003906 C 45.55 2.4503906 44.300781 1.9746094 43.050781 1.9746094 z M 37.482422 6.0898438 A 1.0001 1.0001 0 0 0 36.794922 6.3925781 L 4.2949219 38.791016 A 1.0001 1.0001 0 0 0 4.0332031 39.242188 L 2.0332031 46.742188 A 1.0001 1.0001 0 0 0 3.2578125 47.966797 L 10.757812 45.966797 A 1.0001 1.0001 0 0 0 11.208984 45.705078 L 43.607422 13.205078 A 1.0001 1.0001 0 1 0 42.191406 11.794922 L 9.9921875 44.09375 L 5.90625 40.007812 L 38.205078 7.8085938 A 1.0001 1.0001 0 0 0 37.482422 6.0898438 z">
-                                        </path>
-                                    </svg>
+                            <div class="dropdown show">
+                                <a class="btn btn-sm btn-primary dropdown-toggle" href="#" role="button"
+                                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Action &nbsp;&nbsp;&nbsp;&nbsp;
                                 </a>
-                                <button class="btn btn-sm btn-warning">
-                                    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20"
-                                        viewBox="0 0 24 24">
-                                        <path fill=white
-                                            d="M 10 2 L 9 3 L 3 3 L 3 5 L 4.109375 5 L 5.8925781 20.255859 L 5.8925781 20.263672 C 6.023602 21.250335 6.8803207 22 7.875 22 L 16.123047 22 C 17.117726 22 17.974445 21.250322 18.105469 20.263672 L 18.107422 20.255859 L 19.890625 5 L 21 5 L 21 3 L 15 3 L 14 2 L 10 2 z M 6.125 5 L 17.875 5 L 16.123047 20 L 7.875 20 L 6.125 5 z">
-                                        </path>
-                                    </svg>
-                                </button>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="{{ route('sale-edit', $sale->tran_mst_id) }}">
+                                        <i class="fa fa-edit"></i> <span>Edit</span>
+                                    </a>
+                                    <a class="dropdown-item d-flex gap-1" wire:navigate href="{{ route('sale-details', $sale->tran_mst_id) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            fill="currentColor" class="bi bi-binoculars" viewBox="0 0 16 16">
+                                            <path
+                                                d="M3 2.5A1.5 1.5 0 0 1 4.5 1h1A1.5 1.5 0 0 1 7 2.5V5h2V2.5A1.5 1.5 0 0 1 10.5 1h1A1.5 1.5 0 0 1 13 2.5v2.382a.5.5 0 0 0 .276.447l.895.447A1.5 1.5 0 0 1 15 7.118V14.5a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 14.5v-3a.5.5 0 0 1 .146-.354l.854-.853V9.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v.793l.854.853A.5.5 0 0 1 7 11.5v3A1.5 1.5 0 0 1 5.5 16h-3A1.5 1.5 0 0 1 1 14.5V7.118a1.5 1.5 0 0 1 .83-1.342l.894-.447A.5.5 0 0 0 3 4.882zM4.5 2a.5.5 0 0 0-.5.5V3h2v-.5a.5.5 0 0 0-.5-.5zM6 4H4v.882a1.5 1.5 0 0 1-.83 1.342l-.894.447A.5.5 0 0 0 2 7.118V13h4v-1.293l-.854-.853A.5.5 0 0 1 5 10.5v-1A1.5 1.5 0 0 1 6.5 8h3A1.5 1.5 0 0 1 11 9.5v1a.5.5 0 0 1-.146.354l-.854.853V13h4V7.118a.5.5 0 0 0-.276-.447l-.895-.447A1.5 1.5 0 0 1 12 4.882V4h-2v1.5a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5zm4-1h2v-.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zm4 11h-4v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-8 0H2v.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5z" />
+                                        </svg>
+                                        <span>Details</span>
+                                    </a>
+                                    <a @click="$dispatch('sale-payment', {id: {{ $sale->tran_mst_id }}})" data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
+                                        <i class="fa fa-credit-card"></i> Make payment
+                                    </a>
+                                    <a target="_blank" class="dropdown-item" href="{{ route('sale-invoice', $sale->tran_mst_id) }}">
+                                        <i class="fas fa-print"></i> Print
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-solid fa-rotate-left"></i> Return
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa-regular fa-copy"></i> Duplicate
+                                    </a>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -113,8 +280,18 @@
     </div>
 </div>
 
-<script>
-
+@script
+<script data-navigate-once>
+    document.addEventListener('livewire:navigated', () => {
+        $(document).ready(function() {
+            $('.date-range').daterangepicker();
+        });
+    });
+    $('#date-filter').on('change', function(){
+        @this.set('searchDate', $('#date-filter').val(), false);
+    })
 </script>
+@endscript
+
 
 

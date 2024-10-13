@@ -187,6 +187,7 @@
             {{ request()->routeIs('purchase-return') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-return-create') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-return-edit') ? 'show' : ' ' }}
+            {{ request()->routeIs('purchase-return-details') ? 'show' : ' ' }}
 
         " id="purchaseSubmenu">
                 <li class="
@@ -205,6 +206,7 @@
                 {{ request()->routeIs('purchase-return') ? 'active' : ' ' }}
                 {{ request()->routeIs('purchase-return-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('purchase-return-edit') ? 'active' : ' ' }}
+                {{ request()->routeIs('purchase-return-details') ? 'active' : ' ' }}
                  ">
                     <a class="list" wire:navigate href="{{ route('purchase-return') }}"> - Purchase return</a>
                 </li>
@@ -219,11 +221,18 @@
             <ul class="collapse list-unstyled
         {{ request()->routeIs('sale') ? 'show' : ' ' }}
         {{ request()->routeIs('sale-create') ? 'show' : ' ' }}
+        {{ request()->routeIs('sale-edit') ? 'show' : ' ' }}
+        {{ request()->routeIs('sale-details') ? 'show' : ' ' }}
         {{ request()->routeIs('sale-return') ? 'show' : ' ' }}
         {{ request()->routeIs('sale-return-create') ? 'show' : ' ' }}
         {{ request()->routeIs('sale-return-edit') ? 'show' : ' ' }}
+        {{ request()->routeIs('sale-return-details') ? 'show' : ' ' }}
         " id="salesSubmenu">
-                <li class="{{ request()->routeIs('sale') ? 'active' : ' ' }}">
+                <li class="
+                {{ request()->routeIs('sale') ? 'active' : ' ' }}
+                {{ request()->routeIs('sale-edit') ? 'active' : ' ' }}
+                {{ request()->routeIs('sale-details') ? 'active' : ' ' }}
+                 ">
                     <a class="list" wire:navigate href="{{ route('sale') }}"> - Sales list</a>
                 </li>
                 <li class="{{ request()->routeIs('sale-create') ? 'active' : ' ' }}">
@@ -233,6 +242,7 @@
                 {{ request()->routeIs('sale-return') ? 'active' : ' ' }}
                 {{ request()->routeIs('sale-return-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('sale-return-edit') ? 'active' : ' ' }}
+                {{ request()->routeIs('sale-return-details') ? 'active' : ' ' }}
                 ">
                     <a class="list" wire:navigate href="{{ route('sale-return') }}"> - Sales return</a>
                 </li>

@@ -42,9 +42,10 @@
                     <label for="">Warhouse<span style="color: red"> * </span></label>
                     <select class="form-select" id='ware_house'>
                         @forelse ($war_houses as $war_house)
-                        <option {{-- @if ($customer->st_group_id == @$edit_select['edit_group_id'])
+                        <option
+                        @if ($war_house->war_id == @$edit_select['war_id'])
                             selected
-                            @endif --}}
+                        @endif
                             value="{{ $war_house->war_id }}">{{ $war_house->war_name }}</option>
                         @empty
                         <option value=""></option>
@@ -75,9 +76,10 @@
                             <select class="form-select select2" id='customer'>
                                 <option value="">Select customer</option>
                                 @forelse ($customers as $customer)
-                                <option {{-- @if ($customer->st_group_id == @$edit_select['edit_group_id'])
-                                    selected
-                                    @endif --}}
+                                <option
+                                    @if ($customer->customer_id == @$edit_select['customer_id'])
+                                        selected
+                                    @endif
                                     value="{{ $customer->customer_id }}">{{ $customer->customer_name }}</option>
                                 @empty
                                 <option value=""></option>
@@ -188,23 +190,23 @@
 
                             <td>
                                 <input wire:input.debounce.1000ms='qtyCalculation({{ $sale['st_group_item_id'] }},{{ $sale_key }})'
-                                    type="number" wire:model='saleCart.{{ $sale_key }}.qty'
+                                    type="number" step="0.01" wire:model='saleCart.{{ $sale_key }}.qty'
                                     class="form-control text-center">
                             </td>
                             <td>
-                                <input tabindex="-1" readonly type="number"
+                                <input tabindex="-1" readonly type="number" step="0.01"
                                     wire:model='saleCart.{{ $sale_key }}.mrp_rate' class="form-control text-center">
                             </td>
                             <td>
-                                <input wire:input.debounce.1000ms='calculation({{ $sale_key }})' type="number"
+                                <input wire:input.debounce.1000ms='calculation({{ $sale_key }})' type="number" step="0.01"
                                     wire:model='saleCart.{{ $sale_key }}.discount' class="form-control text-center">
                             </td>
                             <td>
-                                <input tabindex="-1" readonly type="number"
+                                <input tabindex="-1" readonly type="number" step="0.01"
                                     wire:model='saleCart.{{ $sale_key }}.vat_amt' class="form-control text-center">
                             </td>
                             <td>
-                                <input tabindex="-1" type="number" style="border: 1px solid green; text-align: right"
+                                <input tabindex="-1" type="number" step="0.01" style="border: 1px solid green; text-align: right"
                                     readonly class="form-control" wire:model='saleCart.{{ $sale_key }}.line_total'>
                             </td>
                             <td>
@@ -286,7 +288,7 @@
 
                         <div class='row'>
                             <div class="col-md-6">
-                                <livewire:dashboard.sales.sales.pay-partial.bank />
+                                <livewire:dashboard.sales.sales.pay-partial.bank :bank_code="$paymentState['bank_code'] ?? null" />
                             </div>
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.bank_ac_no' name='bank_ac_no'
@@ -312,7 +314,7 @@
                         @if ($paymentState['pay_mode'] == 4)
                         <div class="row">
                             <div class="col-md-6">
-                                <livewire:dashboard.sales.sales.pay-partial.mobile-bank />
+                                <livewire:dashboard.sales.sales.pay-partial.mobile-bank :mfs_id="$paymentState['mfs_id'] ?? null " />
                             </div>
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.mfs_acc_no' name='mfs_acc_no'
@@ -343,7 +345,7 @@
                         <tr style="text-align: right">
                             <td>Shipping</td>
                             <td>
-                                <input type="number" wire:model='state.shipping_amt' style="text-align: right"
+                                <input type="number" step="0.01" wire:model='state.shipping_amt' style="text-align: right"
                                     class="form-control" wire:input.debounce.1000ms='grandCalculation'>
                             </td>
                         </tr>
@@ -357,7 +359,7 @@
                         <tr style="text-align: right">
                             <td> Payment amount</td>
                             <td>
-                                <input type="number" style="text-align: right" class="form-control" wire:model='pay_amt'
+                                <input type="number" step="0.01" style="text-align: right" class="form-control" wire:model='pay_amt'
                                     wire:input.debounce.1000ms='grandCalculation'>
                             </td>
                         </tr>

@@ -25,12 +25,6 @@
                 </span>
             </p>
             <p class="col-auto">
-                Return:
-                <span class="badge bg-warning">
-                    {{ number_format($purchase_mst['prt_amt'], 2, '.', ',') }}
-                </span>
-            </p>
-            <p class="col-auto">
                 Total paid:
                 <span class='badge bg-success'>
                     {{ number_format($purchase_mst['tot_paid_amt'], 2, '.', ',') }}
@@ -219,3 +213,4 @@
     });
 </script>
 @endscript
+

@@ -16,7 +16,7 @@
         </nav>
     </div>
     <div class="card p-4" wire:ignore.self>
-        <livewire:dashboard.sales.sales.sales-form :purchase_u_code=false />
+        <livewire:dashboard.sales.sales.sales-form :sale_id=false />
     </div>
 </div>
 

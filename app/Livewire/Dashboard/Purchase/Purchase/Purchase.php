@@ -32,6 +32,7 @@ class Purchase extends Component
 
 
     #[Computed]
+    #[On('purchase-all')]
     public function resultPurchase()
     {
         $purchases = DB::table('INV_PURCHASE_MST as p');
@@ -41,10 +42,10 @@ class Purchase extends Component
             ->leftJoin('INV_SUPPLIER_INFO as s', function ($join) {
                 $join->on('s.p_code', '=', 'p.p_code');
             })
-            ->leftJoin('INV_PURCHASE_RET_MST as sr', function ($join) {
-                $join->on('sr.ref_memo_no', '=', 'p.memo_no');
-            })
-            ->select(['p.*', 's.p_name', 'sr.tot_payable_amt as rt_amt']);
+            // ->leftJoin('INV_PURCHASE_RET_MST as sr', function ($join) {
+            //     $join->on('sr.ref_memo_no', '=', 'p.memo_no');
+            // })
+            ->select(['p.*', 's.p_name']);
 
         if ($this->search) {
             $purchases
@@ -105,12 +106,15 @@ class Purchase extends Component
     public function mount()
     {
         $amt = DB::table('INV_PURCHASE_MST as p')
-            ->select(DB::raw('SUM(tot_payable_amt) AS tot_payable_amt'), DB::raw('SUM(tot_paid_amt) AS tot_paid_amt'))
+            ->select(
+                DB::raw('SUM(tot_payable_amt) AS tot_payable_amt'),
+                DB::raw('SUM(tot_paid_amt) AS tot_paid_amt'),
+                DB::raw('SUM(prt_amt) AS tot_prt_amt'),
+                DB::raw('SUM(tot_due_amt) AS tot_due_amt'),
+            )
             ->first();
 
-        $this->purchaseRtAmt = DB::table('INV_PURCHASE_RET_MST as p')
-            ->sum('tot_payable_amt');
-
+        $this->purchaseRtAmt = $amt->tot_prt_amt;
         $this->purchaseGrantAmt = $amt->tot_payable_amt;
         $this->purchasePaidAmt = $amt->tot_paid_amt;
         $this->purchaseDueAmt = Payment::dueAmount($this->purchaseGrantAmt, $this->purchaseRtAmt, $this->purchasePaidAmt);
@@ -119,6 +123,6 @@ class Purchase extends Component
     public function render()
     {
         return view('livewire.dashboard.purchase.purchase.purchase')
-                ->title('Purchase');
+            ->title('Purchase');
     }
 }

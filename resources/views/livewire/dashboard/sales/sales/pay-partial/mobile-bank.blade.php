@@ -7,11 +7,11 @@
             <option value="">Select mobile bank</option>
             @forelse ($mfs as $mf)
             <option
-            {{-- @if ($supplier->st_group_id ==
-                @$edit_select['edit_group_id'])
+
+            @if (@$mfs_id == $mf->mfs_id)
                 selected
-                @endif
-            --}}
+            @endif
+
                 value="{{ $mf->mfs_id }}">{{ $mf->mfs_name }}
             </option>
             @empty

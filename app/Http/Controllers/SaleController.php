@@ -8,9 +8,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PurchaseController extends Controller
+class SaleController extends Controller
 {
-    public function invoice($purchase_id)
+    public function invoice($sale_id)
     {
 
         $company = DB::table('HRM_COMPANY_INFO')->first();
@@ -24,12 +24,14 @@ class PurchaseController extends Controller
 
 
 
-        $tran_mst = DB::table('INV_PURCHASE_MST as p')
-            ->where('p.tran_mst_id', $purchase_id)
-            ->leftJoin('INV_SUPPLIER_INFO as s', function ($join) {
-                $join->on('s.p_code', '=', 'p.p_code');
+        $tran_mst = DB::table('INV_SALES_MST as p')
+            ->where('p.tran_mst_id', $sale_id)
+            ->leftJoin('INV_CUSTOMER_INFO as s', function ($join) {
+                $join->on('s.customer_id', '=', 'p.customer_id');
             })
-            ->first(['p.*', 's.p_name', 's.address', 's.phone']);
+            ->first(['p.*', 's.customer_name as p_name',
+                    's.customer_address as address',
+                    's.phone_no as phone']);
 
         $base64PaymentImg = '';
 
@@ -41,37 +43,36 @@ class PurchaseController extends Controller
             $base64PaymentImg = base64_encode($imData);
         }
 
-        $resultDtls = DB::table('INV_PURCHASE_DTL as p')
-            ->where('p.tran_mst_id', $purchase_id)
+        $resultDtls = DB::table('INV_SALES_DTL as p')
+            ->where('p.tran_mst_id', $sale_id)
             ->leftJoin('VW_INV_ITEM_DETAILS as pr', function ($join) {
                 $join->on('pr.st_group_item_id', '=', 'p.item_code');
             })
             ->get([
-                'p.pr_rate',
+                'p.mrp_rate',
                 'p.vat_amt',
                 'p.tot_payble_amt',
                 'p.item_qty',
                 'p.discount',
                 'p.item_code',
-                'p.expire_date',
                 'pr.item_name',
                 'pr.color_name',
                 'pr.item_size_name',
                 'pr.vat_amt as p_vat_amt'
             ]);
 
-        //    return view('reports.purchase.invoice',compact('company','base64Logo','tran_mst','resultDtls','base64PaymentImg'));
-        $pdf = Pdf::loadView('reports.purchase.purchase-invoice', compact(
+        //    return view('reports.sale.invoice',compact('company','base64Logo','tran_mst','resultDtls','base64PaymentImg'));
+        $pdf = Pdf::loadView('reports.sale.sale-invoice', compact(
             'company',
             'base64Logo',
             'tran_mst',
             'resultDtls',
             'base64PaymentImg'
         ));
-        return $pdf->stream('purchase-invoice.pdf');
+        return $pdf->stream('sale-invoice.pdf');
     }
 
-    public function returnInvoice($purchase_id)
+    public function returnInvoice($sale_id)
     {
 
         $company = DB::table('HRM_COMPANY_INFO')->first();
@@ -85,12 +86,14 @@ class PurchaseController extends Controller
 
 
 
-        $tran_mst = DB::table('INV_PURCHASE_RET_MST as p')
-            ->where('p.tran_mst_id', $purchase_id)
-            ->leftJoin('INV_SUPPLIER_INFO as s', function ($join) {
-                $join->on('s.p_code', '=', 'p.p_code');
+        $tran_mst = DB::table('INV_SALES_RET_MST as p')
+            ->where('p.tran_mst_id', $sale_id)
+            ->leftJoin('INV_CUSTOMER_INFO as s', function ($join) {
+                $join->on('s.customer_id', '=', 'p.customer_id');
             })
-            ->first(['p.*', 's.p_name', 's.address', 's.phone']);
+            ->first(['p.*', 's.customer_name as p_name',
+                    's.customer_address as address',
+                    's.phone_no as phone']);
 
         $base64PaymentImg = '';
 
@@ -102,33 +105,32 @@ class PurchaseController extends Controller
             $base64PaymentImg = base64_encode($imData);
         }
 
-        $resultDtls = DB::table('INV_PURCHASE_RET_DTL as p')
-            ->where('p.tran_mst_id', $purchase_id)
+        $resultDtls = DB::table('INV_SALES_RET_DTL as p')
+            ->where('p.tran_mst_id', $sale_id)
             ->leftJoin('VW_INV_ITEM_DETAILS as pr', function ($join) {
                 $join->on('pr.st_group_item_id', '=', 'p.item_code');
             })
             ->get([
-                'p.pr_rate',
+                'p.mrp_rate',
                 'p.vat_amt',
                 'p.tot_payble_amt',
                 'p.item_qty',
                 'p.discount',
                 'p.item_code',
-                'p.expire_date',
                 'pr.item_name',
                 'pr.color_name',
                 'pr.item_size_name',
                 'pr.vat_amt as p_vat_amt'
             ]);
 
-        //    return view('reports.purchase.invoice',compact('company','base64Logo','tran_mst','resultDtls','base64PaymentImg'));
-        $pdf = Pdf::loadView('reports.purchase.purchase-return-invoice', compact(
+        //    return view('reports.sale.invoice',compact('company','base64Logo','tran_mst','resultDtls','base64PaymentImg'));
+        $pdf = Pdf::loadView('reports.sale.sale-return-invoice', compact(
             'company',
             'base64Logo',
             'tran_mst',
             'resultDtls',
             'base64PaymentImg'
         ));
-        return $pdf->stream('purchase-invoice.pdf');
+        return $pdf->stream('sale-return-invoice.pdf');
     }
 }
