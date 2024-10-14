@@ -24,7 +24,7 @@
             </span>
         </p>
         <p class="col-auto">
-            Total purchase return:
+            Total return:
             <span class="badge bg-warning">
                 {{ number_format($saleRtAmt, 2, '.', ',') }}
             </span>

@@ -116,26 +116,31 @@ class SalesForm extends Component
                 ->where('ref_memo_no', $tran_mst->memo_no)
                 ->where('tran_mst_id', $sale_id)
                 ->first();
-            $this->paymentState['pay_mode'] = $resultPay->pay_mode;
+            if ($resultPay) {
+                $this->paymentState['pay_mode'] = $resultPay->pay_mode;
 
-            if ($resultPay->pay_mode == 2) {
-                $this->paymentState['bank_code'] = $resultPay->bank_code;
-                $this->paymentState['bank_ac_no'] = $resultPay->bank_ac_no;
-                $this->paymentState['chq_no'] = $resultPay->chq_no;
-                $this->paymentState['chq_date'] = Carbon::parse($resultPay->chq_date)->toDateString();
-            }
-            if ($resultPay->pay_mode == 3) {
-                $this->paymentState['card_no'] = $resultPay->card_no;
-            }
-            if ($resultPay->pay_mode == 4) {
-                $this->paymentState['mfs_id'] = $resultPay->mfs_id;
-                $this->paymentState['mfs_acc_no'] = $resultPay->mfs_acc_no;
+                if ($resultPay->pay_mode == 2) {
+                    $this->paymentState['bank_code'] = $resultPay->bank_code;
+                    $this->paymentState['bank_ac_no'] = $resultPay->bank_ac_no;
+                    $this->paymentState['chq_no'] = $resultPay->chq_no;
+                    $this->paymentState['chq_date'] = Carbon::parse($resultPay->chq_date)->toDateString();
+                }
+                if ($resultPay->pay_mode == 3) {
+                    $this->paymentState['card_no'] = $resultPay->card_no;
+                }
+                if ($resultPay->pay_mode == 4) {
+                    $this->paymentState['mfs_id'] = $resultPay->mfs_id;
+                    $this->paymentState['mfs_acc_no'] = $resultPay->mfs_acc_no;
+                }
+
+                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+                    $this->paymentState['online_trx_id'] = $resultPay->online_trx_id;
+                    $this->paymentState['online_trx_dt'] = Carbon::parse($resultPay->online_trx_dt)->toDateString();
+                }
+            } else {
+                $this->paymentState['pay_mode'] = 1;
             }
 
-            if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
-                $this->paymentState['online_trx_id'] = $resultPay->online_trx_id;
-                $this->paymentState['online_trx_dt'] = Carbon::parse($resultPay->online_trx_dt)->toDateString();
-            }
 
             // dd($resultPay);
 
@@ -385,7 +390,6 @@ class SalesForm extends Component
                         ->delete();
 
                     $tran_mst_id = $this->sale_id;
-
                 } else {
                     $tran_mst_id = DB::table('INV_SALES_MST')
                         ->insertGetId($this->state, 'tran_mst_id');
@@ -404,10 +408,33 @@ class SalesForm extends Component
                     ]);
                 }
 
+                $ref_memo_no = DB::table('INV_SALES_MST')
+                    ->where('tran_mst_id', $tran_mst_id)
+                    ->first();
+
+                if ($this->sale_id) {
+                    DB::table('ACC_VOUCHER_INFO')
+                        ->where('ref_memo_no', $ref_memo_no->memo_no)
+                        ->where('ref_pay_no', null)
+                        ->where('cash_type', null)
+                        ->update([
+                            'amount' => $this->state['tot_payable_amt'],
+                        ]);
+                } else {
+                    DB::table('ACC_VOUCHER_INFO')->insert([
+                        'voucher_date' => $this->state['tran_date'],
+                        'voucher_type' => 'CR',
+                        'narration' => 'sale vouchar',
+                        'amount' => $this->state['tot_payable_amt'],
+                        'created_by' => $this->state['user_name'],
+                        'tran_type' => 'SL',
+                        'ref_memo_no' => $ref_memo_no->memo_no,
+                        'account_code' => 4010,
+                    ]);
+                }
+
                 if ($this->pay_amt && $this->pay_amt > 0) {
-                    $ref_memo_no = DB::table('INV_SALES_MST')
-                        ->where('tran_mst_id', $tran_mst_id)
-                        ->first();
+
 
                     $payment_info = [
                         'tran_mst_id' => $tran_mst_id,
@@ -451,15 +478,34 @@ class SalesForm extends Component
                             ->update($payment_info);
                     } else {
 
-                        DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
+                        $pay_id = DB::table('ACC_PAYMENT_INFO')
+                            ->insertGetId($payment_info, 'payment_no');
+
+                        $pay_memo = DB::table('ACC_PAYMENT_INFO')
+                            ->where('payment_no', $pay_id)
+                            ->first()
+                            ->memo_no;
+
+                        DB::table('ACC_VOUCHER_INFO')->insert([
+                            'voucher_date' => $this->state['tran_date'],
+                            'voucher_type' => 'DR',
+                            'narration' => 'sale vouchar',
+                            'amount' => $this->pay_amt,
+                            'created_by' => $this->state['user_name'],
+                            'tran_type' => 'SL',
+                            'ref_memo_no' => $ref_memo_no->memo_no,
+                            'account_code' => 4010,
+                            'ref_pay_no' => $pay_memo,
+                            'cash_type' => 'IN',
+                        ]);
                     }
                 }
 
                 DB::commit();
 
-                if($this->sale_id){
+                if ($this->sale_id) {
                     session()->flash('status', 'Sale updated successfully');
-                }else{
+                } else {
                     session()->flash('status', 'New sale created successfully');
                 }
 

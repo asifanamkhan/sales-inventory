@@ -282,19 +282,30 @@ class PurchaseReturnForm extends Component
 
                 $prev_rt_amount = DB::table('INV_PURCHASE_MST as p')
                     ->where('memo_no', $this->oldPurchaseSearch)
-                    ->sum('prt_amt');
+                    ->first();
 
                 DB::table('INV_PURCHASE_MST as p')
                     ->where('memo_no', $this->oldPurchaseSearch)
                     ->update([
-                        'prt_amt' => ($prev_rt_amount + $this->state['tot_payable_amt']),
+                        'prt_amt' => ((float)$prev_rt_amount->prt_amt + $this->state['tot_payable_amt']),
                     ]);
 
-                if ($this->pay_amt && $this->pay_amt > 0) {
+                $ref_memo_no = DB::table('INV_PURCHASE_RET_MST')
+                    ->where('tran_mst_id', $tran_mst_id)
+                    ->first();
 
-                    $ref_memo_no = DB::table('INV_PURCHASE_RET_MST')
-                        ->where('tran_mst_id', $tran_mst_id)
-                        ->first();
+                DB::table('ACC_VOUCHER_INFO')->insert([
+                    'voucher_date' => $this->state['tran_date'],
+                    'voucher_type' => 'CR',
+                    'narration' => 'purchase vouchar',
+                    'amount' => $this->state['tot_payable_amt'],
+                    'created_by' => $this->state['user_name'],
+                    'tran_type' => 'PRT',
+                    'ref_memo_no' => $ref_memo_no->memo_no,
+                    'account_code' => 1030,
+                ]);
+
+                if ($this->pay_amt && $this->pay_amt > 0) {
 
                     $payment_info = [
                         'tran_mst_id' => $tran_mst_id,
@@ -334,7 +345,32 @@ class PurchaseReturnForm extends Component
                         $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                     }
 
-                    DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
+                    $pay_id = DB::table('ACC_PAYMENT_INFO')
+                        ->insertGetId($payment_info, 'payment_no');
+
+                    $pay_memo = DB::table('ACC_PAYMENT_INFO')
+                        ->where('payment_no', $pay_id)
+                        ->first()
+                        ->memo_no;
+
+                    DB::table('ACC_VOUCHER_INFO')->insert([
+                        'voucher_date' => $this->state['tran_date'],
+                        'voucher_type' => 'DR',
+                        'narration' => 'purchase vouchar',
+                        'amount' => $this->pay_amt,
+                        'created_by' => $this->state['user_name'],
+                        'tran_type' => 'PRT',
+                        'ref_memo_no' => $ref_memo_no->memo_no,
+                        'account_code' => 1030,
+                        'ref_pay_no' => $pay_memo,
+                        'cash_type' => 'IN',
+                    ]);
+
+                    DB::table('INV_PURCHASE_MST as p')
+                        ->where('memo_no', $this->oldPurchaseSearch)
+                        ->update([
+                        'prt_paid' => ((float)$prev_rt_amount->prt_paid + $this->pay_amt),
+                    ]);
                 }
 
 

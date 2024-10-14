@@ -10,6 +10,7 @@ use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Validator;
 use App\Service\Payment as PurchasePayment;
+use Illuminate\Support\Facades\Auth;
 
 class Payment extends Component
 {
@@ -48,7 +49,7 @@ class Payment extends Component
         // $this->saleMst($this->sale_id);
 
         // dd($this->sale_mst);
-        // $this->sale_mst = (array)DB::table('INV_PURCHASE_MST as p')
+        // $this->sale_mst = (array)DB::table('INV_sale_mst as p')
         //     ->where('p.tran_mst_id', $this->sale_id)
         //     ->first(['p.*']);
 
@@ -93,7 +94,7 @@ class Payment extends Component
 
         ])->validate();
         // dd((float)$this->paymentState['tot_paid_amt'], (float)$this->sale_mst['tot_due_amt']);
-        if ((float)$this->paymentState['tot_paid_amt'] ==0 || (float)$this->paymentState['tot_paid_amt'] > (float)$this->sale_mst['tot_due_amt']) {
+        if ((float)$this->paymentState['tot_paid_amt'] == 0 || (float)$this->paymentState['tot_paid_amt'] > (float)$this->sale_mst['tot_due_amt']) {
             session()->flash('error', 'Payment amount is greater than due amount');
             $this->paymentState['tot_paid_amt'] = (float)$this->sale_mst['tot_due_amt'];
         } else {
@@ -143,7 +144,36 @@ class Payment extends Component
                     $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                 }
 
-                DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
+                $pay_id = DB::table('ACC_PAYMENT_INFO')
+                    ->insertGetId($payment_info, 'payment_no');
+
+                $pay_memo = DB::table('ACC_PAYMENT_INFO')
+                    ->where('payment_no', $pay_id)
+                    ->first()
+                    ->memo_no;
+
+                DB::table('ACC_VOUCHER_INFO')->insert([
+                    'voucher_date' => Carbon::now()->toDateString(),
+                    'voucher_type' => 'DR',
+                    'narration' => 'purchase payment vouchar',
+                    'amount' => $this->paymentState['tot_paid_amt'],
+                    'created_by' => Auth::user()->id,
+                    'tran_type' => 'SRT',
+                    'ref_memo_no' => $this->sale_mst['memo_no'],
+                    'account_code' => 4010,
+                    'ref_pay_no' => $pay_memo,
+                    'cash_type' => 'OUT',
+                ]);
+
+                $prt_amt = DB::table('INV_SALES_MST as p')
+                    ->where('memo_no', $this->sale_mst['ref_memo_no'])
+                    ->first('prt_paid');
+
+                DB::table('INV_SALES_MST as p')
+                    ->where('memo_no', $this->sale_mst['ref_memo_no'])
+                    ->update([
+                        'prt_paid' => ((float)$prt_amt->prt_paid + (float)$this->paymentState['tot_paid_amt']),
+                    ]);
 
                 DB::commit();
 
@@ -152,8 +182,6 @@ class Payment extends Component
                 $this->paymentState['tot_paid_amt'] = 0;
                 $this->saleMst($this->sale_id);
                 $this->paymentState['pay_mode'] = 1;
-
-
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);

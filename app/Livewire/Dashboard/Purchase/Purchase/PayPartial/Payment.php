@@ -10,6 +10,7 @@ use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Validator;
 use App\Service\Payment as PurchasePayment;
+use Illuminate\Support\Facades\Auth;
 
 class Payment extends Component
 {
@@ -94,7 +95,7 @@ class Payment extends Component
         ])->validate();
 
         if ((float)$this->paymentState['tot_paid_amt'] == 0 || (float)$this->paymentState['tot_paid_amt'] > (float)$this->purchase_mst['tot_due_amt']) {
-            session()->flash('error', 'Payment amount is greater than due amount');
+            session()->flash('error', 'Payment amount is incorrect');
         } else {
             DB::beginTransaction();
             try {
@@ -141,7 +142,26 @@ class Payment extends Component
                     $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                 }
 
-                DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
+                $pay_id = DB::table('ACC_PAYMENT_INFO')
+                    ->insertGetId($payment_info, 'payment_no');
+
+                $pay_memo = DB::table('ACC_PAYMENT_INFO')
+                    ->where('payment_no', $pay_id)
+                    ->first()
+                    ->memo_no;
+
+                DB::table('ACC_VOUCHER_INFO')->insert([
+                    'voucher_date' => Carbon::now()->toDateString(),
+                    'voucher_type' => 'CR',
+                    'narration' => 'purchase payment vouchar',
+                    'amount' => $this->paymentState['tot_paid_amt'],
+                    'created_by' => Auth::user()->id,
+                    'tran_type' => 'PR',
+                    'ref_memo_no' => $this->purchase_mst['memo_no'],
+                    'account_code' => 1030,
+                    'ref_pay_no' => $pay_memo,
+                    'cash_type' => 'OUT',
+                ]);
 
                 DB::commit();
 
@@ -150,7 +170,6 @@ class Payment extends Component
                 $this->paymentState['tot_paid_amt'] = 0;
                 $this->purchaseMst($this->purchase_id);
                 $this->paymentState['pay_mode'] = 1;
-                
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);

@@ -15,7 +15,7 @@ class SalesReturnForm extends Component
     public $state = [];
     public $document = [];
     public $paymentState = [];
-    public $salesesearch, $payment_methods, $olSaleSearch;
+    public $salesesearch, $payment_methods, $oldSaleSearch;
     public $resultSales = [];
     public $saleCart = [];
     public $searchSelect = -1;
@@ -33,7 +33,7 @@ class SalesReturnForm extends Component
     public function updatedSalesesearch()
     {
         if ($this->salesesearch) {
-            $this->olSaleSearch = $this->salesesearch;
+            $this->oldSaleSearch = $this->salesesearch;
             $result = DB::table('INV_SALES_MST as p')
                 ->where('memo_no', $this->salesesearch)
                 ->get()
@@ -271,18 +271,31 @@ class SalesReturnForm extends Component
                 }
 
                 $prev_rt_amount = DB::table('INV_SALES_MST as p')
-                    ->where('memo_no', $this->olSaleSearch)
-                    ->sum('prt_amt');
+                    ->where('memo_no', $this->oldSaleSearch)
+                    ->first();
 
                 DB::table('INV_SALES_MST as p')
-                    ->where('memo_no', $this->olSaleSearch)
+                    ->where('memo_no', $this->oldSaleSearch)
                     ->update([
-                        'prt_amt' => ($prev_rt_amount + $this->state['tot_payable_amt']),
+                        'prt_amt' => ((float)$prev_rt_amount->prt_amt + $this->state['tot_payable_amt']),
                     ]);
-                if ($this->pay_amt && $this->pay_amt > 0) {
+
                     $ref_memo_no = DB::table('INV_SALES_RET_MST')
-                        ->where('tran_mst_id', $tran_mst_id)
-                        ->first();
+                    ->where('tran_mst_id', $tran_mst_id)
+                    ->first();
+
+                    DB::table('ACC_VOUCHER_INFO')->insert([
+                        'voucher_date' => $this->state['tran_date'],
+                        'voucher_type' => 'DR',
+                        'narration' => 'sale return vouchar',
+                        'amount' => $this->state['tot_payable_amt'],
+                        'created_by' => $this->state['user_name'],
+                        'tran_type' => 'SRT',
+                        'ref_memo_no' => $ref_memo_no->memo_no,
+                        'account_code' => 4010,
+                    ]);
+
+                if ($this->pay_amt && $this->pay_amt > 0) {
 
                     $payment_info = [
                         'tran_mst_id' => $tran_mst_id,
@@ -323,7 +336,32 @@ class SalesReturnForm extends Component
                     }
 
 
-                    DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
+                    $pay_id = DB::table('ACC_PAYMENT_INFO')
+                        ->insertGetId($payment_info, 'payment_no');
+
+                    $pay_memo = DB::table('ACC_PAYMENT_INFO')
+                        ->where('payment_no', $pay_id)
+                        ->first()
+                        ->memo_no;
+
+                    DB::table('ACC_VOUCHER_INFO')->insert([
+                        'voucher_date' => $this->state['tran_date'],
+                        'voucher_type' => 'CR',
+                        'narration' => 'sale vouchar',
+                        'amount' => $this->pay_amt,
+                        'created_by' => $this->state['user_name'],
+                        'tran_type' => 'SRT',
+                        'ref_memo_no' => $ref_memo_no->memo_no,
+                        'account_code' => 4010,
+                        'ref_pay_no' => $pay_memo,
+                        'cash_type' => 'OUT',
+                    ]);
+
+                    DB::table('INV_SALES_MST as p')
+                        ->where('memo_no', $this->oldSaleSearch)
+                        ->update([
+                        'prt_paid' => ((float)$prev_rt_amount->prt_paid + $this->pay_amt),
+                    ]);
                 }
                 DB::commit();
 

@@ -7,6 +7,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\CustomPDF;
 
 class SaleController extends Controller
 {
@@ -132,5 +133,54 @@ class SaleController extends Controller
             'base64PaymentImg'
         ));
         return $pdf->stream('sale-return-invoice.pdf');
+    }
+
+    public function tcpdPDF(){
+        $filename = 'demo.pdf';
+
+        $data = [
+
+            'title' => 'Generate PDF using Laravel TCPDF - ItSolutionStuff.com!'
+        ];
+
+
+        $html = view()->make('reports.invoice', $data)->render();
+
+        $pdf = new CustomPDF();
+
+        // Set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Your Name');
+        $pdf->SetTitle('PDF Example');
+        $pdf->SetSubject('TCPDF Tutorial');
+
+        // Set default header data
+        $pdf->SetHeaderData('', 0, 'Header Title', 'Subtitle');
+
+        // Set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        // Set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // Set margins
+        $pdf->SetMargins(15, 30, 15);
+        $pdf->SetHeaderMargin(5);
+        $pdf->SetFooterMargin(10);
+
+        // Set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // Set document information
+        // $pdf->SetCreator(PDF_CREATOR);
+        $pdf->AddPage();
+
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        // return $pdf->Output('example.pdf', 'I');
+
+        $pdf->Output(public_path($filename), 'I');
+
     }
 }

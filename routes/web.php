@@ -133,6 +133,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('product-damage/create', ProductDamageCreate::class)->name('product-damage-create');
     Route::get('product-damage/{product_damage_id}/edit', ProductDamageEdit::class)->name('product-damage-edit');
 
+    Route::get('sale-pdf', [SaleController::class,'tcpdPDF'])->name('sale-pdf');
+
     // ------------- sale end ----------------
 
 });
