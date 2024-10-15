@@ -1,48 +1,50 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" branch="status">
-        <span class="sr-only">Loading...</span>
-    </div>
-    @if (session('status'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('status') }}
-    </div>
-
-    @endif
     <div class="p-4">
+        <div wire:loading class="spinner-border text-primary custom-loading" branch="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        @if (session('status'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('status') }}
+        </div>
+        @elseif (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+        </div>
+        @elseif (session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ session('warning') }}
+        </div>
+        @endif
         @if ($purchase_mst)
         <div class="row" style="padding: 0px 8px 2px">
             <p class="col-auto">
                 Total purchase:
                 <span class="badge bg-primary">
-                    {{ number_format($purchase_mst->tot_payable_amt, 2, '.', ',') }}
+                    {{ number_format($purchase_mst['tot_payable_amt'], 2, '.', ',') }}
                 </span>
             </p>
             <p class="col-auto">
                 Return:
                 <span class="badge bg-warning">
-                    @if ($purchaseRtAmt)
-                        {{ number_format($purchaseRtAmt->tot_payable_amt, 2, '.', ',') }}
-                    @else
-                        0.00
-                    @endif
-
+                    {{ number_format($purchase_mst['prt_amt'], 2, '.', ',') }}
                 </span>
             </p>
             <p class="col-auto">
                 Total paid:
                 <span class='badge bg-success'>
-                    {{ number_format($purchase_mst->tot_paid_amt, 2, '.', ',') }}
+                    {{ number_format($purchase_mst['tot_paid_amt'], 2, '.', ',') }}
                 </span>
             </p>
             <p class="col-auto">
                 Total due:
                 <span class='badge bg-danger'>
-                    {{ number_format($purchase_mst->tot_due_amt, 2, '.', ',') }}
+                    {{ number_format($purchase_mst['tot_due_amt'], 2, '.', ',') }}
                 </span>
             </p>
         </div>
         @endif
-        <form action="">
+        <form action="" wire:submit='save'>
             <div style="padding: 5px 15px">
                 <div class="form-group mb-3">
                     <label for="">Payment method<span style="color: red"> *
@@ -114,6 +116,8 @@
                 </div>
                 @endif
                 @endif
+                <x-input required_mark='' wire:model='paymentState.tot_paid_amt' name='tot_paid_amt' type='number'
+                    steps='0.01' label='Payment amount' />
             </div>
             <div class="mt-1 d-flex justify-content-center">
                 <button class="btn btn-primary">Pay</button>
@@ -133,7 +137,7 @@
                     <option value="100">100</option>
                 </select>
             </div>
-         </div> --}}
+        </div> --}}
         <div class="responsive-table mt-4" style="font-size: 0.9em !important;">
             <table class="table table-bordered table-hover">
                 <thead>
@@ -180,11 +184,11 @@
                         {{-- <td>
                             <button class="btn btn-sm btn-warning">
                                 <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
-                                        viewBox="0 0 50 50">
-                                        <path fill="white"
-                                            d="M 43.050781 1.9746094 C 41.800781 1.9746094 40.549609 2.4503906 39.599609 3.4003906 L 38.800781 4.1992188 L 45.699219 11.099609 L 46.5 10.300781 C 48.4 8.4007812 48.4 5.3003906 46.5 3.4003906 C 45.55 2.4503906 44.300781 1.9746094 43.050781 1.9746094 z M 37.482422 6.0898438 A 1.0001 1.0001 0 0 0 36.794922 6.3925781 L 4.2949219 38.791016 A 1.0001 1.0001 0 0 0 4.0332031 39.242188 L 2.0332031 46.742188 A 1.0001 1.0001 0 0 0 3.2578125 47.966797 L 10.757812 45.966797 A 1.0001 1.0001 0 0 0 11.208984 45.705078 L 43.607422 13.205078 A 1.0001 1.0001 0 1 0 42.191406 11.794922 L 9.9921875 44.09375 L 5.90625 40.007812 L 38.205078 7.8085938 A 1.0001 1.0001 0 0 0 37.482422 6.0898438 z">
-                                        </path>
-                                    </svg>
+                                    viewBox="0 0 50 50">
+                                    <path fill="white"
+                                        d="M 43.050781 1.9746094 C 41.800781 1.9746094 40.549609 2.4503906 39.599609 3.4003906 L 38.800781 4.1992188 L 45.699219 11.099609 L 46.5 10.300781 C 48.4 8.4007812 48.4 5.3003906 46.5 3.4003906 C 45.55 2.4503906 44.300781 1.9746094 43.050781 1.9746094 z M 37.482422 6.0898438 A 1.0001 1.0001 0 0 0 36.794922 6.3925781 L 4.2949219 38.791016 A 1.0001 1.0001 0 0 0 4.0332031 39.242188 L 2.0332031 46.742188 A 1.0001 1.0001 0 0 0 3.2578125 47.966797 L 10.757812 45.966797 A 1.0001 1.0001 0 0 0 11.208984 45.705078 L 43.607422 13.205078 A 1.0001 1.0001 0 1 0 42.191406 11.794922 L 9.9921875 44.09375 L 5.90625 40.007812 L 38.205078 7.8085938 A 1.0001 1.0001 0 0 0 37.482422 6.0898438 z">
+                                    </path>
+                                </svg>
                             </button>
                         </td> --}}
                     </tr>
@@ -195,3 +199,23 @@
         </div>
     </div>
 </div>
+
+@script
+<script data-navigate-once>
+    document.addEventListener('livewire:navigated', () => {
+        $(document).ready(function() {
+            $('.select2').select2({
+                theme: "bootstrap-5",
+            });
+        });
+    });
+
+    $wire.on('set_bank_code_purchase',(event)=>{
+        @this.set('paymentState.bank_code', event.id, false);
+    });
+
+    $wire.on('set_mfs_code_purchase',(event)=>{
+        @this.set('paymentState.mfs_id', event.id, false);
+    });
+</script>
+@endscript

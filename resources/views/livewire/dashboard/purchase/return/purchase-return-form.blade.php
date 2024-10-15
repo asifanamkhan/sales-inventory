@@ -249,7 +249,7 @@
 
 
                             <div class="col-md-6">
-                                <livewire:dashboard.purchase.purchase.pay-partial.bank />
+                                <livewire:dashboard.purchase.purchase.pay-partial.bank :bank_code="$paymentState['bank_code'] ?? null" />
                             </div>
                             @if ($paymentState['pay_mode'] == 2)
                             <div class="col-md-6">
@@ -277,7 +277,7 @@
                             @if ($paymentState['pay_mode'] == 4)
 
                             <div class="col-md-6">
-                                <livewire:dashboard.purchase.purchase.pay-partial.mobile-bank />
+                                <livewire:dashboard.purchase.purchase.pay-partial.mobile-bank :mfs_id="$paymentState['mfs_id'] ?? null "/>
                             </div>
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.mfs_acc_no' name='mfs_acc_no'
@@ -325,7 +325,7 @@
                             <td>Received amount</td>
                             <td>
                                 <input type="number" style="text-align: right" class="form-control" wire:model='pay_amt'
-                                    wire:input.debounce.1000ms='grandCalculation'>
+                                    wire:input.debounce.1000ms='grandCalculation' step="0.01">
                             </td>
                         </tr>
                         <tr style="text-align: right">

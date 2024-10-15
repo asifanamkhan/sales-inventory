@@ -42,7 +42,8 @@
                     <label for="">Warhouse<span style="color: red"> * </span></label>
                     <select class="form-select" id='ware_house'>
                         @forelse ($war_houses as $war_house)
-                        <option @if ($war_house->war_id == @$edit_select['war_id'])
+                        <option
+                        @if ($war_house->war_id == @$edit_select['war_id'])
                             selected
                             @endif
                             value="{{ $war_house->war_id }}">{{ $war_house->war_name }}</option>
@@ -169,7 +170,7 @@
                         <tr class="bg-sidebar">
                             <td class="" style="width:3%">SL</td>
                             <td class="" style="width:28%">Name</td>
-                            <td class="" style="width:7%">Exp date</td>
+                            <td class="" style="width:8%">Exp date</td>
                             <td class="text-center" style="width:10%">Qty</td>
                             <td class="text-center" style="width:13%">Price</td>
                             <td class="text-center" style="width:10%">Discount</td>

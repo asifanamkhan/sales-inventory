@@ -44,7 +44,6 @@ class PurchaseDetails extends Component
                 'p.item_qty',
                 'p.discount',
                 'p.item_code',
-                'p.expire_date',
                 'pr.item_name',
                 'pr.color_name',
                 'pr.item_size_name',
@@ -52,7 +51,7 @@ class PurchaseDetails extends Component
             ]);
 
         $this->payment_info = DB::table('ACC_PAYMENT_INFO as p')
-            ->where('p.tran_mst_id', $purchase_id)
+        ->where('p.ref_memo_no', $this->purchase_mst->memo_no)
             ->leftJoin('ACC_PAYMENT_MODE as pm', function ($join) {
                 $join->on('pm.p_mode_id', '=', 'p.pay_mode');
             })

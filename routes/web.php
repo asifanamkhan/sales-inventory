@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -25,9 +27,9 @@ use App\Livewire\Dashboard\ProductDamage\ProductDamage;
 use App\Livewire\Dashboard\ProductDamage\ProductDamageCreate;
 use App\Livewire\Dashboard\ProductDamage\ProductDamageEdit;
 use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, PurchaseDetails, PurchaseEdit};
-use App\Livewire\Dashboard\Purchase\Return\{PurchaseReturn, PurchaseReturnCreate, PurchaseReturnEdit};
-use App\Livewire\Dashboard\Sales\Sales\{Sales, SalesCreate, SalesEdit};
-use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnEdit};
+use App\Livewire\Dashboard\Purchase\Return\{PurchaseReturn, PurchaseReturnCreate, PurchaseReturnDetails, PurchaseReturnEdit};
+use App\Livewire\Dashboard\Sales\Sales\{SaleDetails, Sales, SalesCreate, SalesEdit};
+use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnDetails, SalesReturnEdit};
 use Illuminate\Support\Facades\DB;
 
 Livewire::setUpdateRoute(function ($handle) {
@@ -103,6 +105,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('purchase-return', PurchaseReturn::class)->name('purchase-return');
     Route::get('purchase-return/create', PurchaseReturnCreate::class)->name('purchase-return-create');
     Route::get('purchase-return/{purchase_return_id}/edit', PurchaseReturnEdit::class)->name('purchase-return-edit');
+    Route::get('purchase-return/{purchase_return_id}/details', PurchaseReturnDetails::class)->name('purchase-return-details');
+    Route::get('purchase-return-invoice/{purchase_id}', [PurchaseController::class, 'returnInvoice'])->name('purchase-return-invoice');
+
 
     // ------------- purchase end ----------------
 
@@ -111,10 +116,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sale', Sales::class)->name('sale');
     Route::get('sale/create', SalesCreate::class)->name('sale-create');
     Route::get('sale/{sale_id}/edit', SalesEdit::class)->name('sale-edit');
+    Route::get('sale/{sale_id}/details', SaleDetails::class)->name('sale-details');
+    Route::get('sale-invoice/{sale_id}', [SaleController::class, 'invoice'])->name('sale-invoice');
+
 
     Route::get('sale-return', SalesReturn::class)->name('sale-return');
     Route::get('sale-return/create', SalesReturnCreate::class)->name('sale-return-create');
     Route::get('sale-return/{sale_return_id}/edit', SalesReturnEdit::class)->name('sale-return-edit');
+    Route::get('sale-return/{sale_return_id}/details', SalesReturnDetails::class)->name('sale-return-details');
+    Route::get('sale-return-invoice/{sale_id}', [SaleController::class, 'returnInvoice'])->name('sale-return-invoice');
 
     // ------------- sale end ----------------
 
@@ -124,6 +134,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('product-damage/create', ProductDamageCreate::class)->name('product-damage-create');
     Route::get('product-damage/{product_damage_id}/edit', ProductDamageEdit::class)->name('product-damage-edit');
 
+    Route::get('sale-pdf', [SaleController::class,'tcpdPDF'])->name('sale-pdf');
+
     // ------------- sale end ----------------
+
+    // ------------- reports start ----------------
+    Route::get('reports-supplier-info}', [SupplierController::class, 'supplierInfo'])->name('supplier-info-reports');
+
 
 });

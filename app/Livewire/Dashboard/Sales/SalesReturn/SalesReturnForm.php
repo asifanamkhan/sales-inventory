@@ -15,7 +15,7 @@ class SalesReturnForm extends Component
     public $state = [];
     public $document = [];
     public $paymentState = [];
-    public $salesesearch, $payment_methods;
+    public $salesesearch, $payment_methods, $oldSaleSearch;
     public $resultSales = [];
     public $saleCart = [];
     public $searchSelect = -1;
@@ -33,6 +33,7 @@ class SalesReturnForm extends Component
     public function updatedSalesesearch()
     {
         if ($this->salesesearch) {
+            $this->oldSaleSearch = $this->salesesearch;
             $result = DB::table('INV_SALES_MST as p')
                 ->where('memo_no', $this->salesesearch)
                 ->get()
@@ -100,60 +101,59 @@ class SalesReturnForm extends Component
 
         if ($search) {
             $sale_dtls = DB::table('INV_SALES_DTL as pr')
-                    ->where('pr.tran_mst_id', $search)
-                    ->leftJoin('INV_ST_GROUP_ITEM as p', function ($join) {
-                        $join->on('p.st_group_item_id', '=', 'pr.item_code');
-                    })
-                    ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                        $join->on('s.item_size_code', '=', 'p.item_size');
-                    })
-                    ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                        $join->on('c.tran_mst_id', '=', 'p.color_code');
-                    })
+                ->where('pr.tran_mst_id', $search)
+                ->leftJoin('INV_ST_GROUP_ITEM as p', function ($join) {
+                    $join->on('p.st_group_item_id', '=', 'pr.item_code');
+                })
+                ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
+                    $join->on('s.item_size_code', '=', 'p.item_size');
+                })
+                ->leftJoin('INV_COLOR_INFO as c', function ($join) {
+                    $join->on('c.tran_mst_id', '=', 'p.color_code');
+                })
 
-                    ->get(['pr.*','p.item_name','p.st_group_item_id','s.item_size_name','c.color_name']);
+                ->get(['pr.*', 'p.item_name', 'p.st_group_item_id', 's.item_size_name', 'c.color_name']);
 
-                    $this->saleCart = [];
-                    $this->state['customer_id'] = @$this->resultSales[$key]->customer_id;
-                    $this->state['war_id'] = @$this->resultSales[$key]->war_id;
-                    $this->state['comp_id'] = @$this->resultSales[$key]->comp_id;
-                    $this->state['branch_id'] = @$this->resultSales[$key]->branch_id;
-                    $this->state['ref_memo_no'] = @$this->resultSales[$key]->memo_no;
+            $this->saleCart = [];
+            $this->state['customer_id'] = @$this->resultSales[$key]->customer_id;
+            $this->state['war_id'] = @$this->resultSales[$key]->war_id;
+            $this->state['comp_id'] = @$this->resultSales[$key]->comp_id;
+            $this->state['branch_id'] = @$this->resultSales[$key]->branch_id;
+            $this->state['ref_memo_no'] = @$this->resultSales[$key]->memo_no;
 
-                    foreach($sale_dtls as $sale_dtl){
+            foreach ($sale_dtls as $sale_dtl) {
 
-                        $return_qty = DB::table('INV_SALES_RET_DTL as pr')
-                                    ->where('ref_memo_no',$this->state['ref_memo_no'])
-                                    ->where('item_code', $sale_dtl->st_group_item_id)
-                                    ->sum('item_qty');
+                $return_qty = DB::table('INV_SALES_RET_DTL as pr')
+                    ->where('ref_memo_no', $this->state['ref_memo_no'])
+                    ->where('item_code', $sale_dtl->st_group_item_id)
+                    ->sum('item_qty');
 
-                        $current_qty = (float)$sale_dtl->item_qty - $return_qty;
+                $current_qty = (float)$sale_dtl->item_qty - $return_qty;
 
-                        if((float)$sale_dtl->vat_amt && (float)$sale_dtl->vat_amt > 0){
-                            $p_vat_amt = (float)$sale_dtl->vat_amt / $sale_dtl->item_qty;
-                        }
+                if ((float)$sale_dtl->vat_amt && (float)$sale_dtl->vat_amt > 0) {
+                    $p_vat_amt = (float)$sale_dtl->vat_amt / $sale_dtl->item_qty;
+                }
 
-                        $this->saleCart[] = [
-                            'item_name' => $sale_dtl->item_name,
-                            'color_name' => $sale_dtl->color_name,
-                            'item_size_name' => $sale_dtl->item_size_name,
-                            'mrp_rate' => $sale_dtl->mrp_rate,
-                            'vat_amt' => $sale_dtl->vat_amt,
-                            'p_vat_amt' => $p_vat_amt ?? 0,
-                            'line_total' => $sale_dtl->tot_payble_amt,
-                            'qty' => $current_qty,
-                            'p_qty' => $current_qty,
-                            'discount' => $sale_dtl->discount,
-                            'st_group_item_id' => $sale_dtl->st_group_item_id,
-                            'is_check' => false,
-                        ];
-                    }
-
-                    $this->grandCalculation();
-                    $this->salesesearch = '';
-                    $this->resetSaleSearch();
-
+                $this->saleCart[] = [
+                    'item_name' => $sale_dtl->item_name,
+                    'color_name' => $sale_dtl->color_name,
+                    'item_size_name' => $sale_dtl->item_size_name,
+                    'mrp_rate' => $sale_dtl->mrp_rate,
+                    'vat_amt' => $sale_dtl->vat_amt,
+                    'p_vat_amt' => $p_vat_amt ?? 0,
+                    'line_total' => $sale_dtl->tot_payble_amt,
+                    'qty' => $current_qty,
+                    'p_qty' => $current_qty,
+                    'discount' => $sale_dtl->discount,
+                    'st_group_item_id' => $sale_dtl->st_group_item_id,
+                    'is_check' => false,
+                ];
             }
+
+            $this->grandCalculation();
+            $this->salesesearch = '';
+            $this->resetSaleSearch();
+        }
     }
 
     public function hideDropdown()
@@ -173,7 +173,7 @@ class SalesReturnForm extends Component
     public function calculation($key)
     {
         $sale_qty = (float)$this->saleCart[$key]['p_qty'];
-        if((float)$this->saleCart[$key]['qty'] > $sale_qty){
+        if ((float)$this->saleCart[$key]['qty'] > $sale_qty) {
             (float)$this->saleCart[$key]['qty'] = 1;
             session()->flash('error', "Return quantity can not bigger than sale quantity ($sale_qty)");
         }
@@ -198,7 +198,7 @@ class SalesReturnForm extends Component
         $shipping_amt = $this->state['shipping_amt'] ?? 0;
 
         foreach ($this->saleCart as $value) {
-            if($value['is_check']){
+            if ($value['is_check']) {
                 $sub_total += (float)$value['line_total'] ?? 0;
                 $total_qty += (float)$value['qty'] ?? 0;
                 $total_discount += (float)$value['discount'] ?? 0;
@@ -216,11 +216,11 @@ class SalesReturnForm extends Component
         $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
     }
 
-    public function saleActive($key){
-        if($this->saleCart[$key]['is_check'] == true){
+    public function saleActive($key)
+    {
+        if ($this->saleCart[$key]['is_check'] == true) {
             $this->saleCart[$key]['is_check'] = 1;
-
-        }else{
+        } else {
             $this->saleCart[$key]['is_check'] = 0;
             $this->saleCart[$key]['return_qty'] =  '';
         }
@@ -247,11 +247,15 @@ class SalesReturnForm extends Component
                 $this->state['emp_id'] = Auth::user()->id;
                 $this->state['comp_id'] = 1;
                 $this->state['branch_id'] = 1;
+                $this->state['tot_due_amt'] = $this->due_amt;
+                $this->state['tot_paid_amt'] = $this->pay_amt;
+                $this->state['payment_status'] = Payment::ReturnPaymentCheck($this->due_amt);
+
 
                 $tran_mst_id = DB::table('INV_SALES_RET_MST')->insertGetId($this->state, 'tran_mst_id');
 
                 foreach ($this->saleCart as $key => $value) {
-                    if($value['is_check'] == 1){
+                    if ($value['is_check'] == 1) {
                         DB::table('INV_SALES_RET_DTL')->insert([
                             'tran_mst_id' => $tran_mst_id,
                             'item_code' => $value['st_group_item_id'],
@@ -266,55 +270,103 @@ class SalesReturnForm extends Component
                     }
                 }
 
-                $ref_memo_no = DB::table('INV_SALES_RET_MST')
+                $prev_rt_amount = DB::table('INV_SALES_MST as p')
+                    ->where('memo_no', $this->oldSaleSearch)
+                    ->first();
+
+                DB::table('INV_SALES_MST as p')
+                    ->where('memo_no', $this->oldSaleSearch)
+                    ->update([
+                        'prt_amt' => ((float)$prev_rt_amount->prt_amt + $this->state['tot_payable_amt']),
+                    ]);
+
+                    $ref_memo_no = DB::table('INV_SALES_RET_MST')
                     ->where('tran_mst_id', $tran_mst_id)
                     ->first();
 
-                $payment_info = [
-                    'tran_mst_id' => $tran_mst_id,
-                    'tran_type' => 'SRT',
-                    'payment_date' => $this->state['tran_date'],
-                    'p_code' => $this->state['customer_id'],
-                    'pay_mode' => $this->paymentState['pay_mode'],
-                    'tot_payable_amt' => $this->state['tot_payable_amt'],
-                    'discount' => $this->state['tot_discount'],
-                    'vat_amt' => $this->state['tot_vat_amt'],
-                    'net_payable_amt' => $this->pay_amt ?? 0,
-                    'due_amt' => $this->due_amt,
-                    'user_id' => $this->state['user_name'],
-                    'ref_memo_no' => $ref_memo_no->memo_no,
-                    'payment_status' => Payment::PaymentCheck($this->due_amt),
+                    DB::table('ACC_VOUCHER_INFO')->insert([
+                        'voucher_date' => $this->state['tran_date'],
+                        'voucher_type' => 'DR',
+                        'narration' => 'sale return vouchar',
+                        'amount' => $this->state['tot_payable_amt'],
+                        'created_by' => $this->state['user_name'],
+                        'tran_type' => 'SRT',
+                        'ref_memo_no' => $ref_memo_no->memo_no,
+                        'account_code' => 4010,
+                    ]);
 
-                ];
-                if ($this->paymentState['pay_mode'] == 2) {
-                    $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
-                    $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
-                    $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
-                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                if ($this->pay_amt && $this->pay_amt > 0) {
+
+                    $payment_info = [
+                        'tran_mst_id' => $tran_mst_id,
+                        'tran_type' => 'SRT',
+                        'payment_date' => $this->state['tran_date'],
+                        'p_code' => $this->state['customer_id'],
+                        'pay_mode' => $this->paymentState['pay_mode'],
+                        'tot_payable_amt' => $this->state['tot_payable_amt'],
+                        'discount' => $this->state['tot_discount'],
+                        'vat_amt' => $this->state['tot_vat_amt'],
+                        'net_payable_amt' => $this->state['net_payable_amt'] ?? 0,
+                        'due_amt' => $this->due_amt,
+                        'user_id' => $this->state['user_name'],
+                        'ref_memo_no' => $ref_memo_no->memo_no,
+                        'payment_status' => Payment::PaymentCheck($this->due_amt),
+                        'tot_paid_amt' => $this->pay_amt ?? 0,
+
+                    ];
+                    if ($this->paymentState['pay_mode'] == 2) {
+                        $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
+                        $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
+                        $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
+                        $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                    }
+
+                    if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
+                        $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
+                        $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
+                    }
+
+                    if ($this->paymentState['pay_mode'] == 4) {
+                        $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
+                        $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
+                    }
+                    if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5 || $this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6) {
+                        $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
+                        $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
+                    }
+
+
+                    $pay_id = DB::table('ACC_PAYMENT_INFO')
+                        ->insertGetId($payment_info, 'payment_no');
+
+                    $pay_memo = DB::table('ACC_PAYMENT_INFO')
+                        ->where('payment_no', $pay_id)
+                        ->first()
+                        ->memo_no;
+
+                    DB::table('ACC_VOUCHER_INFO')->insert([
+                        'voucher_date' => $this->state['tran_date'],
+                        'voucher_type' => 'CR',
+                        'narration' => 'sale vouchar',
+                        'amount' => $this->pay_amt,
+                        'created_by' => $this->state['user_name'],
+                        'tran_type' => 'SRT',
+                        'ref_memo_no' => $ref_memo_no->memo_no,
+                        'account_code' => 4010,
+                        'ref_pay_no' => $pay_memo,
+                        'cash_type' => 'OUT',
+                    ]);
+
+                    DB::table('INV_SALES_MST as p')
+                        ->where('memo_no', $this->oldSaleSearch)
+                        ->update([
+                        'prt_paid' => ((float)$prev_rt_amount->prt_paid + $this->pay_amt),
+                    ]);
                 }
-
-                if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
-                    $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
-                    $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
-                }
-
-                if ($this->paymentState['pay_mode'] == 4) {
-                    $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
-                }
-                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5 || $this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6) {
-                    $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
-                    $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
-                }
-
-
-                DB::table('ACC_PAYMENT_INFO')->insert($payment_info);
-
-
                 DB::commit();
 
                 session()->flash('status', 'New sales return created successfully');
-                return $this->redirect(route('sale-return'), navigate:true);
-
+                return $this->redirect(route('sale-return'), navigate: true);
             } catch (\Exception $exception) {
                 DB::rollback();
                 session()->flash('error', $exception);
