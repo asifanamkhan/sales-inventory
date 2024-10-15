@@ -279,7 +279,7 @@
                     <a class="list" wire:navigate href=""> - Supplier Ledger</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href=""> - Customer Info</a>
+                    <a class="list" target="_blank" href="{{ route('customer-info-reports') }}"> - Customer Info</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href=""> - Customer Ledger</a>

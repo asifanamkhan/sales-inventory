@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
@@ -139,7 +140,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // ------------- sale end ----------------
 
     // ------------- reports start ----------------
-    Route::get('reports-supplier-info}', [SupplierController::class, 'supplierInfo'])->name('supplier-info-reports');
+    Route::get('reports-supplier-info', [SupplierController::class, 'supplierInfo'])->name('supplier-info-reports');
+    Route::get('reports-customer-info', [CustomerController::class, 'customerInfo'])->name('customer-info-reports');
 
 
 });

@@ -160,7 +160,7 @@
 </head>
 
 <body>
-    <div class="invoice-container">
+    <div class="invoice-container" style="display: fixed">
         <div class="invoice-header">
             <div class="logo">
                 <!-- Replace with your logo image -->
@@ -279,6 +279,176 @@
             </div>
 
 
+
+        </div>
+        <div style="min-height: 680px">
+            <table class="invoice-items">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($resultDtls as $key => $dtl)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $dtl->item_name }}
+                            @if($dtl->color_name) | {{ $dtl->color_name }} @endif
+                            @if($dtl->item_size_name) | {{ $dtl->item_size_name }} @endif
+                        </td>
+                        <td style="text-align: center">{{ $dtl->item_qty }}</td>
+                        <td style="text-align: center">{{ number_format($dtl->pr_rate, 2, '.', '') }}</td>
+                        <td style="text-align: center">{{ number_format($dtl->discount, 2, '.', '') }}</td>
+                        <td style="text-align: center">{{ number_format($dtl->vat_amt, 2, '.', '') }}</td>
+                        <td style="text-align: right">{{ number_format($dtl->tot_payble_amt, 2, '.', '') }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7">No data found</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td style="text-align: center">
+                            <b>{{ $tran_mst->total_qty }}</b>
+                        </td>
+                        <td></td>
+                        <td style="text-align: center">
+                            <b>{{ number_format($tran_mst->tot_discount, 2, '.', '') }}</b>
+                        </td>
+                        <td style="text-align: center">
+                            <b>{{ number_format($tran_mst->tot_vat_amt, 2, '.', '') }}</b>
+                        </td>
+                        <td style="text-align: right">
+                            <b>{{ number_format($tran_mst->net_payable_amt, 2, '.', '') }}</b>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="total-section">
+                <table>
+                    {{-- <tr>
+                        <th rowspan="5" style="border: none;text-align: center;">
+                        </th>
+                    </tr> --}}
+                    <tr>
+                        <th>Shipping</th>
+                        <td>{{ number_format($tran_mst->shipping_amt, 2, '.', '') }}</td>
+                    </tr>
+                    <tr class="grand-total">
+                        <th>Total</th>
+                        <td>{{ number_format($tran_mst->tot_payable_amt, 2, '.', '') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Paid amount</th>
+                        <td><b>{{ number_format($tran_mst->tot_paid_amt, 2, '.', '') }}</b></td>
+                    </tr>
+                    <tr>
+                        <th>Due amount</th>
+                        <td style="color: darkred"><b>{{ number_format($tran_mst->tot_due_amt, 2, '.', '') }}</b></td>
+                    </tr>
+                </table>
+
+                <div style="text-align: center; padding-top: 20px">
+                    <img style="width: 120px; " src="data:image/jpeg;base64,{{$base64PaymentImg}}">
+
+                </div>
+            </div>
+
+
+
+        </div>
+        <div style="min-height: 680px">
+            <table class="invoice-items">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Rate</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($resultDtls as $key => $dtl)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $dtl->item_name }}
+                            @if($dtl->color_name) | {{ $dtl->color_name }} @endif
+                            @if($dtl->item_size_name) | {{ $dtl->item_size_name }} @endif
+                        </td>
+                        <td style="text-align: center">{{ $dtl->item_qty }}</td>
+                        <td style="text-align: center">{{ number_format($dtl->pr_rate, 2, '.', '') }}</td>
+                        <td style="text-align: center">{{ number_format($dtl->discount, 2, '.', '') }}</td>
+                        <td style="text-align: center">{{ number_format($dtl->vat_amt, 2, '.', '') }}</td>
+                        <td style="text-align: right">{{ number_format($dtl->tot_payble_amt, 2, '.', '') }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7">No data found</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td style="text-align: center">
+                            <b>{{ $tran_mst->total_qty }}</b>
+                        </td>
+                        <td></td>
+                        <td style="text-align: center">
+                            <b>{{ number_format($tran_mst->tot_discount, 2, '.', '') }}</b>
+                        </td>
+                        <td style="text-align: center">
+                            <b>{{ number_format($tran_mst->tot_vat_amt, 2, '.', '') }}</b>
+                        </td>
+                        <td style="text-align: right">
+                            <b>{{ number_format($tran_mst->net_payable_amt, 2, '.', '') }}</b>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="total-section">
+                <table>
+                    {{-- <tr>
+                        <th rowspan="5" style="border: none;text-align: center;">
+                        </th>
+                    </tr> --}}
+                    <tr>
+                        <th>Shipping</th>
+                        <td>{{ number_format($tran_mst->shipping_amt, 2, '.', '') }}</td>
+                    </tr>
+                    <tr class="grand-total">
+                        <th>Total</th>
+                        <td>{{ number_format($tran_mst->tot_payable_amt, 2, '.', '') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Paid amount</th>
+                        <td><b>{{ number_format($tran_mst->tot_paid_amt, 2, '.', '') }}</b></td>
+                    </tr>
+                    <tr>
+                        <th>Due amount</th>
+                        <td style="color: darkred"><b>{{ number_format($tran_mst->tot_due_amt, 2, '.', '') }}</b></td>
+                    </tr>
+                </table>
+
+                <div style="text-align: center; padding-top: 20px">
+                    <img style="width: 120px; " src="data:image/jpeg;base64,{{$base64PaymentImg}}">
+
+                </div>
+            </div>
 
         </div>
 
