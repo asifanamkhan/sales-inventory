@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -136,5 +137,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sale-pdf', [SaleController::class,'tcpdPDF'])->name('sale-pdf');
 
     // ------------- sale end ----------------
+
+    // ------------- reports start ----------------
+    Route::get('reports-supplier-info}', [SupplierController::class, 'supplierInfo'])->name('supplier-info-reports');
+
 
 });

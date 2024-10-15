@@ -107,12 +107,6 @@
         {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
 
         " id="accountSubmenu">
-                <li class="">
-                    <a class="list" wire:navigate href="">Financial year setup</a>
-                </li>
-                <li class="">
-                    <a class="list" wire:navigate href="">Bank year setup</a>
-                </li>
 
                 <li class="">
                     <a class="list" wire:navigate href="">Chart of accounts</a>
@@ -279,16 +273,16 @@
 
         " id="misReportSubmenu">
                 <li class="">
+                    <a class="list" target="_blank" href="{{ route('supplier-info-reports') }}"> - Supplier Info</a>
+                </li>
+                <li class="">
                     <a class="list" wire:navigate href=""> - Supplier Ledger</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href=""> - Supplier Due Report</a>
+                    <a class="list" wire:navigate href=""> - Customer Info</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href=""> - Customer Ledger</a>
-                </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Customer Due Report</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href=""> - Product Lists</a>

@@ -63,7 +63,7 @@ class SaleController extends Controller
             ]);
 
         //    return view('reports.sale.invoice',compact('company','base64Logo','tran_mst','resultDtls','base64PaymentImg'));
-        $pdf = Pdf::loadView('reports.sale.sale-invoice', compact(
+        $pdf = Pdf::loadView('livewire.dashboard.reports.sale.sale-invoice', compact(
             'company',
             'base64Logo',
             'tran_mst',
@@ -125,7 +125,7 @@ class SaleController extends Controller
             ]);
 
         //    return view('reports.sale.invoice',compact('company','base64Logo','tran_mst','resultDtls','base64PaymentImg'));
-        $pdf = Pdf::loadView('reports.sale.sale-return-invoice', compact(
+        $pdf = Pdf::loadView('livewire.dashboard.reports.sale.sale-return-invoice', compact(
             'company',
             'base64Logo',
             'tran_mst',
@@ -144,7 +144,7 @@ class SaleController extends Controller
         ];
 
 
-        $html = view()->make('reports.invoice', $data)->render();
+        $html = view()->make('tcpInvoice', $data)->render();
 
         $pdf = new CustomPDF();
 
@@ -155,7 +155,7 @@ class SaleController extends Controller
         $pdf->SetSubject('TCPDF Tutorial');
 
         // Set default header data
-        $pdf->SetHeaderData('', 0, 'Header Title', 'Subtitle');
+        // $pdf->SetHeaderData('', 0, 'Header Title', 'Subtitle');
 
         // Set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));

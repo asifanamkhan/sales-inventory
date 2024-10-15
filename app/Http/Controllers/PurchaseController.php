@@ -61,7 +61,7 @@ class PurchaseController extends Controller
             ]);
 
         //    return view('reports.purchase.invoice',compact('company','base64Logo','tran_mst','resultDtls','base64PaymentImg'));
-        $pdf = Pdf::loadView('reports.purchase.purchase-invoice', compact(
+        $pdf = Pdf::loadView('livewire.dashboard.reports.purchase.purchase-invoice', compact(
             'company',
             'base64Logo',
             'tran_mst',
@@ -122,7 +122,7 @@ class PurchaseController extends Controller
             ]);
 
         //    return view('reports.purchase.invoice',compact('company','base64Logo','tran_mst','resultDtls','base64PaymentImg'));
-        $pdf = Pdf::loadView('reports.purchase.purchase-return-invoice', compact(
+        $pdf = Pdf::loadView('livewire.dashboard.reports.purchase.purchase-return-invoice', compact(
             'company',
             'base64Logo',
             'tran_mst',
