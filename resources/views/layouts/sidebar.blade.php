@@ -269,41 +269,49 @@
                 <i class="fa-solid fa-chart-line"></i> MIS reports
             </a>
             <ul class="collapse list-unstyled
-        {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
+        {{ request()->routeIs('supplier-ledger') ? 'show' : ' ' }}
+        {{ request()->routeIs('customer-ledger') ? 'show' : ' ' }}
+        {{ request()->routeIs('customer-ledger') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-product-purchase') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-product-purchase-return') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-product-stock') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-product-stock-out') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-product-damage') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-product-expire') ? 'show' : ' ' }}
 
         " id="misReportSubmenu">
                 <li class="">
                     <a class="list" target="_blank" href="{{ route('supplier-info-reports') }}"> - Supplier Info</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Supplier Ledger</a>
+                <li class="{{ request()->routeIs('supplier-ledger') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('supplier-ledger') }}"> - Supplier Ledger</a>
                 </li>
                 <li class="">
                     <a class="list" target="_blank" href="{{ route('customer-info-reports') }}"> - Customer Info</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Customer Ledger</a>
+                <li class="{{ request()->routeIs('customer-ledger') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('customer-ledger') }}"> - Customer Ledger</a>
                 </li>
                 <li class="">
-                    <a class="list" wire:navigate href=""> - Product Lists</a>
+                    <a class="list" target="_blank" href="{{ route('product-list-reports') }}"> - Product Lists</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Product Purchase Report</a>
+                <li class="{{ request()->routeIs('reports-product-purchase') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-product-purchase') }}"> - Product Purchase Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Purchase Return Report</a>
+                <li class="{{ request()->routeIs('reports-product-purchase-return') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-product-purchase-return') }}"> - Purchase Return Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Product Stock Report</a>
+                <li class="{{ request()->routeIs('reports-product-stock') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-product-stock') }}"> - Product Stock Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Stock Out Report</a>
+                <li class="{{ request()->routeIs('reports-product-stock-out') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-product-stock-out') }}"> - Stock Out Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Product Damage Report</a>
+                <li class="{{ request()->routeIs('reports-product-damage') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-product-damage') }}"> - Product Damage Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Product Expiry Report</a>
+                <li class="{{ request()->routeIs('reports-product-expire') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-product-expire') }}"> - Product Expiry Report</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href=""> - Daily Sells Report</a>

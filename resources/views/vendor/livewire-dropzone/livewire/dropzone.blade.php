@@ -86,8 +86,8 @@
 
         @if(count($files) > 0)
             <div class="dz-flex dz-flex-wrap dz-gap-x-10 dz-gap-y-2 dz-justify-start dz-w-full dz-mt-5">
-                @foreach($files as $file)
-                    <div class="dz-flex dz-items-center dz-justify-between dz-gap-2 dz-border dz-rounded dz-border-gray-200 dz-w-full dz-h-auto dz-overflow-hidden dark:dz-border-gray-700">
+                @foreach($files as $fileKey => $file)
+                    <div wire:key="{{ $fileKey }}" class="dz-flex dz-items-center dz-justify-between dz-gap-2 dz-border dz-rounded dz-border-gray-200 dz-w-full dz-h-auto dz-overflow-hidden dark:dz-border-gray-700">
                         <div class="dz-flex dz-items-center dz-gap-3">
                             @if($this->isImageMime($file['extension']))
                                 <div class="dz-flex-none dz-w-14 dz-h-14">

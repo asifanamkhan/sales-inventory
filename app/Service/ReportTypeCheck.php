@@ -11,6 +11,12 @@ class ReportTypeCheck
         if($route == 'supplier-info-reports'){
             return 'SUPPLIER INFO';
         }
+        if($route == 'supplier-ledger-pdf'){
+            return 'SUPPLIER LEDGER';
+        }
+        if($route == 'product-list-reports'){
+            return 'PRODUCTS LIST';
+        }
     }
 
 

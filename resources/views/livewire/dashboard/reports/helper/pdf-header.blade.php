@@ -37,6 +37,7 @@
             font-weight: bold;
             color: #4CAF50
         }
+        
     </style>
 </head>
 

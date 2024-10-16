@@ -49,15 +49,9 @@ table thead tr td {
     color: white !important;
 }
 
-<tr>
-                    <td style="width: 5%">{{ $loop->iteration }}</td>
-                    <td style="width: 25%">{{ $supplier->p_name }}</td>
-                    <td style="width: 10%">{{ $supplier->supplier_code }}</td>
-                    <td style="width: 15%">{{ $supplier->supplier_cat_name  }}</td>
-                    <td style="width: 15%">{{ $supplier->email  }}</td>
-                    <td style="width: 15%">{{ $supplier->phone  }}</td>
-                    <td style="width: 15%">{{ $supplier->address  }}</td>
-                </tr>
+.table-bordered>:not(caption)>*>* {
+    background-color: transparent;
+}
 
 .bg-sidebar {
     background-image: linear-gradient(195deg, #49a3f1, #1a73e8) !important;

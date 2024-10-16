@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
@@ -29,6 +30,14 @@ use App\Livewire\Dashboard\ProductDamage\ProductDamageCreate;
 use App\Livewire\Dashboard\ProductDamage\ProductDamageEdit;
 use App\Livewire\Dashboard\Purchase\Purchase\{Purchase, PurchaseCreate, PurchaseDetails, PurchaseEdit};
 use App\Livewire\Dashboard\Purchase\Return\{PurchaseReturn, PurchaseReturnCreate, PurchaseReturnDetails, PurchaseReturnEdit};
+use App\Livewire\Dashboard\Reports\Customer\CustomerLedger;
+use App\Livewire\Dashboard\Reports\Product\ProductDamageReport;
+use App\Livewire\Dashboard\Reports\Product\ProductExpiryReport;
+use App\Livewire\Dashboard\Reports\Product\ProductPurchaseReport;
+use App\Livewire\Dashboard\Reports\Product\ProductPurchaseReturnReport;
+use App\Livewire\Dashboard\Reports\Product\ProductStockOutReport;
+use App\Livewire\Dashboard\Reports\Product\ProductStockReport;
+use App\Livewire\Dashboard\Reports\Supplier\SupplierLedger;
 use App\Livewire\Dashboard\Sales\Sales\{SaleDetails, Sales, SalesCreate, SalesEdit};
 use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnDetails, SalesReturnEdit};
 use Illuminate\Support\Facades\DB;
@@ -141,7 +150,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // ------------- reports start ----------------
     Route::get('reports-supplier-info', [SupplierController::class, 'supplierInfo'])->name('supplier-info-reports');
-    Route::get('reports-customer-info', [CustomerController::class, 'customerInfo'])->name('customer-info-reports');
+    Route::get('supplier-ledger',SupplierLedger::class)->name('supplier-ledger');
+    Route::get('supplier-ledger-pdf/{code}',[SupplierController::class, 'supplierLedgerPdf'])->name('supplier-ledger-pdf');
 
+    Route::get('reports-customer-info', [CustomerController::class, 'customerInfo'])->name('customer-info-reports');
+    Route::get('customer-ledger',CustomerLedger::class)->name('customer-ledger');
+    Route::get('customer-ledger-pdf/{code}',[CustomerController::class, 'customerLedgerPdf'])->name('customer-ledger-pdf');
+
+    Route::get('reports-product-list', [ProductController::class, 'productList'])->name('product-list-reports');
+    Route::get('reports-product-purchase',ProductPurchaseReport::class)->name('reports-product-purchase');
+    Route::get('reports-product-purchase-return',ProductPurchaseReturnReport::class)->name('reports-product-purchase-return');
+    Route::get('reports-product-stock',ProductStockReport::class)->name('reports-product-stock');
+    Route::get('reports-product-stock-out',ProductStockOutReport::class)->name('reports-product-stock-out');
+    Route::get('reports-product-damage',ProductDamageReport::class)->name('reports-product-damage');
+    Route::get('reports-product-expire',ProductExpiryReport::class)->name('reports-product-expire');
+
+    // ------------- reports end ----------------
 
 });
