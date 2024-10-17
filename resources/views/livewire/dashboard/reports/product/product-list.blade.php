@@ -42,12 +42,12 @@
                 <th class="invoice-items-head"  style="width:15%">Group</th>
                 <th class="invoice-items-head"  style="width:10%">Category</th>
                 <th class="invoice-items-head" style="width:10%">Brand</th>
-                <th class="invoice-items-head" style="width:6%">Unit</th>
+                <th class="invoice-items-head" style="width:7%">Unit</th>
                 <th class="invoice-items-head" style="width:5%">Size</th>
                 <th class="invoice-items-head" style="width:10%">Color</th>
                 <th class="invoice-items-head" style="width:8%; text-align: center">PR</th>
                 <th class="invoice-items-head" style="width:8%; text-align: center">MRP</th>
-                <th class="invoice-items-head" style="width:7%; text-align: center">Vat</th>
+                <th class="invoice-items-head" style="width:6%; text-align: center">Vat</th>
             </tr>
         </thead>
         <tbody>
@@ -59,12 +59,12 @@
                     <td style="width: 15%">{{ $product->group_name }}</td>
                     <td style="width: 10%">{{ $product->catagories_name }}</td>
                     <td style="width: 10%">{{ $product->brand_name  }}</td>
-                    <td style="width: 6%">{{ $product->unit_name  }}</td>
+                    <td style="width: 7%">{{ $product->unit_name  }}</td>
                     <td style="width: 5%">{{ $product->item_size_name  }}</td>
                     <td style="width: 10%">{{ $product->color_name  }}</td>
                     <td style="width: 8%; text-align: center">{{ $product->pr_rate  }}</td>
                     <td style="width: 8%; text-align: center">{{ $product->mrp_rate  }}</td>
-                    <td style="width: 7%; text-align: center">
+                    <td style="width: 6%; text-align: center">
                         @if ($product->vat_rate)
                             {{ $product->vat_rate  }}%
                         @else

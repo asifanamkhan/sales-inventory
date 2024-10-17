@@ -158,12 +158,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('customer-ledger-pdf/{code}',[CustomerController::class, 'customerLedgerPdf'])->name('customer-ledger-pdf');
 
     Route::get('reports-product-list', [ProductController::class, 'productList'])->name('product-list-reports');
+
     Route::get('reports-product-purchase',ProductPurchaseReport::class)->name('reports-product-purchase');
+    Route::post('product-purchase-report-pdf', [ProductController::class, 'purchaseReport'])->name('product-purchase-report-pdf');
+
     Route::get('reports-product-purchase-return',ProductPurchaseReturnReport::class)->name('reports-product-purchase-return');
+    Route::post('product-purchase-return-report-pdf', [ProductController::class, 'purchaseReturnReport'])->name('product-purchase-return-report-pdf');
+
     Route::get('reports-product-stock',ProductStockReport::class)->name('reports-product-stock');
+    Route::post('product-stock-report-pdf', [ProductController::class, 'purchaseStockReport'])->name('product-stock-report-pdf');
+
     Route::get('reports-product-stock-out',ProductStockOutReport::class)->name('reports-product-stock-out');
+
     Route::get('reports-product-damage',ProductDamageReport::class)->name('reports-product-damage');
+    Route::post('product-damage-report-pdf', [ProductController::class, 'purchaseDamageReport'])->name('product-damage-report-pdf');
+
     Route::get('reports-product-expire',ProductExpiryReport::class)->name('reports-product-expire');
+    Route::post('product-expire-report-pdf', [ProductController::class, 'purchaseExpireReport'])->name('product-expire-report-pdf');
 
     // ------------- reports end ----------------
 
