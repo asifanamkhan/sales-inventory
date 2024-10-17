@@ -5,13 +5,13 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-solid fa-cart-shopping"></i> Supplier Ledger
+            <i class="fa-solid fa-cart-shopping"></i> Customer Ledger
         </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Reports</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('supplier-ledger') }}"
-                        style="color: #3C50E0">Supplier Ledger</a></li>
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('customer-ledger') }}"
+                        style="color: #3C50E0">Customer Ledger</a></li>
             </ol>
         </nav>
     </div>
@@ -21,18 +21,18 @@
             <div class="row g-3 mb-3 align-items-center">
                 <div class="col-md-4">
                     <div class="form-group mb-3" wire:ignore>
-                        <label for="">Supplier<span style="color: red"> * </span></label>
-                        <select class="form-select select2" id='supplier'>
-                            <option value="">Select supplier</option>
-                            @forelse ($suppliers as $supplier)
-                            <option value="{{ $supplier->p_code }}">{{
-                                $supplier->p_name }}</option>
+                        <label for="">Customer<span style="color: red"> * </span></label>
+                        <select class="form-select select2" id='customer'>
+                            <option value="">Select customer</option>
+                            @forelse ($customers as $customer)
+                            <option value="{{ $customer->customer_id }}">{{
+                                $customer->customer_name }}</option>
                             @empty
                             <option value=""></option>
                             @endforelse
                         </select>
                     </div>
-                    @error('p_code')
+                    @error('customer_id')
                     <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
                 </div>
@@ -54,9 +54,9 @@
         @if (count($ledgers) > 0)
         <div>
             <div style="display: flex; justify-content: space-between" class="p-2">
-                <h4 class="" style="color: #4CAF50">{{ $ledgers[0]->supplier_name }}</h4>
+                <h4 class="" style="color: #4CAF50">{{ $ledgers[0]->customer_name }}</h4>
                 <div >
-                    <a target="_blank" class="btn btn-sm btn-success" href="{{ route('supplier-ledger-pdf', $ledgers[0]->p_code) }}">
+                    <a target="_blank" class="btn btn-sm btn-success" href="{{ route('customer-ledger-pdf', $ledgers[0]->customer_id) }}">
                         <i class="fa-solid fa-file-pdf"></i> Generate PDF
                     </a>
                 </div>
@@ -89,21 +89,21 @@
                         <tr wire:key='{{ $key }}'>
                             @php
                             $t_tot_payable_amt += $ledger->tot_payable_amt;
-                            $t_total_paid += $ledger->total_paid;
-                            $t_return_amt += $ledger->return_amt;
-                            $t_return_paid_amt += $ledger->return_paid_amt;
-                            $t_receivable_amt += $ledger->receivable_amt;
-                            $t_total_due += $ledger->total_due;
+                            $t_total_paid += $ledger->total_paid_amt;
+                            $t_return_amt += $ledger->tot_return_amt;
+                            $t_return_paid_amt += $ledger->sales_ret_paid;
+                            $t_receivable_amt += $ledger->receiveable_amt;
+                            $t_total_due += $ledger->tot_due_amt;
                             @endphp
                             <td>{{ $key+1 }}</td>
                             <td>{{ date('d-M-y', strtotime($ledger->tran_date)) }}</td>
                             <td>{{ $ledger->memo_no }}</td>
                             <td style="text-align: right">{{ number_format($ledger->tot_payable_amt, 2, '.', '') }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->total_paid, 2, '.', '') }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->return_amt, 2, '.', '') }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->return_paid_amt, 2, '.', '') }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->receivable_amt, 2, '.', '') }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->total_due, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->total_paid_amt, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->tot_return_amt, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->sales_ret_paid, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->receiveable_amt, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->tot_due_amt, 2, '.', '') }}</td>
 
                         </tr>
                         @empty
@@ -137,14 +137,6 @@
 
 @script
 <script data-navigate-once>
-    document.addEventListener('livewire:navigated', () => {
-        $(document).ready(function() {
-            $('.date-range').daterangepicker();
-        });
-    });
-    $('#date-filter').on('change', function(){
-        @this.set('searchDate', $('#date-filter').val(), false);
-    })
 
     document.addEventListener('livewire:navigated', () => {
         $(document).ready(function() {
@@ -154,9 +146,9 @@
         });
     });
 
-
-    $('#supplier').on('change', function(e){
-        @this.set('state.p_code', e.target.value, false);
+    $('#customer').on('change', function(e){
+        @this.set('state.customer_id', e.target.value, false);
     });
 </script>
 @endscript
+

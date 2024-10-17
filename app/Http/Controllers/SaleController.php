@@ -137,12 +137,14 @@ class SaleController extends Controller
 
     public function tcpdPDF(){
         $filename = 'demo.pdf';
-
+        $company = DB::table('HRM_COMPANY_INFO')->first();
         $data = [
 
-            'title' => 'Generate PDF using Laravel TCPDF - ItSolutionStuff.com!'
+            'title' => 'Generate PDF using Laravel TCPDF - ItSolutionStuff.com!',
+            'company' => $company,
+            'logo'=>json_decode($company->logo)[0]
         ];
-
+        // dd(json_decode($company->logo)[0]);
 
         $html = view()->make('tcpInvoice', $data)->render();
 
@@ -165,9 +167,9 @@ class SaleController extends Controller
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // Set margins
-        $pdf->SetMargins(15, 30, 15);
+        $pdf->SetMargins(10, 15, 10);
         $pdf->SetHeaderMargin(5);
-        $pdf->SetFooterMargin(10);
+        $pdf->SetFooterMargin(5);
 
         // Set auto page breaks
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
