@@ -5,12 +5,12 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-solid fa-cart-shopping"></i> Product stock out report
+            <i class="fa-solid fa-cart-shopping"></i> Product sale report
         </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Reports</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="" style="color: #3C50E0">Product stock out
+                <li class="breadcrumb-item active"><a wire:navigate href="" style="color: #3C50E0">Product sale
                         report</a></li>
             </ol>
         </nav>
@@ -18,7 +18,7 @@
     <div class="card p-4">
         <form action="" wire:submit='search'>
             <div class="row g-3 mb-3 align-items-center">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group mb-2" wire:ignore>
                         <label for="">Branch</label>
                         <select class="form-select select2" id='branch'>
@@ -37,7 +37,7 @@
                     @enderror
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <div class="form-group mb-2" wire:ignore>
                         <label for="">Category</label>
                         <select class="form-select select2" id='catagories_id'>
@@ -81,7 +81,14 @@
                     @enderror
                 </div>
 
-
+                <div class="col-md-2 ">
+                    <x-input required_mark='' wire:model='state.start_date' name='start_date' type='date'
+                        label='Start Date' />
+                </div>
+                <div class="col-md-2 ">
+                    <x-input required_mark='' wire:model='state.end_date' name='end_date' type='date'
+                        label='End Date' />
+                </div>
 
                 <div class="col-md-1 ">
                     <button class="btn btn-primary" id='search'>Search</button>
@@ -93,9 +100,11 @@
             <div style="display: flex; justify-content: space-between" class="p-2">
                 <div></div>
                 <div style="float: right">
-                    <form target="_blank" action="{{route('product-stock-report-pdf')}}" method="post">
+                    <form target="_blank" action="{{route('product-sale-report-pdf')}}" method="post">
                         @csrf
-                         <input type="hidden" name="branch_id" value="{{ $state['branch_id'] }}">
+                        <input type="hidden" name="start_date" value="{{ $state['start_date'] }}">
+                        <input type="hidden" name="end_date" value="{{ $state['end_date'] }}">
+                        <input type="hidden" name="branch_id" value="{{ $state['branch_id'] }}">
                         <input type="hidden" name="catagories_id" value="{{ $state['catagories_id'] }}">
                         <input type="hidden" name="st_group_item_id" value="{{ $state['st_group_item_id'] }}">
                         <button class="btn btn-sm btn-success">
@@ -107,22 +116,18 @@
             </div>
             <div class="responsive-table" style="font-size: 0.9em !important;">
                 <table class="table table-bordered table-hover">
-                    <thead class="bg-sidebar">
-                        <tr >
-                            <td rowspan="2" style="">#</td>
-                            <td rowspan="2" style="text-align: center">Item</td>
-                            <td rowspan="2" style="text-align: center">Category</td>
-                            <td rowspan="2" style="text-align: center">Brand</td>
-                            <td colspan="7" style="text-align: center">Qty</td>
-                        </tr>
+                    <thead>
                         <tr class="bg-sidebar">
-                            <td style="text-align: center">Opening</td>
-                            <td style="text-align: center">Purchase</td>
-                            <td style="text-align: center">Purchase rt </td>
-                            <td style="text-align: center">Sale</td>
-                            <td style="text-align: center">Sale rt</td>
-                            <td style="text-align: center">Damage</td>
-                            <td style="text-align: center">Current</td>
+                            <td style="">#</td>
+                            <td style="width:9%">Date</td>
+                            <td style="width:11%">Sale no</td>
+                            <td style="text-align: center">Item</td>
+                            <td style="text-align: center">Branch</td>
+                            <td style="text-align: center">Qty</td>
+                            <td style="text-align: center">Rate</td>
+                            <td style="text-align: center">Vat</td>
+                            <td style="text-align: center">Discount</td>
+                            <td style="text-align: center">Total</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -135,9 +140,14 @@
                         @forelse ($ledgers as $key => $ledger)
                         <tr wire:key='{{ $key }}'>
                             @php
-                            // $t_qty += $ledger->item_qty;
+                            $t_qty += $ledger->sales_qty;
+                            $t_vat += $ledger->vat_amt;
+                            $t_discount += $ledger->discount;
+                            $t_total += $ledger->tot_sales_amt;
                             @endphp
                             <td>{{ $key+1 }}</td>
+                            <td>{{ date('d-M-y', strtotime($ledger->sales_date)) }}</td>
+                            <td>{{ $ledger->challan_no }}</td>
                             <td>
                                 {{ $ledger->item_name }}
                                 @if ($ledger->item_size_name)
@@ -147,15 +157,12 @@
                                 | {{ $ledger->color_name }}
                                 @endif
                             </td>
-                            <td>{{ $ledger->catagories_name }}</td>
-                            <td>{{ $ledger->brand_name }}</td>
-                            <td style="text-align: center">{{ $ledger->op_qty }}</td>
-                            <td style="text-align: center">{{ $ledger->rc_qty }}</td>
-                            <td style="text-align: center">{{ $ledger->prt_qty }}</td>
-                            <td style="text-align: center">{{ $ledger->sl_qty }}</td>
-                            <td style="text-align: center">{{ $ledger->srt_qty }}</td>
-                            <td style="text-align: center">{{ $ledger->rj_qty }}</td>
-                            <td style="text-align: center">{{ $ledger->stock_qty }}</td>
+                            <td>{{ $ledger->branch_name }}</td>
+                            <td style="text-align: center">{{ $ledger->sales_qty }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->mrp_rate, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->vat_amt, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->discount, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->tot_sales_amt, 2, '.', '') }}</td>
 
                         </tr>
                         @empty
@@ -165,15 +172,15 @@
                         @endforelse
 
                     </tbody>
-                    {{-- <tfoot>
+                    <tfoot>
                         <th colspan="5" style="text-align: right">Total: </th>
-                        <th style="text-align: right">{{ number_format($t_qty, 2, '.', '') }}</th>
+                        <th style="text-align: center">{{ $t_qty }}</th>
                         <th style="text-align: right"></th>
                         <th style="text-align: right">{{ number_format($t_vat, 2, '.', '') }}</th>
                         <th style="text-align: right">{{ number_format($t_discount, 2, '.', '') }}</th>
                         <th style="text-align: right">{{ number_format($t_total, 2, '.', '') }}</th>
 
-                    </tfoot> --}}
+                    </tfoot>
 
                 </table>
             </div>
