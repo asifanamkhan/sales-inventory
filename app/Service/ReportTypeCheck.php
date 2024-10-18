@@ -24,7 +24,7 @@ class ReportTypeCheck
             return 'PRODUCT PURCHASE';
         }
         if($route == 'product-purchase-return-report-pdf'){
-            return 'PURCHASE RETURN';
+            return 'PRODUCT PR RETURN';
         }
         if($route == 'product-stock-report-pdf'){
             return 'PRODUCT STOCK REPORT';
@@ -37,6 +37,9 @@ class ReportTypeCheck
         }
         if($route == 'product-expire-report-pdf'){
             return 'PRODUCT EXPIRE REPORT';
+        }
+        if($route == 'product-sale-report-pdf'){
+            return 'PRODUCT SALE REPORT';
         }
     }
 

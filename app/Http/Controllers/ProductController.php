@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Service\CustomTcPDFHF;
+use App\Service\GeneratePdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +23,7 @@ class ProductController extends Controller
             'html' => $html,
             'filename' => 'product-info.pdf',
         ];
-        $this->PDFGenerate($pdf_data);
+        GeneratePdf::generate($pdf_data);
     }
 
     public function purchaseReport(Request $request)
@@ -56,11 +57,11 @@ class ProductController extends Controller
             'html' => $html,
             'filename' => 'product-purchase.pdf',
         ];
-        $this->PDFGenerate($pdf_data);
-
+        GeneratePdf::generate($pdf_data);
     }
 
-    public function purchaseReturnReport(Request $request){
+    public function purchaseReturnReport(Request $request)
+    {
 
         $query = DB::table('VW_PRODUCT_PURCHASE_RETURN');
 
@@ -91,13 +92,12 @@ class ProductController extends Controller
             'html' => $html,
             'filename' => 'product-purchase.pdf',
         ];
-        $this->PDFGenerate($html,  $pdf_data);
+        GeneratePdf::generate($pdf_data);
     }
 
-
-
-    public function purchaseDamageReport(Request $request){
-          $query = DB::table('VW_PRODUCT_DAMAGE_REPORT');
+    public function purchaseDamageReport(Request $request)
+    {
+        $query = DB::table('VW_PRODUCT_DAMAGE_REPORT');
         if ($request->start_date) {
             $query->where('damage_date', '>=', $request->start_date);
         }
@@ -126,12 +126,13 @@ class ProductController extends Controller
             'filename' => 'product-damage.pdf',
         ];
 
-        $this->PDFGenerate($html,  $pdf_data);
+        GeneratePdf::generate($pdf_data);
     }
 
-    public function purchaseExpireReport(Request $request){
+    public function purchaseExpireReport(Request $request)
+    {
 
-         $query = DB::table('VW_PRODUCT_EXPIRE_REPORT');
+        $query = DB::table('VW_PRODUCT_EXPIRE_REPORT');
         if ($request->start_date) {
             $query->where('expire_date', '>=', $request->start_date);
         }
@@ -160,10 +161,11 @@ class ProductController extends Controller
             'filename' => 'product-expire.pdf',
         ];
 
-        $this->PDFGenerate($pdf_data);
+        GeneratePdf::generate($pdf_data);
     }
 
-    public function purchaseStockReport(Request $request){
+    public function purchaseStockReport(Request $request)
+    {
         $query = DB::table('VW_INV_ITEM_STOCK_QTY');
 
         if ($request->st_group_item_id) {
@@ -187,32 +189,42 @@ class ProductController extends Controller
             'html' => $html,
             'filename' => 'product-stock.pdf',
         ];
-        $this->PDFGenerate($pdf_data);
+        GeneratePdf::generate($pdf_data);
+    }
 
-   }
+    public function productSaleReport(Request $request){
 
+        $query = DB::table('VW_SALES_REPORT');
 
-   public function PDFGenerate($data){
-    
-    $pdf = new CustomTcPDFHF();
-    // $pdf = new CustomTcPDFHF('L', 'pt', ['format' => 'A4']);
+        if ($request->start_date) {
+            $query->where('sales_date', '>=', $request->start_date);
+        }
+        if ($request->end_date) {
+            $query->where('sale_date', '<=', $request->end_date);
+        }
+        if ($request->st_group_item_id) {
+            $query->where('st_group_item_id', $request->st_group_item_id);
+        }
+        if ($request->branch_id) {
+            $query->where('branch_id', $request->branch_id);
+        }
+        if ($request->catagories_id) {
+            $query->where('catagories_id', $request->catagories_id);
+        }
+        $products = $query->get();
 
-    // Set document information
-    $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor(Auth::user()->name);
+        $data = [
+            'ledgers' => $products
+        ];
 
-    // Set margins
-    $pdf->SetMargins(10, 52, 10);
-    $pdf->SetHeaderMargin(3);
-    $pdf->SetFooterMargin(3);
+        $html = view()->make('livewire.dashboard.reports.product.pdf.product-sale-report-pdf', $data)->render();
 
-    // Set auto page breaks
-    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf_data = [
+            'html' => $html,
+            'filename' => 'product-sale.pdf',
+        ];
 
-    $pdf->AddPage();
+        GeneratePdf::generate($pdf_data);
+    }
 
-    $pdf->writeHTML($data['html'], true, false, true, false, '');
-
-    $pdf->Output(public_path($data['filename']), 'I');
-}
 }

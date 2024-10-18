@@ -95,6 +95,8 @@ class SalesReturnForm extends Component
         $this->resultAppend($pk);
     }
 
+
+
     public function resultAppend($key)
     {
         $search = @$this->resultSales[$key]->tran_mst_id;

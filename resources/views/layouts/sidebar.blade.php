@@ -278,6 +278,8 @@
         {{ request()->routeIs('reports-product-stock-out') ? 'show' : ' ' }}
         {{ request()->routeIs('reports-product-damage') ? 'show' : ' ' }}
         {{ request()->routeIs('reports-product-expire') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-sale') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-product-sale') ? 'show' : ' ' }}
 
         " id="misReportSubmenu">
                 <li class="">
@@ -313,14 +315,24 @@
                 <li class="{{ request()->routeIs('reports-product-expire') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('reports-product-expire') }}"> - Product Expiry Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Daily Sells Report</a>
+                <li class="{{ request()->routeIs('reports-product-sale') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-product-sale') }}"> - Product Sale Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Monthly Sells Report</a>
+                <li class="
+                @if (request()->routeIs('reports-sale') && request()->route('type') == 'daily')
+                    active
+                @endif">
+                    <a class="list" wire:navigate href="{{ route('reports-sale','daily') }}"> - Daily Sells Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Yearly Sells Report</a>
+                <li class="@if (request()->routeIs('reports-sale') && request()->route('type') == 'monthly')
+                    active
+                @endif">
+                    <a class="list" wire:navigate href="{{ route('reports-sale','monthly') }}"> - Monthly Sells Report</a>
+                </li>
+                <li class="@if (request()->routeIs('reports-sale') && request()->route('type') == 'custom')
+                    active
+                @endif">
+                    <a class="list" wire:navigate href="{{ route('reports-sale','custom') }}"> - Sells Report</a>
                 </li>
                 <li class="">
                     <a class="list" wire:navigate href=""> - Sells Return Report</a>

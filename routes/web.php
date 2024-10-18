@@ -35,8 +35,10 @@ use App\Livewire\Dashboard\Reports\Product\ProductDamageReport;
 use App\Livewire\Dashboard\Reports\Product\ProductExpiryReport;
 use App\Livewire\Dashboard\Reports\Product\ProductPurchaseReport;
 use App\Livewire\Dashboard\Reports\Product\ProductPurchaseReturnReport;
+use App\Livewire\Dashboard\Reports\Product\ProductSaleReport;
 use App\Livewire\Dashboard\Reports\Product\ProductStockOutReport;
 use App\Livewire\Dashboard\Reports\Product\ProductStockReport;
+use App\Livewire\Dashboard\Reports\Sale\SaleReport;
 use App\Livewire\Dashboard\Reports\Supplier\SupplierLedger;
 use App\Livewire\Dashboard\Sales\Sales\{SaleDetails, Sales, SalesCreate, SalesEdit};
 use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnDetails, SalesReturnEdit};
@@ -175,6 +177,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('reports-product-expire',ProductExpiryReport::class)->name('reports-product-expire');
     Route::post('product-expire-report-pdf', [ProductController::class, 'purchaseExpireReport'])->name('product-expire-report-pdf');
+
+    Route::get('reports-product-sale',ProductSaleReport::class)->name('reports-product-sale');
+    Route::post('product-sale-report-pdf', [ProductController::class, 'productSaleReport'])->name('product-sale-report-pdf');
+
+    Route::get('reports-product-sale/{type}',SaleReport::class)->name('reports-sale');
 
     // ------------- reports end ----------------
 

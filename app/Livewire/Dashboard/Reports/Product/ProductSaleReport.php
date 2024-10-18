@@ -2,13 +2,15 @@
 
 namespace App\Livewire\Dashboard\Reports\Product;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class ProductStockOutReport extends Component
+class ProductSaleReport extends Component
 {
     public $products, $branchs, $catagories, $ledgers = [];
     public $state = [];
+    public $type;
 
     public function productsAll()
     {
@@ -34,15 +36,23 @@ class ProductStockOutReport extends Component
     public function search()
     {
 
-        $query = DB::table('VW_INV_ITEM_STOCK_OUT_REPORT');
+        $query = DB::table('VW_SALES_REPORT');
 
-        if(@$this->state['st_group_item_id']){
+
+        if (@$this->state['start_date']) {
+            $query->where('sales_date', '>=', $this->state['start_date']);
+        }
+        if (@$this->state['end_date']) {
+            $query->where('sales_date', '<=', $this->state['end_date']);
+        }
+
+        if (@$this->state['st_group_item_id']) {
             $query->where('st_group_item_id', $this->state['st_group_item_id']);
         }
-        if(@$this->state['branch_id']){
+        if (@$this->state['branch_id']) {
             $query->where('branch_id', $this->state['branch_id']);
         }
-        if(@$this->state['catagories_id']){
+        if (@$this->state['catagories_id']) {
             $query->where('catagories_id', $this->state['catagories_id']);
         }
 
@@ -60,11 +70,11 @@ class ProductStockOutReport extends Component
         $this->state['branch_id'] = '';
         $this->state['catagories_id'] = '';
         $this->state['st_group_item_id'] = '';
-
-
+        $this->state['start_date'] = '';
+        $this->state['end_date'] = '';
     }
     public function render()
     {
-        return view('livewire.dashboard.reports.product.product-stock-out-report');
+        return view('livewire.dashboard.reports.product.product-sale-report');
     }
 }
