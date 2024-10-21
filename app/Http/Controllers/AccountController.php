@@ -10,7 +10,8 @@ class AccountController extends Controller
 {
     public function paymentReport(Request $request){
 
-        $query = DB::table('VW_ACC_VOUCHER_INFO');
+        $query = DB::table('VW_ACC_VOUCHER_INFO')
+                ->where('cash_type', '!=', null);
 
         if ($request->start_date) {
             $query->where('return_date', '>=', $request->start_date);
