@@ -195,13 +195,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // -------------Account reports start ----------------
     Route::get('account-transaction',TransactionReport::class)->name('account-transaction');
-    
+    Route::post('account-transaction-pdf',[AccountController::class, 'transactionReport'])->name('account-transaction-pdf');
+
     Route::get('account-payments',PaymentReport::class)->name('account-payments');
     Route::post('account-payments-pdf',[AccountController::class, 'paymentReport'])->name('account-payments-pdf');
-    
+
     Route::get('trial-balance',TrialBalance::class)->name('trial-balance');
     Route::post('trial-balance-pdf',[AccountController::class, 'trialBalance'])->name('trial-balance-pdf');
-    
+
 
 
     // -------------Account reports end ----------------

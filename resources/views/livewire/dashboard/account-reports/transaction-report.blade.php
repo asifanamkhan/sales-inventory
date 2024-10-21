@@ -75,7 +75,7 @@
             <div style="display: flex; justify-content: space-between" class="p-2">
                 <div></div>
                 <div style="float: right">
-                    <form target="_blank" action="{{route('account-payments-pdf')}}" method="post">
+                    <form target="_blank" action="{{route('account-transaction-pdf')}}" method="post">
                         @csrf
                         <input type="hidden" name="start_date" value="{{ $state['start_date'] }}">
                         <input type="hidden" name="end_date" value="{{ $state['end_date'] }}">
@@ -130,14 +130,14 @@
                                 @if ($ledger->cash_type == 'IN')
                                 {{ number_format($ledger->amount, 2, '.', ',') }}
                                 @endif
-                                
+
                             </td>
                             <td style="text-align: right">
                                 @if ($ledger->cash_type == 'OUT')
                                 {{ number_format($ledger->amount, 2, '.', ',') }}
                                 @endif
                             </td>
-                           
+
                             <td style="text-align: right">{{ number_format($balance, 2, '.', ',') }}</td>
 
                         </tr>
@@ -148,7 +148,7 @@
                         @endforelse
 
                     </tbody>
-                    
+
                     <tfoot>
                         <tr>
                             <tr>

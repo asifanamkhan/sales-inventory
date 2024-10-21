@@ -30,7 +30,6 @@
             background-color: #4CAF50;
             color: #fff;
         }
-        
     </style>
 </head>
 
@@ -39,86 +38,68 @@
     <table class="invoice-items" cellspacing="0" cellpadding="4">
         <thead>
             <tr>
-                <td class="invoice-items-head" style="width: 5%; ">#</td>
+                <td class="invoice-items-head" style="width: 4%; ">#</td>
                 <td class="invoice-items-head" style="width: 10%;"> Date</td>
-                <td class="invoice-items-head" style="width: 15%; ">Memo no</td>
-                <td class="invoice-items-head" style="width: 15%; ">Branch</td>
-                <td class="invoice-items-head" style="width: 20%; text-align: center">Tran Type</td>
-                <td class="invoice-items-head" style="width: 8%; text-align: center">Cash</td>
-                <td class="invoice-items-head" style="width: 10%; text-align: center">Pay mode</td>
-                <td class="invoice-items-head" style="width: 17%; text-align: center">Amount</td>
+                <td class="invoice-items-head" style="width: 13%; ">Memo no</td>
+                <td class="invoice-items-head" style="width: 10%; ">Branch</td>
+                <td class="invoice-items-head" style="width: 12%; text-align: center">Tran Type</td>
+                <td class="invoice-items-head" style="width: 8%; text-align: center">P mode</td>
+                <td class="invoice-items-head" style="width: 15%; text-align: center">Cash In</td>
+                <td class="invoice-items-head" style="width: 15%; text-align: center">Cash out</td>
+                <td class="invoice-items-head" style="width: 15%; text-align: center">Balance</td>
             </tr>
         </thead>
         <tbody>
             @php
             $t_cashIn = 0;
             $t_cashOut = 0;
+            $balance = 0;
             @endphp
             @forelse ($ledgers as $key => $ledger)
             <tr wire:key='{{ $key }}'>
 
-                <td style="width:5%">{{ $key+1 }}</td>
+                <td style="width:4%">{{ $key+1 }}</td>
                 <td style="width:10%">{{ date('d-M-y', strtotime($ledger->voucher_date)) }}</td>
-                <td style="width:15%">{{ $ledger->ref_memo_no }}</td>
-                <td style="width:15%">{{ $ledger->branch_name }}</td>
-                <td style="width:20%">{{ App\Service\Accounts::tranTypeCheck($ledger->tran_type) }}</td>
-                <td style="width: 8%">
+                <td style="width:13%">{{ $ledger->ref_memo_no }}</td>
+                <td style="width:10%">{{ $ledger->branch_name }}</td>
+                <td style="width:12%">{{ App\Service\Accounts::tranTypeCheck($ledger->tran_type) }}</td>
+                <td style="width: 8%">{{ $ledger->p_mode_name }}</td>
+                <td style="text-align: right;width: 15%">
                     @php
                     if($ledger->cash_type == 'IN'){
-                    $t_cashIn += (float)$ledger->amount;
+                        $balance += (float)$ledger->amount;
+                        $t_cashIn += (float)$ledger->amount;
                     }else{
-                    $t_cashOut += (float)$ledger->amount;
+                        $balance -= (float)$ledger->amount;
+                        $t_cashOut += (float)$ledger->amount;
                     }
                     @endphp
-                    {{ $ledger->cash_type }}
+                    @if ($ledger->cash_type == 'IN')
+                    {{ number_format($ledger->amount, 2, '.', ',') }}
+                    @endif
 
                 </td>
-                <td style="width: 10%">{{ $ledger->p_mode_name }}</td>
-                <td style="text-align: right; width: 17%">{{ number_format($ledger->amount, 2, '.', ',') }}</td>
 
+                <td style="text-align: right;width: 15%">
+                    @if ($ledger->cash_type == 'OUT')
+                    {{ number_format($ledger->amount, 2, '.', ',') }}
+                    @endif
+                </td>
+                <td style="text-align: right; width: 15%">{{ number_format($balance, 2, '.', ',') }}</td>
             </tr>
             @empty
             <tr>
                 <td colspan="7">No data found</td>
             </tr>
             @endforelse
-
-           <tfoot style="font-weight: bold">
-            @if ($state['cash_type'] == 'IN' || $state['tran_type'] == 'PRT' || $state['tran_type'] == 'SL')
-
-            <tr>
-                <th colspan="7" style="text-align: right;font-weight: bold">Total: </th>
-                <th style="text-align: right;font-weight: bold">{{ number_format($t_cashIn, 2, '.', ',') }}</th>
-            </tr>
-
-            @elseif ($state['cash_type'] == 'OUT' || $state['tran_type'] == 'PR' || $state['tran_type'] == 'SRT')
-
-            <tr>
-                <th colspan="7" style="text-align: right;font-weight: bold">Total: </th>
-                <th style="text-align: right;font-weight: bold">{{ number_format($t_cashOut, 2, '.', ',') }}</th>
-            </tr>
-
-            @elseif (!$state['cash_type'] && !$state['tran_type'])
-
-            <tr style="border: none">
-                <th style="border: none" colspan="8"></th>
-            </tr>
-            <tr>
-                <th colspan="7" style="text-align: right;font-weight: bold">Total Cash In: </th>
-                <th style="text-align: right;font-weight: bold">{{ number_format($t_cashIn, 2, '.', ',') }}</th>
-            </tr>
-            <tr>
-                <th colspan="7" style="text-align: right;font-weight: bold">Total Cash Out: </th>
-                <th style="text-align: right;font-weight: bold">{{ number_format($t_cashOut, 2, '.', ',') }}</th>
-            </tr>
-            <tr>
-                <th colspan="7" style="text-align: right;font-weight: bold">Net balance: </th>
-                <th style="text-align: right;font-weight: bold">{{ number_format(($t_cashIn - $t_cashOut), 2, '.', ',') }}</th>
-            </tr>
-            @endif
-           </tfoot>
-
-
+            <tfoot>
+                <tr>
+                    <th colspan="6" style="text-align: right">Total  </th>
+                    <th style="text-align: right">{{ number_format($t_cashIn, 2, '.', ',') }}</th>
+                    <th style="text-align: right">{{ number_format($t_cashOut, 2, '.', ',') }}</th>
+                    <th style="text-align: right">{{ number_format($balance, 2, '.', ',') }}</th>
+                </tr>
+            </tfoot>
         </tbody>
 
 
