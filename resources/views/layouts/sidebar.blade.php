@@ -100,19 +100,24 @@
         </li>
 
         <li>
-            <a href="#accountSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
-                <i class="fa-solid fa-money-check-dollar"></i> Accounts settings
+            <a href="#expenseSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+                <i class="fas fa-donate"></i> Expense
             </a>
             <ul class="collapse list-unstyled
-        {{-- {{ request()->routeIs('counter') ? 'show' : ' ' }} --}}
+            {{ request()->routeIs('expense-category') ? 'show' : ' ' }}
+            {{ request()->routeIs('expense') ? 'show' : ' ' }}
 
-        " id="accountSubmenu">
+        " id="expenseSubmenu">
 
-                <li class="">
-                    <a class="list" wire:navigate href="">Chart of accounts</a>
+                <li class="{{ request()->routeIs('expense-category') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('expense-category') }}">Category</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href="">Expense setup</a>
+                <li class="
+                {{ request()->routeIs('expense') ? 'active' : ' ' }}
+                {{ request()->routeIs('expense-create') ? 'active' : ' ' }}
+                {{ request()->routeIs('expense-edit') ? 'active' : ' ' }}
+                ">
+                    <a class="list" wire:navigate href="{{ route('expense') }}">Lists</a>
                 </li>
 
             </ul>
@@ -338,14 +343,14 @@
                 <li class="{{ request()->routeIs('reports-product-sale-return') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('reports-product-sale-return') }}"> - Sells Return Report</a>
                 </li>
-                
+
             </ul>
         </li>
 
         <li>
             <a href="#accountReportSubmenu" data-toggle="collapse" aria-expanded="true"
                 class="dropdown-toggle main-list">
-                <i class="fa fa-file" aria-hidden="true"></i> Accounts report
+                <i class="fas fa-book" aria-hidden="true"></i> Accounts report
             </a>
             <ul class="collapse list-unstyled
             {{ request()->routeIs('account-transaction') ? 'show' : ' ' }}
