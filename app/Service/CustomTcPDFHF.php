@@ -33,9 +33,12 @@ class CustomTcPDFHF extends TCPDF
 
         $company = DB::table('HRM_COMPANY_INFO')->first();
         $logo = '';
+
+
         if($company->logo){
-            $logo = asset('storage/app/upload/company/'.json_decode($company->logo)[0]);
+            $logo = env('IMAGE_PATH').json_decode($company->logo)[0];
         }
+        // dd($logo);
         $date= Carbon::now()->toDateString();
         $html = view(
             'livewire.dashboard.reports.helper.pdf-header',
