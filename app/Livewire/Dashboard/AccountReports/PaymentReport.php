@@ -55,11 +55,15 @@ class PaymentReport extends Component
             $query->where('cash_type', $this->state['cash_type']);
         }
 
+        if (@$this->state['pay_mode']) {
+            $query->where('pay_mode', $this->state['pay_mode']);
+        }
+
 
         $this->ledgers = $query
             ->orderBy('voucher_id', 'DESC')
             ->get();
-        
+
 
     }
 
@@ -73,6 +77,7 @@ class PaymentReport extends Component
         $this->state['end_date'] = '';
         $this->state['tran_type'] = '';
         $this->state['cash_type'] = '';
+        $this->state['pay_mode'] = '';
     }
     public function render()
     {

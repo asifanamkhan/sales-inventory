@@ -18,11 +18,11 @@
     <div class="card p-4">
         <form action="" wire:submit='search'>
             <div class="row g-3 mb-3 align-items-center">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group mb-2" wire:ignore>
                         <label for="">Branch</label>
                         <select class="form-select select2" id='branch'>
-                            <option value="">Select branch</option>
+                            <option value="">All</option>
                             @forelse ($branchs as $branch)
                             <option wire:key='{{ $branch->branch_id }}' value="{{ $branch->branch_id }}">
                                 {{ $branch->branch_name }}
@@ -38,11 +38,30 @@
                 </div>
 
                 <div class="col-md-3">
+                    <div class="form-group mb-2" wire:ignore>
+                        <label for="">Tran Type</label>
+                        <select class="form-select select2" id='tran_type'>
+                            <option value="">All</option>
+                            @forelse ($trancastionType as $key => $catagory)
+                            <option wire:key='{{ $loop->iteration }}' value="{{ $key }}">
+                                {{ $catagory }}
+                            </option>
+                            @empty
+                            <option value=""></option>
+                            @endforelse
+                        </select>
+                    </div>
+                    @error('st_group_item_id')
+                    <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="col-md-2">
                     <div class="form-group mb-2">
-                        <label for="">Payment method<span style="color: red"> *
+                        <label for="">Pay method<span style="color: red"> *
                             </span></label>
                         <select class="form-select" wire:model='state.pay_mode'>
-                            <option value="">Select</option>
+                            <option value="">All</option>
                             @forelse ($payment_methods as $method)
                             <option value="{{ $method->p_mode_id }}">{{ $method->p_mode_name }}
                             </option>
@@ -65,7 +84,7 @@
                         label='End Date' />
                 </div>
 
-                <div class="col-md-2 ">
+                <div class="col-md-1 ">
                     <button class="btn btn-primary" id='search'>Search</button>
                 </div>
             </div>
@@ -75,7 +94,7 @@
             <div style="display: flex; justify-content: space-between" class="p-2">
                 <div></div>
                 <div style="float: right">
-                    <form target="_blank" action="{{route('account-payments-pdf')}}" method="post">
+                    <form target="_blank" action="{{route('trial-balance-pdf')}}" method="post">
                         @csrf
                         <input type="hidden" name="start_date" value="{{ $state['start_date'] }}">
                         <input type="hidden" name="end_date" value="{{ $state['end_date'] }}">
@@ -121,7 +140,7 @@
                                 @else
                                     {{ App\Service\Accounts::tranTypeCheck($ledger->tran_type) }}
                                 @endif
-                                
+
                             </td>
                             <td>{{ $ledger->p_mode_name }}</td>
                             <td style="text-align: right">
@@ -137,21 +156,21 @@
                                 @if ($ledger->voucher_type == 'DR')
                                 {{ number_format($ledger->amount, 2, '.', ',') }}
                                 @endif
-                                
+
                             </td>
                             <td style="text-align: right">
                                 @if ($ledger->voucher_type == 'CR')
                                 {{ number_format($ledger->amount, 2, '.', ',') }}
                                 @endif
                             </td>
-                           
+
                             <td style="text-align: right">
-                                
+
                                 @php
                                    $dr_cr = '';
-                                   if($balance > 0){
+                                   if($balance < 0){
                                        $dr_cr = 'CR';
-        
+
                                    } else{
                                        $dr_cr = 'DR';
                                    }
@@ -167,7 +186,7 @@
                         @endforelse
 
                     </tbody>
-                    
+
                     <tfoot>
                         <tr>
                             <tr>
@@ -176,13 +195,13 @@
                                 <th style="text-align: right">{{ number_format($t_cashOut, 2, '.', ',') }} CR</th>
                                 <th style="text-align: right">
                                     @php
-                                   $dr_cr = '';
-                                   if($balance > 0){
-                                       $dr_cr = 'CR';
-        
-                                   } else{
-                                       $dr_cr = 'DR';
-                                   }
+                                    $dr_cr = '';
+                                    if($balance < 0){
+                                        $dr_cr = 'CR';
+
+                                    } else{
+                                        $dr_cr = 'DR';
+                                    }
                                 @endphp
                                 {{ number_format( abs($balance), 2, '.', ',') }} {{ $dr_cr }}
                                 </th>
@@ -211,6 +230,9 @@
         });
     });
 
+    $('#tran_type').on('change', function(e){
+        @this.set('state.tran_type', e.target.value, false);
+    });
 
 </script>
 @endscript

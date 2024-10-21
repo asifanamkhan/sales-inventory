@@ -22,7 +22,7 @@
                     <div class="form-group mb-2" wire:ignore>
                         <label for="">Branch</label>
                         <select class="form-select select2" id='branch'>
-                            <option value="">Select branch</option>
+                            <option value="">All</option>
                             @forelse ($branchs as $branch)
                             <option wire:key='{{ $branch->branch_id }}' value="{{ $branch->branch_id }}">
                                 {{ $branch->branch_name }}
@@ -39,9 +39,9 @@
 
                 <div class="col-md-4">
                     <div class="form-group mb-2" wire:ignore>
-                        <label for="">Transaction Type</label>
+                        <label for="">Tran Type</label>
                         <select class="form-select select2" id='tran_type'>
-                            <option value="">Select categry</option>
+                            <option value="">All</option>
                             @forelse ($trancastionType as $key => $catagory)
                             <option wire:key='{{ $loop->iteration }}' value="{{ $key }}">
                                 {{ $catagory }}
@@ -59,8 +59,8 @@
                 <div class="col-md-4">
                     <div class="form-group mb-3" wire:ignore>
                         <label for="">Cash Type</label>
-                        <select class="form-select select2" id='cash_type'>
-                            <option value="">Select type</option>
+                        <select class="form-select select2"  id='cash_type'>
+                            <option value="">All</option>
                             <option value=""></option>
                             <option value="IN">Cash In</option>
                             <option value="OUT">Cash Out</option>
@@ -75,8 +75,8 @@
                     <div class="form-group mb-2">
                         <label for="">Payment method<span style="color: red"> *
                             </span></label>
-                        <select class="form-select" id='pay_mode'>
-                            <option value="">Select</option>
+                        <select class="form-select" wire:model='state.pay_mode' id='pay_mode'>
+                            <option value="">All </option>
                             @forelse ($payment_methods as $method)
                             <option value="{{ $method->p_mode_id }}">{{ $method->p_mode_name }}
                             </option>
@@ -242,6 +242,7 @@
     $('#tran_type').on('change', function(e){
         @this.set('state.tran_type', e.target.value, false);
     });
-    
+
+
 </script>
 @endscript

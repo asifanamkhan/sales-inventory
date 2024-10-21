@@ -47,6 +47,12 @@ class ReportTypeCheck
         if($route == 'account-payments-pdf'){
             return 'PAYMENTS REPORT';
         }
+        if($route == 'account-transaction-pdf'){
+            return 'TRANSACTION REPORT';
+        }
+        if($route == 'trial-balance-pdf'){
+            return 'TRIAL BALANCE';
+        }
     }
 
 

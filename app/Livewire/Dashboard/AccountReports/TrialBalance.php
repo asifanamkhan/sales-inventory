@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard\AccountReports;
 
+use App\Service\Accounts;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -23,6 +24,11 @@ class TrialBalance extends Component
             ->get(['p_mode_id', 'p_mode_name']);
     }
 
+    public function trancastionCatAll()
+    {
+        return $this->trancastionType = Accounts::$tranTypeArray;
+    }
+
 
     public function search()
     {
@@ -42,11 +48,15 @@ class TrialBalance extends Component
         if (@$this->state['pay_mode']) {
             $query->where('pay_mode', $this->state['pay_mode']);
         }
-        
+
+        if (@$this->state['tran_type']) {
+            $query->where('tran_type', $this->state['tran_type']);
+        }
+
         $this->ledgers = $query
             ->orderBy('voucher_id', 'ASC')
             ->get();
-        
+
         // dd($this->ledgers);
     }
 
@@ -55,11 +65,12 @@ class TrialBalance extends Component
 
         $this->branchAll();
         $this->paymentMethodAll();
+        $this->trancastionCatAll();
         $this->state['branch_id'] = '';
         $this->state['start_date'] = '';
         $this->state['end_date'] = '';
         $this->state['pay_mode'] = '';
-        
+
     }
     public function render()
     {
