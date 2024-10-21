@@ -106,6 +106,7 @@
             <ul class="collapse list-unstyled
             {{ request()->routeIs('expense-category') ? 'show' : ' ' }}
             {{ request()->routeIs('expense') ? 'show' : ' ' }}
+            {{ request()->routeIs('expense-create') ? 'show' : ' ' }}
 
         " id="expenseSubmenu">
 
@@ -117,7 +118,7 @@
                 {{ request()->routeIs('expense-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('expense-edit') ? 'active' : ' ' }}
                 ">
-                    <a class="list" wire:navigate href="{{ route('expense') }}">Lists</a>
+                    <a class="list" wire:navigate href="{{ route('expense') }}">Expense Lists</a>
                 </li>
 
             </ul>
