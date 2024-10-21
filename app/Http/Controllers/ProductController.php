@@ -227,4 +227,39 @@ class ProductController extends Controller
         GeneratePdf::generate($pdf_data);
     }
 
+    public function productSaleReturnReport(Request $request){
+
+        $query = DB::table('VW_SALES_RETURN_REPORT');
+
+        if ($request->start_date) {
+            $query->where('return_date', '>=', $request->start_date);
+        }
+        if ($request->end_date) {
+            $query->where('return_date', '<=', $request->end_date);
+        }
+        if ($request->st_group_item_id) {
+            $query->where('st_group_item_id', $request->st_group_item_id);
+        }
+        if ($request->branch_id) {
+            $query->where('branch_id', $request->branch_id);
+        }
+        if ($request->catagories_id) {
+            $query->where('catagories_id', $request->catagories_id);
+        }
+        $products = $query->get();
+
+        $data = [
+            'ledgers' => $products
+        ];
+
+        $html = view()->make('livewire.dashboard.reports.product.pdf.product-sale-return-report-pdf', $data)->render();
+
+        $pdf_data = [
+            'html' => $html,
+            'filename' => 'product-return-sale.pdf',
+        ];
+
+        GeneratePdf::generate($pdf_data);
+    }
+
 }

@@ -280,6 +280,7 @@
         {{ request()->routeIs('reports-product-expire') ? 'show' : ' ' }}
         {{ request()->routeIs('reports-sale') ? 'show' : ' ' }}
         {{ request()->routeIs('reports-product-sale') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-product-sale-return') ? 'show' : ' ' }}
 
         " id="misReportSubmenu">
                 <li class="">
@@ -334,11 +335,33 @@
                 @endif">
                     <a class="list" wire:navigate href="{{ route('reports-sale','custom') }}"> - Sells Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Sells Return Report</a>
+                <li class="{{ request()->routeIs('reports-product-sale-return') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-product-sale-return') }}"> - Sells Return Report</a>
                 </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> - Payment Report</a>
+                
+            </ul>
+        </li>
+
+        <li>
+            <a href="#accountReportSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle main-list">
+                <i class="fa fa-file" aria-hidden="true"></i> Accounts report
+            </a>
+            <ul class="collapse list-unstyled
+            {{ request()->routeIs('account-transaction') ? 'show' : ' ' }}
+            {{ request()->routeIs('account-payments') ? 'show' : ' ' }}
+            {{ request()->routeIs('trial-balance') ? 'show' : ' ' }}
+
+
+        " id="accountReportSubmenu">
+                <li class="{{ request()->routeIs('account-payments') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('account-payments') }}"> - Payment Report</a>
+                </li>
+                <li class="{{ request()->routeIs('account-transaction') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('account-transaction') }}"> - Transaction Statement</a>
+                </li>
+                <li class="{{ request()->routeIs('trial-balance') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('trial-balance') }}"> - Trial Balance</a>
                 </li>
             </ul>
         </li>
