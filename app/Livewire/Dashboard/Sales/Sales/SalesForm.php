@@ -199,8 +199,6 @@ class SalesForm extends Component
         $this->paymentMethodAll();
     }
 
-
-
     //search increment decrement start
     public function decrementHighlight()
     {

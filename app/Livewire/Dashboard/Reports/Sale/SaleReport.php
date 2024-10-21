@@ -9,31 +9,53 @@ use Livewire\Attributes\On;
 
 class SaleReport extends Component
 {
-    public $products, $challans, $catagories, $ledgers = [];
+    public $products, $challans, $catagories, $sale_ledgers = [];
     public $state = [];
     public $type;
     public $searchSelect = -1;
     public $countProduct = 0;
     public $resultSales = [];
     public $salesesearch;
+    public $oldSalesesearch;
 
     public function updatedSalesesearch()
-    {
+    {   
+        
         if ($this->salesesearch) {
 
-            $result = DBc::table('INV_SALES_MST as p')
-                ->where('memo_no', $this->salesesearch)
-                ->get()
-                ->toArray();
+            $resultQuery = DB::table('INV_SALES_MST as p')
+                        ->where('memo_no', $this->salesesearch);
+
+            if ($this->type == 'daily') {
+                $resultQuery->where('tran_date', Carbon::now()->toDate());
+            }
+            if ($this->type == 'montyly') {
+                $resultQuery->where('tran_date', '>=', Carbon::now()->firstOfMonth()->toDateString());
+                $resultQuery->where('tran_date', '<=', Carbon::now()->lastOfMonth()->toDateString());
+            }
+
+            $result = $resultQuery->get()
+                    ->toArray();
 
             if ($result) {
                 $this->resultSales = $result;
-
             } else {
-                $this->resultSales = DB::table('INV_SALES_MST as p')
+                $resultQuery = DB::table('INV_SALES_MST as p');
+
+                if ($this->type == 'daily') {
+                    $resultQuery->where('tran_date', Carbon::now()->toDate());
+                }
+                if ($this->type == 'montyly') {
+                    $resultQuery->where('tran_date', '>=', Carbon::now()->firstOfMonth()->toDateString());
+                    $resultQuery->where('tran_date', '<=', Carbon::now()->lastOfMonth()->toDateString());
+                }
+
+                $this->resultSales = $resultQuery
                     ->where(DB::raw('lower(p.memo_no)'), 'like', '%' . strtolower($this->salesesearch) . '%')
                     ->get()
                     ->toArray();
+
+                // dd($this->resultSales);
             }
 
             $this->searchSelect = -1;
@@ -47,12 +69,15 @@ class SaleReport extends Component
     public function searchRowSelect($pk)
     {
         $this->state['memo_no'] = $this->resultSales[$pk]->memo_no;
+        $this->salesesearch = $this->state['memo_no'];
+        
     }
 
     public function selectAccount()
     {
         $this->state['memo_no'] = $this->resultSales[$this->searchSelect]->memo_no;
-
+        $this->salesesearch = $this->state['memo_no'];
+        
     }
 
 
@@ -84,39 +109,38 @@ class SaleReport extends Component
     }
 
 
-
     public function search()
     {
 
-        $query = DB::table('VW_SALES_REPORT');
-
-        if($this->type == 'daily'){
-            $query->where('sales_date', Carbon::now()->toDate());
-
+        $query = DB::table('INV_SALES_MST');
+        
+        if($this->salesesearch){
+            $query->where('memo_no', $this->salesesearch);
         }
-        if($this->type == 'montyly'){
-            $query->where('sales_date', '>=', Carbon::now()->firstOfMonth()->toDateString());
-            $query->where('sales_date', '<=', Carbon::now()->lastOfMonth()->toDateString());
+        
+        if ($this->type == 'daily') {
+            $query->where('tran_date', Carbon::now()->toDate());
+        }
+        if ($this->type == 'montyly') {
+            $query->where('tran_date', '>=', Carbon::now()->firstOfMonth()->toDateString());
+            $query->where('tran_date', '<=', Carbon::now()->lastOfMonth()->toDateString());
         }
 
-        if($this->type == 'custom'){
-            if(@$this->state['start_date']){
-                $query->where('sales_date', '>=', $this->state['start_date']);
+        if ($this->type == 'custom') {
+            if (@$this->state['start_date']) {
+                $query->where('tran_date', '>=', $this->state['start_date']);
             }
-            if(@$this->state['end_date']){
-                $query->where('sales_date', '<=', $this->state['end_date']);
+            if (@$this->state['end_date']) {
+                $query->where('tran_date', '<=', $this->state['end_date']);
             }
         }
 
-        if(@$this->state['st_group_item_id']){
-            $query->where('st_group_item_id', $this->state['st_group_item_id']);
-        }
-
-
-        $this->ledgers = $query->get();
-
-        // dd($this->ledgers);
-
+       
+        $this->sale_ledgers = $query
+                ->orderBy('memo_no','DESC')
+                ->get();
+        
+        
     }
 
     public function mount($type)
@@ -125,8 +149,7 @@ class SaleReport extends Component
         $this->challans = [];
         $this->state['start_date'] = '';
         $this->state['end_date'] = '';
-        $this->state['memo_no'] = '';
-
+        $this->state['challan_no'] = '';
     }
     public function render()
     {

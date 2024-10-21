@@ -41,6 +41,12 @@ class ReportTypeCheck
         if($route == 'product-sale-report-pdf'){
             return 'PRODUCT SALE REPORT';
         }
+        if($route == 'product-sale-return-report-pdf'){
+            return 'PRODUCT SALE RETURN REPORT';
+        }
+        if($route == 'account-payments-pdf'){
+            return 'PAYMENTS REPORT';
+        }
     }
 
 

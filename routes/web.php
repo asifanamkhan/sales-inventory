@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
+use App\Livewire\Dashboard\AccountReports\PaymentReport;
+use App\Livewire\Dashboard\AccountReports\TransactionReport;
+use App\Livewire\Dashboard\AccountReports\TrialBalance;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -36,6 +40,7 @@ use App\Livewire\Dashboard\Reports\Product\ProductExpiryReport;
 use App\Livewire\Dashboard\Reports\Product\ProductPurchaseReport;
 use App\Livewire\Dashboard\Reports\Product\ProductPurchaseReturnReport;
 use App\Livewire\Dashboard\Reports\Product\ProductSaleReport;
+use App\Livewire\Dashboard\Reports\Product\ProductSaleReturn;
 use App\Livewire\Dashboard\Reports\Product\ProductStockOutReport;
 use App\Livewire\Dashboard\Reports\Product\ProductStockReport;
 use App\Livewire\Dashboard\Reports\Sale\SaleReport;
@@ -181,8 +186,24 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('reports-product-sale',ProductSaleReport::class)->name('reports-product-sale');
     Route::post('product-sale-report-pdf', [ProductController::class, 'productSaleReport'])->name('product-sale-report-pdf');
 
+    Route::get('reports-product-sale-return',ProductSaleReturn::class)->name('reports-product-sale-return');
+    Route::post('product-sale-return-report-pdf', [ProductController::class, 'productSaleReturnReport'])->name('product-sale-return-report-pdf');
+
     Route::get('reports-product-sale/{type}',SaleReport::class)->name('reports-sale');
 
     // ------------- reports end ----------------
+
+    // -------------Account reports start ----------------
+    Route::get('account-transaction',TransactionReport::class)->name('account-transaction');
+    
+    Route::get('account-payments',PaymentReport::class)->name('account-payments');
+    Route::post('account-payments-pdf',[AccountController::class, 'paymentReport'])->name('account-payments-pdf');
+    
+    Route::get('trial-balance',TrialBalance::class)->name('trial-balance');
+    Route::post('trial-balance-pdf',[AccountController::class, 'trialBalance'])->name('trial-balance-pdf');
+    
+
+
+    // -------------Account reports end ----------------
 
 });
