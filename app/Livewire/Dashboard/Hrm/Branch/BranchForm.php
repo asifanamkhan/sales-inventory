@@ -13,6 +13,7 @@ class BranchForm extends Component
     public $branch_name;
     public $branch;
     public $editForm = false;
+    
     public function render()
     {
         return view('livewire.dashboard.hrm.branch.branch-form');

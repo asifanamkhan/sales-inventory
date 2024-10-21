@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SaleController;
@@ -16,6 +17,11 @@ use App\Livewire\Dashboard\Admin\Company\CompanyInfo;
 use App\Livewire\Dashboard\Admin\Module\Module;
 use App\Livewire\Dashboard\Admin\Role\{Role, RoleCreate, RoleDetails};
 use App\Livewire\Dashboard\Admin\User\{User, UserCreate};
+use App\Livewire\Dashboard\Expense\Category\ExpenseCategory;
+use App\Livewire\Dashboard\Expense\Expense;
+use App\Livewire\Dashboard\Expense\ExpenseCreate;
+use App\Livewire\Dashboard\Expense\ExpenseDetails;
+use App\Livewire\Dashboard\Expense\ExpenseEdit;
 use App\Livewire\Dashboard\Hrm\Branch\Branch;
 use App\Livewire\Dashboard\Hrm\Customer\{Customer, CustomerCreate, CustomerEdit};
 use App\Livewire\Dashboard\Hrm\Department\Department;
@@ -204,7 +210,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('trial-balance-pdf',[AccountController::class, 'trialBalance'])->name('trial-balance-pdf');
 
 
-
     // -------------Account reports end ----------------
+
+    // -------------Expense start ----------------
+    Route::get('expense-category',ExpenseCategory::class)->name('expense-category');
+
+    Route::get('expense',Expense::class)->name('expense');
+    Route::get('expense/create',ExpenseCreate::class)->name('expense-create');
+    Route::get('expense/{expense_id}/edit',ExpenseEdit::class)->name('expense-edit');
+    Route::get('expense/{expense_id}/details',ExpenseDetails::class)->name('expense-details');
+    Route::get('expense-invoice/{expense_id}', [ExpenseController::class, 'invoice'])->name('expense-invoice');
+    // Route::post('expense-pdf', [ExpenseController::class, 'expensePDF'])->name('expense-pdf');
+
+    // -------------Expense end ----------------
 
 });

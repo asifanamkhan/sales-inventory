@@ -19,7 +19,7 @@ class CustomTcPDFHF extends TCPDF
         $this->SetFont('helvetica', 'I', 8);
 
         // Left-aligned text
-        $leftText = 'Custom Text on the Left';
+        $leftText = 'Design & Developed By: InfoTech IT Solutions, www.infotechitsolutionsbd.com ';
         $this->Cell(0, 10, $leftText, 0, 0, 'L'); // 'L' for left alignment
         // Page number
         $pageText = 'Page ' . $this->getAliasNumPage() . ' of ' . $this->getAliasNbPages();
