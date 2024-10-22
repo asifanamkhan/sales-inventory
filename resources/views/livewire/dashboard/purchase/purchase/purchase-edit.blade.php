@@ -9,7 +9,7 @@
             <ol class="breadcrumb">
 
                 <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase') }}">Purchase</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-create') }}"
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-edit', $purchase_id) }}"
                         style="color: #3C50E0">edit</a></li>
             </ol>
         </nav>

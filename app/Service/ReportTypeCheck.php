@@ -53,6 +53,11 @@ class ReportTypeCheck
         if($route == 'trial-balance-pdf'){
             return 'TRIAL BALANCE';
         }
+        if($route == 'expense-invoice'){
+            return 'EXPENSE INVOICE';
+        }
+
+
     }
 
 

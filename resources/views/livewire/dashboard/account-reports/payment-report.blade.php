@@ -183,7 +183,7 @@
                             <th style="text-align: right">{{ number_format($t_cashIn, 2, '.', ',') }}</th>
                         </tr>
                     </tfoot>
-                    @elseif ($state['cash_type'] == 'OUT' || $state['tran_type'] == 'PR' || $state['tran_type'] == 'SRT')
+                    @elseif ($state['cash_type'] == 'OUT' || $state['tran_type'] == 'PR' || $state['tran_type'] == 'SRT' || $state['tran_type'] == 'EXP')
                     <tfoot>
                         <tr>
                             <th colspan="7" style="text-align: right">Total: </th>

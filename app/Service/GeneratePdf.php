@@ -15,6 +15,7 @@ class GeneratePdf
         // Set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(Auth::user()->name);
+        $pdf->SetTitle($data['filename']);
 
         // Set margins
         $pdf->SetMargins(10, 52, 10);
