@@ -107,6 +107,8 @@
             {{ request()->routeIs('expense-category') ? 'show' : ' ' }}
             {{ request()->routeIs('expense') ? 'show' : ' ' }}
             {{ request()->routeIs('expense-create') ? 'show' : ' ' }}
+            {{ request()->routeIs('expense-details') ? 'show' : ' ' }}
+            {{ request()->routeIs('expense-edit') ? 'show' : ' ' }}
 
         " id="expenseSubmenu">
 
@@ -117,6 +119,7 @@
                 {{ request()->routeIs('expense') ? 'active' : ' ' }}
                 {{ request()->routeIs('expense-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('expense-edit') ? 'active' : ' ' }}
+                {{ request()->routeIs('expense-details') ? 'active' : ' ' }}
                 ">
                     <a class="list" wire:navigate href="{{ route('expense') }}">Expense Lists</a>
                 </li>

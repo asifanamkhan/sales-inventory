@@ -40,9 +40,6 @@ class Expense extends Component
             ->leftJoin('ACC_EXPENSES_LIST as s', function ($join) {
                 $join->on('s.expense_id', '=', 'p.expense_type');
             })
-            // ->leftJoin('INV_PURCHASE_RET_MST as sr', function ($join) {
-            //     $join->on('sr.ref_memo_no', '=', 'p.memo_no');
-            // })
             ->select(['p.*', 's.expense_type as p_name']);
 
         if ($this->search) {
@@ -84,7 +81,7 @@ class Expense extends Component
     public function updatedSelectPageRows()
     {
         if ($this->selectPageRows) {
-            $this->selectRows = $this->resultPurchase->pluck('expense_mst_id')->toArray();
+            $this->selectRows = $this->resultExpense->pluck('expense_mst_id')->toArray();
         } else {
             $this->selectRows = [];
         }

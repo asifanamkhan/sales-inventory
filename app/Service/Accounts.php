@@ -9,11 +9,12 @@ class Accounts
         'PRT' => 'Purchase return',
         'SL' => 'Sale',
         'SRT' => 'Sale return',
+        'EXP' => 'Expense',
     ];
-    
+
     public static function tranTypeCheck($prams){
         return self::$tranTypeArray[$prams];
     }
 
-    
+
 }

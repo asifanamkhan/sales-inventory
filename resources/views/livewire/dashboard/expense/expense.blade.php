@@ -79,13 +79,14 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a wire:navigate href='{{route('expense-create') }}' type="button" class="btn btn-primary">Create new expense</a>
+                <a wire:navigate href='{{route('expense-create') }}' type="button" class="btn btn-primary">Create new
+                    expense</a>
             </div>
             @endpermission
 
-             {{-- modal --}}
-             <x-large-modal class='payment'>
-                <livewire:dashboard.purchase.purchase.pay-partial.payment>
+            {{-- modal --}}
+            <x-large-modal class='payment'>
+                <livewire:dashboard.expense.pay-partial.payment>
             </x-large-modal>
 
         </div>
@@ -93,18 +94,19 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td style="">
-
+                        <td>
+                            <input wire:model.live.debounce.500ms='selectPageRows' type="checkbox"
+                                class="form-check-input">
                         </td>
                         <td style="">#</td>
                         <td style="width:9%">Date</td>
                         {{-- <td style="width:11%">Memo no</td> --}}
-                        <td style="width:15%">Type</td>
+                        <td style="">Type</td>
                         <td style="text-align: center">Amount</td>
                         <td style="text-align: center">Paid</td>
                         <td style="text-align: center">Due</td>
                         <td style="text-align: center">Payment</td>
-                        <td class="text-center">Action</td>
+                        <td class="text-center" style=" width: 9%"">Action</td>
 
                     </tr>
 
@@ -115,7 +117,7 @@
                     <tr wire:key='{{ $key }}'>
                         <td>
                             <input wire:model='selectRows' id='{{ $expense->expense_mst_id }}'
-                                value="{{ $expense->expense_mst_id }}" type="checkbox" class="form-check-input">
+                                value=" {{ $expense->expense_mst_id }}" type="checkbox" class="form-check-input">
                         </td>
                         <td>{{ $this->resultExpense->firstItem() + $key }}</td>
                         <td>
@@ -137,6 +139,9 @@
                             {{ number_format($expense->tot_paid_amt, 2, '.', '') }}
                         </td>
                         <td style="text-align: right">
+                            @php
+                            $due_total += (float)$expense->tot_due_amt;
+                            @endphp
                             {{ number_format($expense->tot_due_amt, 2, '.', '') }}
                         </td>
                         <td style="text-align: right">
@@ -155,7 +160,7 @@
                                 </span>
                             </div>
                         </td>
-                        {{-- <td style="">
+                        <td style="">
                             <div class="dropdown show">
                                 <a class="btn btn-sm btn-primary dropdown-toggle" href="#" role="button"
                                     id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
@@ -164,10 +169,12 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ route('expense-edit', $expense->expense_mst_id) }}">
+                                    <a class="dropdown-item" wire:navigate
+                                        href="{{ route('expense-edit', $expense->expense_mst_id) }}">
                                         <i class="fa fa-edit"></i> <span>Edit</span>
                                     </a>
-                                    <a class="dropdown-item d-flex gap-1" wire:navigate href="{{ route('expense-details', $expense->expense_mst_id) }}">
+                                    <a class="dropdown-item d-flex gap-1" wire:navigate
+                                        href="{{ route('expense-details', $expense->expense_mst_id) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-binoculars" viewBox="0 0 16 16">
                                             <path
@@ -175,28 +182,27 @@
                                         </svg>
                                         <span>Details</span>
                                     </a>
-                                    <a @click="$dispatch('expense-payment', {id: {{ $expense->expense_mst_id }}})" data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
+                                    <a @click="$dispatch('expense-payment', {id: {{ $expense->expense_mst_id }}})"
+                                        data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
                                         <i class="fa fa-credit-card"></i> Make payment
                                     </a>
-                                    <a target="_blank" class="dropdown-item" href="{{ route('expense-invoice', $expense->expense_mst_id) }}">
+                                    <a target="_blank" class="dropdown-item"
+                                        href="{{ route('expense-invoice', $expense->expense_mst_id) }}">
                                         <i class="fas fa-print"></i> Print
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fa-solid fa-rotate-left"></i> Return
                                     </a>
                                     <a class="dropdown-item" href="#">
                                         <i class="fa-regular fa-copy"></i> Duplicate
                                     </a>
                                 </div>
                             </div>
-                        </td> --}}
+                        </td>
                     </tr>
                     @endforeach
                     @endif
-                </tbody>
+                    </tbody>
                 <tfoot>
                     <tr style="text-align: right; font-weight:600">
-                        <td colspan="5">Total</td>
+                        <td colspan="4">Total</td>
                         <td>
                             {{ number_format($grand_total, 2, '.', ',') }}
                         </td>
@@ -226,4 +232,3 @@
     })
 </script>
 @endscript
-

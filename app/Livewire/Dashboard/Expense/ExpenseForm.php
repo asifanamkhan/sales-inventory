@@ -18,7 +18,7 @@ class ExpenseForm extends Component
     public $expense_id;
     public $document = [];
     public $paymentState = [];
-    public $categories, $payment_methods;
+    public $categories, $payment_methods, $payment_info;
     public $expenseCart = [];
     public $pay_amt, $due_amt;
 
@@ -30,14 +30,11 @@ class ExpenseForm extends Component
             ->get();
     }
 
-
     public function paymentMethodAll()
     {
         return $this->payment_methods = DB::table('ACC_PAYMENT_MODE')
             ->get(['p_mode_id', 'p_mode_name']);
     }
-
-
 
     public function mount($expense_id)
     {
@@ -62,6 +59,7 @@ class ExpenseForm extends Component
             $resultPay = DB::table('ACC_PAYMENT_INFO')
                 ->where('tran_mst_id', $expense_id)
                 ->first();
+
             if ($resultPay) {
                 $this->paymentState['pay_mode'] = $resultPay->pay_mode;
 
@@ -203,6 +201,7 @@ class ExpenseForm extends Component
                         'item_amount' => $value['item_amount'],
                         'description' => $value['description'],
                         'account_code' => '1000',
+                        'item_date' => $this->state['expense_date'],
                     ]);
                 }
 
@@ -221,11 +220,11 @@ class ExpenseForm extends Component
                 } else {
                     DB::table('ACC_VOUCHER_INFO')->insert([
                         'voucher_date' => $this->state['expense_date'],
-                        'voucher_type' => 'CR',
+                        'voucher_type' => 'DR',
                         'narration' => 'expense vouchar',
                         'amount' => $this->state['total_amount'],
-                        'created_by' => $this->state['user_name'],
-                        'tran_type' => 'EX',
+                        'created_by' => $this->state['employee_id'],
+                        'tran_type' => 'EXP',
                         'ref_memo_no' => $ref_memo_no->memo_no,
                         'account_code' => 1030,
                     ]);
@@ -233,9 +232,9 @@ class ExpenseForm extends Component
 
                 if ($this->pay_amt && $this->pay_amt > 0) {
 
-                    $payment_info = [
-                        'expense_mst_id' => $expense_mst_id,
-                        'tran_type' => 'EX',
+                    $this->payment_info = [
+                        'tran_mst_id' => $expense_mst_id,
+                        'tran_type' => 'EXP',
                         'payment_date' => $this->state['expense_date'],
                         'p_code' => $this->state['expense_type'],
                         'pay_mode' => $this->paymentState['pay_mode'],
@@ -250,37 +249,19 @@ class ExpenseForm extends Component
                         'payment_status' => Payment::PaymentCheck($this->due_amt),
                     ];
 
-                    if ($this->paymentState['pay_mode'] == 2) {
-                        $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
-                        $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
-                        $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
-                        $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
-                    }
-
-                    if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
-                        $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
-                    }
-
-                    if ($this->paymentState['pay_mode'] == 4) {
-                        $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
-                        $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
-                    }
-                    if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
-                        $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
-                        $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
-                    }
+                    $this->paymentStatusFunc();
 
                     $acc_tran = DB::table('ACC_PAYMENT_INFO')
-                        ->where('tran_type', 'EX')
+                        ->where('tran_type', 'EXP')
                         ->where('tran_mst_id', $this->expense_id)
                         ->first();
 
                     if ($this->expense_id && $acc_tran) {
 
                         DB::table('ACC_PAYMENT_INFO')
-                            ->where('tran_type', 'EX')
+                            ->where('tran_type', 'EXP')
                             ->where('tran_mst_id', $this->expense_id)
-                            ->update($payment_info);
+                            ->update($this->payment_info);
 
                         DB::table('ACC_VOUCHER_INFO')
                             ->where('ref_pay_no', $acc_tran->memo_no)
@@ -290,7 +271,7 @@ class ExpenseForm extends Component
                     } else {
 
                         $pay_id = DB::table('ACC_PAYMENT_INFO')
-                            ->insertGetId($payment_info, 'payment_no');
+                            ->insertGetId($this->payment_info, 'payment_no');
 
                         $pay_memo = DB::table('ACC_PAYMENT_INFO')
                             ->where('payment_no', $pay_id)
@@ -303,7 +284,7 @@ class ExpenseForm extends Component
                             'narration' => 'expense vouchar',
                             'amount' => $this->pay_amt,
                             'created_by' => Auth::user()->id,
-                            'tran_type' => 'EX',
+                            'tran_type' => 'EXP',
                             'ref_memo_no' => $ref_memo_no->memo_no,
                             'account_code' => 1030,
                             'ref_pay_no' => $pay_memo,
@@ -322,6 +303,28 @@ class ExpenseForm extends Component
             }
         } else {
             session()->flash('error', '*At least one product need to added');
+        }
+    }
+
+    public function paymentStatusFunc(){
+        if ($this->paymentState['pay_mode'] == 2) {
+            $this->payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
+            $this->payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
+            $this->payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
+            $this->payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+        }
+
+        if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
+            $this->payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
+        }
+
+        if ($this->paymentState['pay_mode'] == 4) {
+            $this->payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
+            $this->payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
+        }
+        if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+            $this->payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
+            $this->payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
         }
     }
 

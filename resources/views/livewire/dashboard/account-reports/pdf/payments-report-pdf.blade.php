@@ -30,7 +30,7 @@
             background-color: #4CAF50;
             color: #fff;
         }
-        
+
     </style>
 </head>
 
@@ -91,7 +91,7 @@
                 <th style="text-align: right;font-weight: bold">{{ number_format($t_cashIn, 2, '.', ',') }}</th>
             </tr>
 
-            @elseif ($state['cash_type'] == 'OUT' || $state['tran_type'] == 'PR' || $state['tran_type'] == 'SRT')
+            @elseif ($state['cash_type'] == 'OUT' || $state['tran_type'] == 'PR' || $state['tran_type'] == 'SRT' || $state['tran_type'] == 'EXP')
 
             <tr>
                 <th colspan="7" style="text-align: right;font-weight: bold">Total: </th>

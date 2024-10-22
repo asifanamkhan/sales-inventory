@@ -23,7 +23,6 @@ class PurchaseForm extends Component
     public $purchaseCheck = [];
     public $searchSelect = -1;
     public $countProduct = 0;
-    public $isCheck = false;
     public $pay_amt, $due_amt;
 
 

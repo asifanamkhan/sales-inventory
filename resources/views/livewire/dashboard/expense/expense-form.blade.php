@@ -37,7 +37,20 @@
                 <x-input required_mark='true' wire:model='state.expense_date' name='expense_date' type='date'
                     label='Expense date' />
             </div>
+            <div class="col-md-2">
+                <div class="form-group mb-3">
+                    <label for="">Status<span style="color: red"> * </span></label>
+                    <select wire:model='state.status' class="form-select" id='status'>
+                        <option value="1">Complete</option>
+                        <option value="2">Pending</option>
+                        <option value="5">Cancled</option>
 
+                    </select>
+                    @error('status')
+                    <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
             <div class="col-md-5">
                 <div class="d-flex align-items-center">
                     <div style="width: 90%">
@@ -46,7 +59,7 @@
                             <select class="form-select select2" id='type'>
                                 <option value="">Select type</option>
                                 @forelse ($categories as $type)
-                                <option @if ($type->expense_id == @$edit_select['type_id'])
+                                <option @if ($type->expense_id == @$edit_select['expense_type'])
                                     selected
                                     @endif
                                     value="{{ $type->expense_id }}">{{ $type->expense_type }}</option>
@@ -79,9 +92,9 @@
             </div>
             @endif
             <div style="text-align: right">
-                <button class="btn btn-success" wire:click='addCart'>
+                <a class="btn btn-success" wire:click='addCart'>
                     <i class="fa fa-plus"></i> Add new row
-                </button>
+                </a>
             </div>
             <div class="col-md-12 mt-2 responsive-table">
                 <table class="table table-bordered">
@@ -96,7 +109,7 @@
                     <tbody>
                         @forelse ($expenseCart as $expense_key => $expense)
                         <tr wire:key='{{ $expense_key }}'>
-                            <td>{{ $expense_key + 1 }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             <td>
                                 <input type="text" class="form-control"
                                     wire:model='expenseCart.{{ $expense_key }}.description'>
@@ -183,7 +196,7 @@
 
                         <div class='row'>
                             <div class="col-md-6">
-                                <livewire:dashboard.expense.expense.pay-partial.bank
+                                <livewire:dashboard.purchase.purchase.pay-partial.bank
                                     :bank_code="$paymentState['bank_code'] ?? null" />
                             </div>
                             <div class="col-md-6">
