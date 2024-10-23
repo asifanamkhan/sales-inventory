@@ -63,7 +63,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a href='{{ route('sale-return-create') }}' type="button" class="btn btn-primary">Create new sale return</a>
+                <a wire:navigate href='{{ route('sale-return-create') }}' type="button" class="btn btn-primary">Create new sale return</a>
             </div>
             @endpermission
             <x-large-modal class='sale-return-payment'>

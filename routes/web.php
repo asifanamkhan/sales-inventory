@@ -54,6 +54,7 @@ use App\Livewire\Dashboard\Reports\Supplier\SupplierLedger;
 use App\Livewire\Dashboard\Sales\Sales\{SaleDetails, Sales, SalesCreate, SalesEdit};
 use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnDetails, SalesReturnEdit};
 use Illuminate\Support\Facades\DB;
+use App\Livewire\Dashboard\Dashboard;
 
 Livewire::setUpdateRoute(function ($handle) {
     return Route::post('/sales-inventory/livewire/update', $handle);
@@ -64,10 +65,10 @@ require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    // Route::get('/', function () {
+    //     return view('dashboard');
+    // })->name('dashboard');
+    Route::get('/', Dashboard::class)->name('dashboard');
     // ------------- admin start ----------------
     Route::get('role', Role::class)->name('role');
     Route::get('role/create', RoleCreate::class)->name('role-create');

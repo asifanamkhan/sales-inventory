@@ -4,7 +4,7 @@
     </div>
     <ul class="list-unstyled components">
         <li>
-            <a href="#"><i class="fa fa-home"></i> Dashboard</a>
+            <a wire:navigate href="{{ route('dashboard') }}"><i class="fa fa-home"></i> Dashboard</a>
         </li>
         <li>
             <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">

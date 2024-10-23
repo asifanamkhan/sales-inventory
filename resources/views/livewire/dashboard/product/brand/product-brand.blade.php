@@ -38,9 +38,24 @@
             </div>
             @endpermission
 
-            {{-- modal --}}
+            <div wire:ignore.self class="modal fade" id="{{ $event }}" tabindex="-1" role="dialog"
+                aria-labelledby="{{ $event }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="justify-content: space-between">
+                            <h5 class="modal-title" id="exampleModalLabel">{{ $modal_title }}</h5>
+                            <b type="button" class="btn btn-sm btn-danger" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </b>
+                        </div>
+                        <div class="modal-body">
+                            <livewire:dashboard.product.brand.product-brand-form />
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-
         </div>
         <div class="responsive-table">
             <table class="table table-bordered table-hover">

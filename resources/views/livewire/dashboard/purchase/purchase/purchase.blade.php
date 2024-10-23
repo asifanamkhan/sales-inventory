@@ -84,7 +84,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto">
-                <a href='{{route('purchase-create') }}' type="button" class="btn btn-primary">Create new purchase</a>
+                <a wire:navigate href='{{route('purchase-create') }}' type="button" class="btn btn-primary">Create new purchase</a>
             </div>
             @endpermission
 
