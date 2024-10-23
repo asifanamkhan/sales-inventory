@@ -71,7 +71,7 @@
             </div>
             @permission(1,'visible_flag')
             <div class="col-auto" style="text-align: right">
-                <a href='{{ route('sale-create') }}' type="button" class="btn btn-primary">Create new Sale</a>
+                <a wire:navigate href='{{ route('sale-create') }}' type="button" class="btn btn-primary">Create new Sale</a>
             </div>
             @endpermission
         {{-- modal --}}

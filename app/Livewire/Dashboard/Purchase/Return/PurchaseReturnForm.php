@@ -33,8 +33,9 @@ class PurchaseReturnForm extends Component
 
     public function updatedPurchasesearch()
     {
+
         if ($this->purchasesearch) {
-            $this->oldPurchaseSearch = $this->purchasesearch;
+
             $result = DB::table('INV_PURCHASE_MST as p')
                 ->where('memo_no', $this->purchasesearch)
                 ->get()
@@ -99,21 +100,12 @@ class PurchaseReturnForm extends Component
     public function resultAppend($key)
     {
         $search = @$this->resultPurchases[$key]->tran_mst_id;
+        $this->oldPurchaseSearch = @$this->resultPurchases[$key]->memo_no;
 
         if ($search) {
-            $purchase_dtls = DB::table('INV_PURCHASE_DTL as pr')
-                ->where('pr.tran_mst_id', $search)
-                ->leftJoin('INV_ST_GROUP_ITEM as p', function ($join) {
-                    $join->on('p.st_group_item_id', '=', 'pr.item_code');
-                })
-                ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                    $join->on('s.item_size_code', '=', 'p.item_size');
-                })
-                ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                    $join->on('c.tran_mst_id', '=', 'p.color_code');
-                })
-
-                ->get(['pr.*', 'p.item_name', 'p.st_group_item_id', 's.item_size_name', 'c.color_name']);
+            $purchase_dtls = DB::table('VW_PRODUCT_PURCHASE_REPORT as pr')
+                ->where('pr.purchase_no', $this->oldPurchaseSearch)
+                ->get(['pr.*']);
 
             $this->purchaseCart = [];
             $this->state['p_code'] = @$this->resultPurchases[$key]->p_code;

@@ -100,21 +100,11 @@ class SalesReturnForm extends Component
     public function resultAppend($key)
     {
         $search = @$this->resultSales[$key]->tran_mst_id;
-
+        $this->oldSaleSearch = @$this->resultSales[$key]->memo_no;
         if ($search) {
-            $sale_dtls = DB::table('INV_SALES_DTL as pr')
-                ->where('pr.tran_mst_id', $search)
-                ->leftJoin('INV_ST_GROUP_ITEM as p', function ($join) {
-                    $join->on('p.st_group_item_id', '=', 'pr.item_code');
-                })
-                ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                    $join->on('s.item_size_code', '=', 'p.item_size');
-                })
-                ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                    $join->on('c.tran_mst_id', '=', 'p.color_code');
-                })
-
-                ->get(['pr.*', 'p.item_name', 'p.st_group_item_id', 's.item_size_name', 'c.color_name']);
+            $sale_dtls = DB::table('VW_SALES_REPORT as pr')
+                ->where('pr.challan_no', $this->oldSaleSearch)
+                ->get(['pr.*']);
 
             $this->saleCart = [];
             $this->state['customer_id'] = @$this->resultSales[$key]->customer_id;
@@ -130,10 +120,10 @@ class SalesReturnForm extends Component
                     ->where('item_code', $sale_dtl->st_group_item_id)
                     ->sum('item_qty');
 
-                $current_qty = (float)$sale_dtl->item_qty - $return_qty;
+                $current_qty = (float)$sale_dtl->sales_qty - $return_qty;
 
                 if ((float)$sale_dtl->vat_amt && (float)$sale_dtl->vat_amt > 0) {
-                    $p_vat_amt = (float)$sale_dtl->vat_amt / $sale_dtl->item_qty;
+                    $p_vat_amt = (float)$sale_dtl->vat_amt / $sale_dtl->sales_qty;
                 }
 
                 $this->saleCart[] = [
@@ -143,7 +133,7 @@ class SalesReturnForm extends Component
                     'mrp_rate' => $sale_dtl->mrp_rate,
                     'vat_amt' => $sale_dtl->vat_amt,
                     'p_vat_amt' => $p_vat_amt ?? 0,
-                    'line_total' => $sale_dtl->tot_payble_amt,
+                    'line_total' => $sale_dtl->tot_sales_amt,
                     'qty' => $current_qty,
                     'p_qty' => $current_qty,
                     'discount' => $sale_dtl->discount,
