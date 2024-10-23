@@ -104,7 +104,7 @@ class Payment extends Component
                     ]);
                 $payment_info = [
                     'tran_mst_id' => $this->purchase_id,
-                    'tran_type' => 'PR',
+                    'tran_type' => 'EXP',
                     'payment_date' => Carbon::now()->toDateString(),
                     'p_code' => $this->purchase_mst['expense_type'],
                     'pay_mode' => $this->paymentState['pay_mode'],
@@ -152,7 +152,7 @@ class Payment extends Component
                     'narration' => 'expense payment vouchar',
                     'amount' => $this->paymentState['tot_paid_amt'],
                     'created_by' => Auth::user()->id,
-                    'tran_type' => 'PR',
+                    'tran_type' => 'EXP',
                     'ref_memo_no' => $this->purchase_mst['memo_no'],
                     'account_code' => 1030,
                     'ref_pay_no' => $pay_memo,

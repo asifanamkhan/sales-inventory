@@ -336,4 +336,28 @@ form-check-input:focus {
     }
 }
 
+@media (max-width: 768px) {
+    .col-md-3 {
+        width: 100%; /* Stack elements on smaller screens */
+    }
+
+    .icon i {
+        font-size: 3rem; /* Reduce icon size on smaller screens */
+    }
+
+    .inner h3 {
+        font-size: 1.5rem; /* Adjust font size for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .icon i {
+        font-size: 2rem; /* Further reduce the icon size on very small screens */
+    }
+
+    .inner h3 {
+        font-size: 1.2rem; /* Smaller font size for very small screens */
+    }
+}
+
 
