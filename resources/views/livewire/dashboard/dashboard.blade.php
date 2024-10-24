@@ -39,10 +39,12 @@
             </div>
             @if ($date == 5)
             <div class="col-md-3" style="display: flex; align-items:center">
-                <span style="width: 50%; text-align: right">Start: &nbsp;</span> <input type="date" wire:model.live.debounce.300ms='start_date' class="form-control">
+                <span style="width: 50%; text-align: right">Start: &nbsp;</span> <input type="date"
+                    wire:model.live.debounce.300ms='start_date' class="form-control">
             </div>
             <div class="col-md-3" style="display: flex;align-items:center">
-                <span style="width: 50%; text-align: right">End: &nbsp;</span> <input type="date" wire:model.live.debounce.300ms='end_date' class="form-control">
+                <span style="width: 50%; text-align: right">End: &nbsp;</span> <input type="date"
+                    wire:model.live.debounce.300ms='end_date' class="form-control">
             </div>
             @endif
         </div>
@@ -59,7 +61,7 @@
                     ">
                         <div class="row" style="padding: 10px;">
                             <div class="inner" style="position: relative; z-index: 2;">
-                                <h3>{{number_format($this->result->pr_total, 1, '.', ',') }}</h3>
+                                <h3>{{number_format($this->result['total']->pr_total, 1, '.', ',') }}</h3>
                                 <p>Purchase</p>
                             </div>
                             <div class="icon" style="
@@ -88,7 +90,7 @@
                     ">
                         <div class="row" style="padding: 10px;">
                             <div class="inner" style="position: relative; z-index: 2;">
-                                <h3>{{number_format($this->result->prt_total, 1, '.', ',') }}</h3>
+                                <h3>{{number_format($this->result['total']->prt_total, 1, '.', ',') }}</h3>
                                 <p>Purchase Return</p>
                             </div>
                             <div class="icon" style="
@@ -118,8 +120,8 @@
                         <div class="row" style="padding: 10px;">
                             <div class="inner" style="position: relative; z-index: 2;">
                                 @php
-                                $pr_due = $this->result->pr_total - ($this->result->prt_total +
-                                $this->result->pr_paid_total);
+                                $pr_due = $this->result['total']->pr_total - ($this->result['total']->prt_total +
+                                $this->result['total']->pr_paid_total);
                                 @endphp
                                 <h3>{{number_format($pr_due, 1, '.', ',') }}</h3>
                                 <p>Purchase Due</p>
@@ -150,7 +152,7 @@
                     ">
                         <div class="row" style="padding: 10px;">
                             <div class="inner" style="position: relative; z-index: 2;">
-                                <h3>{{number_format($this->result->sl_total, 1, '.', ',') }}</h3>
+                                <h3>{{number_format($this->result['total']->sl_total, 1, '.', ',') }}</h3>
                                 <p>Sale</p>
                             </div>
                             <div class="icon" style="
@@ -185,7 +187,7 @@
                 ">
                     <div class="row" style="padding: 10px;">
                         <div class="inner" style="position: relative; z-index: 2;">
-                            <h3>{{number_format($this->result->srt_total, 1, '.', ',') }}</h3>
+                            <h3>{{number_format($this->result['total']->srt_total, 1, '.', ',') }}</h3>
                             <p>Sale Return</p>
                         </div>
                         <div class="icon" style="
@@ -214,7 +216,7 @@
                 ">
                     <div class="row" style="padding: 10px;">
                         <div class="inner" style="position: relative; z-index: 2;">
-                            <h3>{{number_format($this->result->sl_paid_total, 1, '.', ',') }}</h3>
+                            <h3>{{number_format($this->result['total']->sl_paid_total, 1, '.', ',') }}</h3>
                             <p>Sale Received</p>
                         </div>
                         <div class="icon" style="
@@ -245,8 +247,8 @@
                     <div class="row" style="padding: 10px;">
                         <div class="inner" style="position: relative; z-index: 2;">
                             @php
-                            $sl_due = $this->result->sl_total - ($this->result->srt_total +
-                            $this->result->sl_paid_total);
+                            $sl_due = $this->result['total']->sl_total - ($this->result['total']->srt_total +
+                            $this->result['total']->sl_paid_total);
                             @endphp
                             <h3>{{number_format($sl_due, 1, '.', ',') }}</h3>
                             <p>Sale Due</p>
@@ -277,7 +279,7 @@
                 ">
                     <div class="row" style="padding: 10px;">
                         <div class="inner" style="position: relative; z-index: 2;">
-                            <h3>{{number_format($this->result->exp_total, 1, '.', ',') }}</h3>
+                            <h3>{{number_format($this->result['total']->exp_total, 1, '.', ',') }}</h3>
                             <p>Expense</p>
                         </div>
                         <div class="icon" style="
@@ -296,15 +298,126 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="row mt-4">
 
+            <div class="col-md-6">
+                <h4>Top product sales</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr style="background: #660FF1; color:white">
+                            <td style="width: 50%">Itam name</td>
+                            <td style="width: 15%; text-align: center">Current</td>
+                            <td style="width: 15%; text-align: center">Prev </td>
+                            <td style="width: 20%; text-align: center">
+                                <i class="fa fa-arrow-up"></i>
+                                <i class="fa fa-arrow-down"></i> %
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach ($this->result['top_item'] as $item)
+                        <tr>
+                            <td>{{$item->item_name}}</td>
+                            <td style="text-align: center">{{$item->current_sales}}</td>
+                            <td style="text-align: center">{{$item->previous_sales}}</td>
+                            <td style="text-align: center">
+                                @if ($item->percentage_change != 0)
+                                @if ($item->percentage_change > 0)
+                                {{ number_format($item->percentage_change, 1, '.', '') }} %
+                                <i style="color: #3D9970" class="fa fa-arrow-up"></i>
+                                @else
+                                {{ number_format(abs($item->percentage_change), 1, '.', '') }} %
+                                <i style="color: #DC3546" class="fa fa-arrow-down"></i>
+                                @endif
+                                @else
+                                -
+                                @endif
+
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div wire:ignore class="col-md-6">
+                <h4>Last 15 days sale</h4>
+                <canvas id="salesChart"></canvas>
+            </div>
         </div>
     </div>
 
 </div>
-</div>
-@script
-<script data-navigate-once>
+
+
+<script>
+    document.addEventListener('livewire:navigated', () => {
+    var sales_date = @json($this->result['salesData']->pluck('sales_date'));
+    var total_sales = @json($this->result['salesData']->pluck('total_sales'));
+    renderChart(sales_date, total_sales);
+
+    function renderChart(sales_date, total_sales){
+        const ctx = document.getElementById('salesChart').getContext('2d');
+            let salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sales_date, // Plots X-axis labels
+                    datasets: [{
+                        label: 'Sales Quantity',
+                        data: total_sales, // Plots Y-axis data
+                        backgroundColor: '#3c0ff1c4',
+                        borderColor: '#660FF1',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: {
+                        tooltip: {
+                            backgroundColor: '#fff', // White tooltip background
+                            titleColor: '#333', // Tooltip title color
+                            bodyColor: '#333', // Tooltip body color
+                            borderColor: '#ddd', // Tooltip border color
+                            borderWidth: 1,
+                            padding: 10,
+                            callbacks: {
+                                label: function (context) {
+                                    return `Sales: ${context.raw}`; // Custom tooltip label
+                                }
+                            },
+                            titleFont: {
+                                family: 'Arial, sans-serif', // Custom font family for tooltip title
+                                size: 14, // Font size for tooltip title
+                            },
+                            bodyFont: {
+                                family: 'Arial, sans-serif', // Custom font family for tooltip body
+                                size: 14, // Font size for tooltip body
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#333', // Legend text color
+                                font: {
+                                    size: 16, // Font size for legend
+                                    family: 'Arial, sans-serif', // Custom font family for legend
+                                }
+                            }
+                        }
+                    }
+
+            });
+
+
+        }
+    });
+
 
 </script>
-@endscript

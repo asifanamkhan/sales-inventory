@@ -56,7 +56,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {{-- date range --}}
     {{-- @vite(['resources/css/app.css']) --}}
 
