@@ -1,4 +1,16 @@
 <div>
+    <style>
+        .summary-card {
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            /* margin-bottom: 30px; */
+            /* padding: 30px; */
+        }
+
+        .summary-card:hover {
+            transform: scale(1.05);
+        }
+    </style>
     <div wire:loading class="spinner-border text-primary custom-loading">
         <span class="sr-only">Loading...</span>
     </div>
@@ -30,11 +42,13 @@
             </div>
             <div class="col-md-2">
                 <select wire:model.live.debounce.300ms="date" class="form-select">
-                    <option value="1">Today</option>
-                    <option value="2">Weekly</option>
-                    <option value="3">Monthly</option>
-                    <option value="4">Yearly</option>
-                    <option value="5">Custom</option>
+                    <option value="1">All time</option>
+                    <option value="2">Today</option>
+                    <option value="3">Weekly</option>
+                    <option value="4">Monthly</option>
+                    <option value="5">Yearly</option>
+                    <option value="6">Custom</option>
+
                 </select>
             </div>
             @if ($date == 5)
@@ -52,7 +66,7 @@
         <div class="mt-4">
             <div class="row">
                 <div class="col-md-3">
-                    <div style="
+                    <div class="summary-card" style="
                         border-radius: 5px;
                         background: #007AFF;
                         color: white;
@@ -81,7 +95,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div style="
+                    <div class="summary-card" style="
                         border-radius: 5px;
                         background: #17A2B7;
                         color: white;
@@ -110,7 +124,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div style="
+                    <div class="summary-card" style="
                         border-radius: 5px;
                         background: #6366F1;
                         color: white;
@@ -143,7 +157,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div style="
+                    <div class="summary-card" style="
                         border-radius: 5px;
                         background: #6C757E;
                         color: white;
@@ -172,13 +186,11 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
 
         <div class="row mt-4">
             <div class="col-md-3">
-                <div style="
+                <div class="summary-card" style="
                     border-radius: 5px;
                     background: #3D9970;
                     color: white;
@@ -207,7 +219,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div style="
+                <div class="summary-card" style="
                     border-radius: 5px;
                     background: #660FF1;
                     color: white;
@@ -237,7 +249,7 @@
             </div>
 
             <div class="col-md-3">
-                <div style="
+                <div class="summary-card" style="
                     border-radius: 5px;
                     background: #DC3546;
                     color: white;
@@ -270,7 +282,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div style="
+                <div class="summary-card" style="
                     border-radius: 5px;
                     background: #001f3ee8;
                     color: white;

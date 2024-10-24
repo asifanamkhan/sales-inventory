@@ -14,7 +14,7 @@ class Dashboard extends Component
 
     public function mount()
     {
-        $this->date = 1;
+        $this->date = 3;
     }
 
     #[Computed]
@@ -28,10 +28,10 @@ class Dashboard extends Component
 
         $query = DB::table('ACC_VOUCHER_INFO');
 
-        if ($this->date == 1) {
+        if ($this->date == 2) {
             $query->where('voucher_date', Carbon::now()->toDateString());
         }
-        if ($this->date == 2) {
+        if ($this->date == 3) {
             $query->where('voucher_date', '>=', Carbon::now()->startOfWeek(Carbon::SATURDAY)->toDateString());
             $query->where('voucher_date', '<=', Carbon::now()->endOfWeek(Carbon::SATURDAY)->subDay()->toDateString());
 
@@ -42,7 +42,7 @@ class Dashboard extends Component
             $endDatePrevious = Carbon::now()->subWeek()->endOfWeek(Carbon::SATURDAY)->subDay()->toDateString();
 
         }
-        if ($this->date == 3) {
+        if ($this->date == 4) {
             $query->where('voucher_date', '>=', Carbon::now()->firstOfMonth()->toDateString());
             $query->where('voucher_date', '<=', Carbon::now()->lastOfMonth()->toDateString());
 
@@ -52,7 +52,7 @@ class Dashboard extends Component
             $startDatePrevious = Carbon::now()->subMonth()->firstOfMonth()->toDateString();
             $endDatePrevious = Carbon::now()->subMonth()->lastOfMonth()->toDateString();
         }
-        if ($this->date == 4) {
+        if ($this->date == 5) {
 
             $query->where('voucher_date', '>=', Carbon::now()->startOfYear()->toDateString());
             $query->where('voucher_date', '<=', Carbon::now()->endOfYear()->toDateString());
@@ -64,7 +64,7 @@ class Dashboard extends Component
             $endDatePrevious = Carbon::now()->subYear()->endOfYear()->toDateString();
         }
 
-        if ($this->date == 5) {
+        if ($this->date == 6) {
             // dd($this->date);
             if ($this->start_date) {
                 $query->where('voucher_date', '>=', $this->start_date);
@@ -112,7 +112,7 @@ class Dashboard extends Component
                 ->get();
 
         $salesDataFormatted = $getSalesData->map(function ($item) {
-            $item->sales_date = \Carbon\Carbon::parse($item->sales_date)->format('d-M-Y'); // Format the date
+            $item->sales_date = \Carbon\Carbon::parse($item->sales_date)->format('d-M-y'); // Format the date
             return $item;
         });
 

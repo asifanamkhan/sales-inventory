@@ -218,7 +218,7 @@
                                     class="form-control text-center">
                             </td>
                             <td>
-                                <input tabindex="-1" type="number" style="border: 1px solid green; text-align: right"
+                                <input loading="lazy" tabindex="-1" type="number" style="border: 1px solid green; text-align: right"
                                     readonly class="form-control"
                                     wire:model='purchaseCart.{{ $purchase_key }}.line_total'>
                             </td>
@@ -373,14 +373,14 @@
                         <tr style="text-align: right">
                             <td>Net payable</td>
                             <td>
-                                <input style="text-align: right" readonly class="form-control"
+                                <input loading="lazy" style="text-align: right" readonly class="form-control"
                                     wire:model='state.tot_payable_amt'>
                             </td>
                         </tr>
                         <tr style="text-align: right">
                             <td> Payment amount</td>
                             <td>
-                                <input type="number" step="0.01" style="text-align: right" class="form-control"
+                                <input loading="lazy" type="number" step="0.01" style="text-align: right" class="form-control"
                                     wire:model='pay_amt' wire:input.debounce.500ms='grandCalculation'>
                                 @if (session('payment-error'))
                                 <div class="" role="alert">
