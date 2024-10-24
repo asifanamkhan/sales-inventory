@@ -63,7 +63,7 @@ Livewire::setUpdateRoute(function ($handle) {
 require __DIR__ . '/auth.php';
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
 
     // Route::get('/', function () {
     //     return view('dashboard');
