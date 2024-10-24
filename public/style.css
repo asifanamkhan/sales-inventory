@@ -26,7 +26,7 @@ a:focus {
 }
 
 .navbar {
-    padding: 10px;
+    padding: 0 10px;
     background: #fff;
     border: none;
     border-radius: 0;
@@ -39,6 +39,22 @@ a:focus {
     outline: none !important;
     border: none;
 }
+
+.dropdown-toggle::after {
+    display: inline-block; /* Show the arrow icon */
+    margin-left: 8px; /* Space between image and arrow */
+}
+.profile-img {
+    width: 40px; /* Set the width of the image */
+    height: 40px; /* Set the height of the image */
+    object-fit: cover; /* Ensure the image covers the rounded area */
+    vertical-align: middle; /* Align the image vertically */
+}
+.drop-nav-menu {
+    left: -80px; /* Adjust to move the dropdown menu to the left */
+    right: auto; /* Prevent it from aligning on the right */
+}
+
 
 .line {
     width: 100%;

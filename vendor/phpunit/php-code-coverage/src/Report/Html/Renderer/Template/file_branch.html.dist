@@ -24,8 +24,8 @@
    </div>
   </header>
   <div class="container-fluid">
-   <div class="responsive-table">
-    <table class="table table-bordered table-hover">
+   <div class="table-responsive">
+    <table class="table table-bordered">
      <thead>
       <tr>
        <td>&nbsp;</td>

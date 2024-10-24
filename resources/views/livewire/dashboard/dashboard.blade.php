@@ -148,7 +148,7 @@
                                 z-index: 1;
                                 opacity: 0.9; /* This will make the icon slightly transparent */
                             ">
-                                <i class="fa-solid fa-forward" style="color: #5557CE; font-size: 80px;"></i>
+                                <i class="fas fa-exclamation-circle" style="color: #5557CE; font-size: 80px;"></i>
                             </div>
                         </div>
                         <div style="background: #585CD9; padding: 2px; text-align:center">
@@ -210,7 +210,7 @@
                             z-index: 1;
                             opacity: 0.9; /* This will make the icon slightly transparent */
                         ">
-                            <i class="fa-solid fa-forward" style="color: #338260; font-size: 80px;"></i>
+                            <i class="fa-solid fa-backward" style="color: #338260; font-size: 80px;"></i>
                         </div>
                     </div>
                     <div style="background: #378965; padding: 2px; text-align:center">
@@ -239,7 +239,7 @@
                             z-index: 1;
                             opacity: 0.9; /* This will make the icon slightly transparent */
                         ">
-                            <i class="fa-solid fa-forward" style="color: #570ECF; font-size: 80px;"></i>
+                            <i class="fas fa-dollar-sign" style="color: #570ECF; font-size: 80px;"></i>
                         </div>
                     </div>
                     <div style="background: #5B0ED8; padding: 2px; text-align:center">
@@ -273,7 +273,7 @@
                             z-index: 1;
                             opacity: 0.9; /* This will make the icon slightly transparent */
                         ">
-                            <i class="fa-solid fa-forward" style="color: #C12D3B; font-size: 80px;"></i>
+                            <i class="fas fa-exclamation-circle" style="color: #C12D3B; font-size: 80px;"></i>
                         </div>
                     </div>
                     <div style="background: #C62F3E; padding: 2px; text-align:center">
@@ -302,7 +302,7 @@
                             z-index: 1;
                             opacity: 0.9; /* This will make the icon slightly transparent */
                         ">
-                            <i class="fa-solid fa-forward" style="color: #001F3E; font-size: 80px;"></i>
+                            <i class="fas fa-shopping-cart" style="color: #001F3E; font-size: 80px;"></i>
                         </div>
                     </div>
                     <div style="background: #001F3E; padding: 2px; text-align:center">
