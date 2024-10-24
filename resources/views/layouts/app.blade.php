@@ -69,6 +69,13 @@
 
     });
 
+    function redirectToRoute(select) {
+            const selectedValue = select.value;
+            if (selectedValue) {
+                window.open(selectedValue, '_blank'); // Redirect to the selected route
+            }
+        }
+
     </script>
 
     <link rel="stylesheet" href="{{ asset('public/style.css') }}">
@@ -103,19 +110,45 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
-                            <li class="nav-item">
+                            <li class="nav-item d-flex align-items-center justify-content-center">
+                                <select onchange="redirectToRoute(this)" name="" id="" class="form-select">
+                                    <option value="">Quick access</option>
 
+                                    <option wire:navigate value="{{ route('sale-create') }}">
+                                        Add Sale
+                                    </option>
+                                    <option wire:navigate value="{{ route('sale-return-create') }}">
+                                        Add Sale Return
+                                    </option>
+                                    <option wire:navigate value="{{ route('purchase-create') }}">
+                                        Add Purchase
+                                    </option>
+                                    <option wire:navigate value="{{ route('purchase-return-create') }}">
+                                        Add Purchase Return
+                                    </option>
+                                </select>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                    style="display: none;">
-                                    @csrf
-                                </form>
-
+                            <li class="nav-item dropdown">
+                                <a class="nav-link " href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <img src="https://via.placeholder.com/40" class="rounded-circle profile-img"
+                                        alt="Profile Photo"> <!-- Replace with your logo URL -->
+                                </a>
+                                <div class="dropdown-menu drop-nav-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">Profile</a>
+                                    <a class="dropdown-item" href="#">Settings</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                        href="{{ route('logout') }}">Logout</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
                             </li>
+
                         </ul>
                     </div>
                 </div>
@@ -126,6 +159,7 @@
     </div>
 
     @livewireScripts
+
 
 
 
