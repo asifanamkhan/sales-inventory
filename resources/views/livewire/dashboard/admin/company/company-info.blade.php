@@ -33,8 +33,10 @@
                     <x-input required_mark='true'  wire:model='state.comp_name' name='comp_name' type='text' label='Company name' />
                 </div>
                 <div class="col-md-6">
-                    <x-input required_mark='true' wire:model='state.comp_add' name='comp_add' type='text' label='Company address' />
+                    <x-input required_mark='true' wire:model='state.short_name' name='short_name' type='text' label='Short name' />
                 </div>
+
+
                 <div class="col-md-6">
                     <x-input required_mark='true' wire:model='state.comp_phone' name='comp_phone' type='text' label='Company phone' />
                 </div>
@@ -46,6 +48,9 @@
                 </div>
                 <div class="col-md-6">
                     <x-input required_mark='' wire:model='state.code' name='code' type='text' label='Company code' />
+                </div>
+                <div class="col-md-12">
+                    <x-input required_mark='true' wire:model='state.comp_add' name='comp_add' type='text' label='Company address' />
                 </div>
                 <div class="col-md-6">
                     <div>

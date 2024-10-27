@@ -1,6 +1,18 @@
 <nav id="sidebar">
+
     <div class="sidebar-header">
-        <div>INVENTORY</div>
+        <div>
+
+            @php
+            $company = DB::table('HRM_COMPANY_INFO')->first();
+            @endphp
+            @if (@$company->short_name)
+            {{ $company->short_name }}
+            @else
+            INVENTORY
+            @endif
+
+        </div>
     </div>
     <ul class="list-unstyled components">
         <li>
@@ -169,11 +181,7 @@
                 <li class="
                 {{ request()->routeIs('product-pricing-list') ? 'active' : ' ' }}
                 ">
-                    <a class="list" wire:navigate href="{{ route('product-pricing-list') }}"> - Pricing list</a>
-                </li>
-                <li class="">
-                    <a class="list" wire:navigate href=""> -
-                        Discount list</a>
+                    <a class="list" wire:navigate href="{{ route('product-pricing-list') }}"> - Pricing/discount list</a>
                 </li>
             </ul>
         </li>
@@ -308,22 +316,28 @@
                     <a class="list" target="_blank" href="{{ route('product-list-reports') }}"> - Product Lists</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-product-purchase') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('reports-product-purchase') }}"> - Product Purchase Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-product-purchase') }}"> - Product Purchase
+                        Report</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-product-purchase-return') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('reports-product-purchase-return') }}"> - Purchase Return Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-product-purchase-return') }}"> - Purchase
+                        Return Report</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-product-stock') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('reports-product-stock') }}"> - Product Stock Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-product-stock') }}"> - Product Stock
+                        Report</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-product-stock-out') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('reports-product-stock-out') }}"> - Stock Out Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-product-stock-out') }}"> - Stock Out
+                        Report</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-product-damage') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('reports-product-damage') }}"> - Product Damage Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-product-damage') }}"> - Product Damage
+                        Report</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-product-expire') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('reports-product-expire') }}"> - Product Expiry Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-product-expire') }}"> - Product Expiry
+                        Report</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-product-sale') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('reports-product-sale') }}"> - Product Sale Report</a>
@@ -337,7 +351,8 @@
                 <li class="@if (request()->routeIs('reports-sale') && request()->route('type') == 'monthly')
                     active
                 @endif">
-                    <a class="list" wire:navigate href="{{ route('reports-sale','monthly') }}"> - Monthly Sells Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-sale','monthly') }}"> - Monthly Sells
+                        Report</a>
                 </li>
                 <li class="@if (request()->routeIs('reports-sale') && request()->route('type') == 'custom')
                     active
@@ -345,7 +360,8 @@
                     <a class="list" wire:navigate href="{{ route('reports-sale','custom') }}"> - Sells Report</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-product-sale-return') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('reports-product-sale-return') }}"> - Sells Return Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-product-sale-return') }}"> - Sells Return
+                        Report</a>
                 </li>
 
             </ul>

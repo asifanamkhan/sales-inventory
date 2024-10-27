@@ -53,7 +53,7 @@
             </div>
             <div class="col-md-10 offset-1">
                 <div class="form-group mb-3">
-                    <label for="">Product group</label>
+                    <label for="">Product group</label><span style="color: red"> * </span>
                     <select wire:model='state.group_name' name="" id="" class="form-select">
                         <option value="">select</option>
                         @forelse ($groups as $group)

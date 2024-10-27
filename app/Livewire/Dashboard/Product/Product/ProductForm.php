@@ -82,7 +82,9 @@ class ProductForm extends Component
         ])->validate();
 
         $this->state['u_code'] = time().'-'.mt_rand(1000,9999);
-
+        if(!@$this->state['unit_id']){
+            $this->state['unit_id'] = 2;
+        }
         if(count($this->photos)){
             foreach($this->photos as $photo){
                 $file_name = $this->state['u_code'].'-'.mt_rand().'.'.$photo['extension'];
