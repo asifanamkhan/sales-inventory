@@ -226,3 +226,14 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
     // -------------Expense end ----------------
 
 });
+// Route::get('test', function () {
+//     $data = DB::select("
+//     SELECT account_code, parent_code, LEVEL as depth
+//     FROM ACC_CHART_OF_ACCOUNTS
+//     START WITH parent_code IS NULL
+//     CONNECT BY PRIOR code = parent_code
+//     ORDER SIBLINGS BY code
+//     ");
+
+//     dd($data);
+// });
