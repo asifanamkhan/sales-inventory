@@ -30,11 +30,14 @@ class Product extends Component
             ->leftJoin('INV_CATAGORIES_INFO as c', function ($join) {
                 $join->on('c.tran_mst_id', '=', 'p.catagories_id');
             })
-            ->select(['p.u_code', 'b.brand_name', 'c.catagories_name', 'p.item_name', 'p.photo']);
+            ->select(['p.u_code', 'b.brand_name', 'c.catagories_name', 'p.item_name', 'p.photo', 'p.item_code']);
 
         if ($this->search) {
             $products
-                ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->search) . '%');
+                ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->search) . '%')
+                ->orWhere(DB::raw('lower(p.item_code)'), 'like', '%' . strtolower($this->search) . '%')
+                ->orWhere(DB::raw('lower(b.brand_name)'), 'like', '%' . strtolower($this->search) . '%')
+                ->orWhere(DB::raw('lower(c.catagories_name)'), 'like', '%' . strtolower($this->search) . '%');
         }
         // $p =   $products->get();
         // dd($p);

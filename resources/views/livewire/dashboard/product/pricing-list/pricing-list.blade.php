@@ -60,14 +60,21 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td style="width: 5%">#</td>
-                        <td>Product</td>
-                        <td>Purchase rate</td>
-                        <td>Sale rate</td>
-                        <td>Vat rate</td>
-                        <td>Alert qty</td>
-                        <td>Status</td>
-                        <td class="text-center">Action</td>
+                        <td rowspan="2"  style="width: 5%">#</td>
+                        <td rowspan="2">Product</td>
+                        <td colspan="6" style="text-align: center">Rate</td>
+                        <td colspan="2" style="text-align: center">Quantity</td>
+                        <td rowspan="2" class="text-center">Action</td>
+                    </tr>
+                    <tr class="bg-sidebar">
+                        <td >Purchase</td>
+                        <td >Diller</td>
+                        <td >Retail</td>
+                        <td >MRP</td>
+                        <td >Vat (%)</td>
+                        <td >Vat amt</td>
+                        <td >Alert</td>
+                        <td >Stock</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,68 +83,47 @@
                     <tr wire:key='{{ $key }}'>
                         <td>{{ $this->resultProduct->firstItem() + $key }}</td>
                         <td>
-                            <div>
-                                {{
-                                    $product->item_name
-                                }}
-                            </div>
+                            {{$product->item_name }}
+
                             @if ($product->item_size_name)
-                            <div>
-                                Size: {{ $product->item_size_name  }}
-                            </div>
+                            {{ $product->item_size_name  }}
                             @endif
                             @if ($product->color_name)
-                            <div>
-                                <span style="font-weight: 500">Color:</span> {{ $product->color_name }}
-                            </div>
+                            {{ $product->color_name }}
                             @endif
                         </td>
+                        <td style="text-align: center">
+                            {{ number_format($product->pr_rate, 1, '.', ',') }}
+                        </td>
+                        <td style="text-align: center">
+                            {{ number_format($product->dp_rate, 1, '.', ',') }}
+                        </td>
+                        <td style="text-align: center">
+                            {{ number_format($product->rp_rate, 1, '.', ',') }}
+                        </td>
+                        <td style="text-align: center">
+                            {{ number_format($product->mrp_rate, 1, '.', ',') }}
+                        </td>
+                        <td style="text-align: center">
+                            {{ number_format($product->vat_rate, 1, '.', ',') }}
+                        </td>
+                        <td style="text-align: center">
+                            {{ number_format($product->vat_amt, 1, '.', ',') }}
+                        </td>
 
-                        <td>
-                            <div class="d-flex align-items-center justify-content-center">
-                                {{ $product->pr_rate }}
-                            </div>
+                        <td style="text-align: center">
+                            {{ $product->max_ch_qty }}
                         </td>
-                        <td>
-                            <div>
-                                <div class="d-flex gap-2">
-                                    <div style="width:50%; font-weight:500">Diller:</div>
-                                    <div style="width:50%;text-align:right">{{ $product->dp_rate ?? '-' }}</div>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <div style="width:50%; font-weight:500">Retail:</div>
-                                    <div style="width:50%;text-align:right">{{ $product->rp_rate ?? '-' }}</div>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <div style="width:50%; font-weight:500">MRP:</div>
-                                    <div style="width:50%;text-align:right">{{ $product->mrp_rate ?? '-' }}</div>
-                                </div>
+                        <td style="
+                        text-align: center;
+                        @if ($product->stock_qty <= $product->max_ch_qty)
+                        background-color: darkred;color: white;
 
-                            </div>
+                        @endif
+                        ">
+                            {{ $product->stock_qty }}
                         </td>
-                        <td>
-                            <div>
-                                <div class="d-flex gap-1">
-                                    <div style="width:50%; font-weight:500">Rate:</div>
-                                    <div style="width:50%;text-align:right">{{ $product->vat_rate ?? '-' }}%</div>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <div style="width:50%; font-weight:500">Amt:</div>
-                                    <div style="width:50%;text-align:right">{{ $product->vat_amt ?? '-' }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex justify-content-center align-items-center">
-                                <span style="background: #F8D7DA;
-                                color: #721c24;" class="badge badge-danger badge-pill">
-                                    {{ $product->max_ch_qty }}
-                                </span>
-                            </div>
-                        </td>
-                        <td>
-                            {{ $product->status }}
-                        </td>
+
                         <td style="">
                             <div class="d-flex justify-content-center gap-2">
                                 <a wire:navigate href="" class="btn btn-sm btn-success">

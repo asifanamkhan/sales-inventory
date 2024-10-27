@@ -24,6 +24,7 @@ class ProductCategoryForm extends Component
     {
         Validator::make($this->state, [
             'catagories_name' => 'required',
+            'group_name' => 'required',
             'photo' => 'nullable|mimes:jpg,bmp,png,svg,jpeg|max:1024'
         ])->validate();
 
@@ -65,6 +66,7 @@ class ProductCategoryForm extends Component
     {
         Validator::make($this->state, [
             'catagories_name' => 'required',
+            'group_name' => 'required',
             'photo' => 'mimes:jpg,bmp,png|max:1024|nullable'
         ])->validate();
 

@@ -57,7 +57,8 @@ use Illuminate\Support\Facades\DB;
 use App\Livewire\Dashboard\Dashboard;
 
 Livewire::setUpdateRoute(function ($handle) {
-    return Route::post('/sales-inventory/livewire/update', $handle);
+    $path = env('UPDATE_PATH');
+    return Route::post("/$path/livewire/update", $handle);
 });
 
 require __DIR__ . '/auth.php';

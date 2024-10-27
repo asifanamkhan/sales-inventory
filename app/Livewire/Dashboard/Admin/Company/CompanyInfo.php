@@ -23,12 +23,14 @@ class CompanyInfo extends Component
         return view('livewire.dashboard.admin.company.company-info');
     }
 
-    public function mount(){
+    public function mount()
+    {
         $this->state = (array)DB::table('HRM_COMPANY_INFO')
             ->first();
-
-        $this->editPhotos = json_decode($this->state['logo']);
-
+        
+        if (@$this->state['logo']) {
+            $this->editPhotos = json_decode($this->state['logo']);
+        }
     }
 
     // public function updatedIsTure(){
@@ -40,7 +42,8 @@ class CompanyInfo extends Component
     // }
 
 
-    public function save(){
+    public function save()
+    {
 
         Validator::make($this->state, [
             'comp_name' => 'required',
@@ -49,9 +52,9 @@ class CompanyInfo extends Component
             'comp_email' => 'required',
         ])->validate();
 
-        if(count($this->photos)){
-            foreach($this->photos as $photo){
-                $file_name = time().'-'.mt_rand().'.'.$photo['extension'];
+        if (count($this->photos)) {
+            foreach ($this->photos as $photo) {
+                $file_name = time() . '-' . mt_rand() . '.' . $photo['extension'];
                 Storage::putFileAs('upload/company', new File($photo['path']), $file_name);
                 $allFile[] = $file_name;
             }
@@ -62,10 +65,8 @@ class CompanyInfo extends Component
         $this->photos = [];
 
         DB::table('HRM_COMPANY_INFO')->where('com_id', $this->state['com_id'])
-                ->update($this->state);
+            ->update($this->state);
 
         session()->flash('status', 'Company information updated successfully.');
-
-
     }
 }

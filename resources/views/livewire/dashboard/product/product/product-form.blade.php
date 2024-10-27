@@ -107,6 +107,8 @@
                                 <option
                                 @if ($unit->st_unit_convert_id == @$edit_select['edit_unit_id'])
                                     selected
+                                @elseif ($unit->st_unit_convert_id == 2)
+                                    selected
                                 @endif
                                 value="{{ $unit->st_unit_convert_id }}">{{ $unit->unit_name }}</option>
                                 @empty

@@ -43,6 +43,7 @@
                         <td  style="width: 5%">#</td>
                         <td style="width: 7%">Image</td>
                         <td >Product name</td>
+                        <td >Code</td>
                         <td >Category name</td>
                         <td >Brand name</td>
                         <td class="text-center" >Action</td>
@@ -54,22 +55,23 @@
                     <tr wire:key='{{ $key }}'>
                         <td>{{ $this->resultProduct->firstItem() + $key }}</td>
                         <td>
-                            <div class="">
+                            <div class="d-flex justify-content-center align-items-center">
                                 @if ($product->photo)
                                 @php
                                     $photo = json_decode($product->photo)[0];
 
                                 @endphp
                                 <a target='_blank' href="{{ asset('storage/app/upload/product/'.$photo) }}">
-                                    <img class="" style="height: 40px; width:50px" src="{{ asset('storage/app/upload/product/'.$photo) }}" alt="">
+                                    <img class="" style="height: 30px; width:45px" src="{{ asset('storage/app/upload/product/'.$photo) }}" alt="">
                                 </a>
                                 @else
-                                    <img class="" style="height: 40px; width:50px" src="{{ asset('public/img/no-img.png') }}" alt="">
+                                    <img class="" style="height: 30px; width:45px" src="{{ asset('public/img/no-img.png') }}" alt="">
                                 @endif
                             </div>
 
                         </td>
                         <td>{{ $product->item_name }}</td>
+                        <td>{{ $product->item_code }}</td>
                         <td>{{ $product->catagories_name }}</td>
                         <td>{{ $product->brand_name }}</td>
                         <td style="">
