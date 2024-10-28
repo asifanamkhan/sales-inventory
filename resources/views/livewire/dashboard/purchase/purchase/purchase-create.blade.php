@@ -15,7 +15,8 @@
         </nav>
     </div>
     <div class="card p-4" wire:ignore.self>
-        <livewire:dashboard.purchase.purchase.purchase-form :purchase_id=false />
+        @livewire('dashboard.purchase.purchase.purchase-form', ['action' => 'savePurchase'])
+        {{-- <livewire:dashboard.purchase.purchase.purchase-form :purchase_id=false /> --}}
     </div>
 </div>
 
