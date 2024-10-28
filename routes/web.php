@@ -57,8 +57,8 @@ use Illuminate\Support\Facades\DB;
 use App\Livewire\Dashboard\Dashboard;
 
 Livewire::setUpdateRoute(function ($handle) {
-    $path = env('UPDATE_PATH');
-    return Route::post("/$path/livewire/update", $handle);
+    $path = env('LIVEWIRE_UPDATE_PATH').'/livewire/update';
+    return Route::post($path, $handle);
 });
 
 require __DIR__ . '/auth.php';
@@ -66,9 +66,6 @@ require __DIR__ . '/auth.php';
 
 Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
 
-    // Route::get('/', function () {
-    //     return view('dashboard');
-    // })->name('dashboard');
     Route::get('/', Dashboard::class)->name('dashboard');
     // ------------- admin start ----------------
     Route::get('role', Role::class)->name('role');

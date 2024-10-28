@@ -86,7 +86,7 @@ class PurchaseForm extends Component
         $this->countProduct = count($this->resultProducts);
     }
 
-    public function mount($purchase_id)
+    public function mount($purchase_id = null)
     {
         if ($purchase_id) {
             $this->purchase_id = $purchase_id;
@@ -369,6 +369,12 @@ class PurchaseForm extends Component
                 $this->state['tot_paid_amt'] = $this->pay_amt;
                 $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
 
+                // $this->dispatch($this->action, [
+                //     'name' => $this->name,
+                //     'class' => $this->class,
+                //     'group' => $this->group,
+                //     'photo' => $photoPath,
+                // ]);
 
                 if ($this->purchase_id) {
                     DB::table('INV_PURCHASE_MST')
