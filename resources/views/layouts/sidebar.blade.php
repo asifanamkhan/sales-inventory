@@ -191,6 +191,10 @@
                 <i class="fa-solid fa-cart-shopping"></i> Purchase settings
             </a>
             <ul class="collapse list-unstyled
+            {{ request()->routeIs('lc') ? 'show' : ' ' }}
+            {{ request()->routeIs('lc-create') ? 'show' : ' ' }}
+            {{ request()->routeIs('lc-edit') ? 'show' : ' ' }}
+            {{ request()->routeIs('lc-details') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-create') ? 'show' : ' ' }}
             {{ request()->routeIs('purchase-edit') ? 'show' : ' ' }}
@@ -201,6 +205,14 @@
             {{ request()->routeIs('purchase-return-details') ? 'show' : ' ' }}
 
         " id="purchaseSubmenu">
+            <li class="
+                {{ request()->routeIs('lc') ? 'active' : ' ' }}
+                {{ request()->routeIs('lc-edit') ? 'active' : ' ' }}
+                {{ request()->routeIs('lc-details') ? 'active' : ' ' }}
+                {{ request()->routeIs('lc-create') ? 'active' : ' ' }}
+                 ">
+                    <a class="list" wire:navigate href="{{ route('lc') }}"> - LC list</a>
+                </li>
                 <li class="
                 {{ request()->routeIs('purchase') ? 'active' : ' ' }}
                 {{ request()->routeIs('purchase-edit') ? 'active' : ' ' }}

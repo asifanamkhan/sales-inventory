@@ -55,6 +55,10 @@ use App\Livewire\Dashboard\Sales\Sales\{SaleDetails, Sales, SalesCreate, SalesEd
 use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnDetails, SalesReturnEdit};
 use Illuminate\Support\Facades\DB;
 use App\Livewire\Dashboard\Dashboard;
+use App\Livewire\Dashboard\Purchase\Lc\Lc;
+use App\Livewire\Dashboard\Purchase\Lc\LcCreate;
+use App\Livewire\Dashboard\Purchase\Lc\LcDetails;
+use App\Livewire\Dashboard\Purchase\Lc\LcEdit;
 
 Livewire::setUpdateRoute(function ($handle) {
     $path = env('LIVEWIRE_UPDATE_PATH').'/livewire/update';
@@ -117,6 +121,13 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
 
 
     // ------------- purchase start ----------------
+
+    Route::get('lc', Lc::class)->name('lc');
+    Route::get('lc/create', LcCreate::class)->name('lc-create');
+    Route::get('lc/{lc_id}/edit', LcEdit::class)->name('lc-edit');
+    Route::get('lc/{lc_id}/details', LcDetails::class)->name('lc-details');
+    // Route::get('lc-invoice/{lc_id}', [PurchaseController::class, 'invoice'])->name('lc-invoice');
+
 
     Route::get('purchase', Purchase::class)->name('purchase');
     Route::get('purchase/create', PurchaseCreate::class)->name('purchase-create');
@@ -223,14 +234,19 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
 
     // -------------Expense end ----------------
 
+
 });
+
+
+
+
 // Route::get('test', function () {
 //     $data = DB::select("
 //     SELECT account_code, parent_code, LEVEL as depth
 //     FROM ACC_CHART_OF_ACCOUNTS
 //     START WITH parent_code IS NULL
-//     CONNECT BY PRIOR code = parent_code
-//     ORDER SIBLINGS BY code
+//     CONNECT BY PRIOR account_code = parent_code
+//     ORDER SIBLINGS BY parent_code
 //     ");
 
 //     dd($data);

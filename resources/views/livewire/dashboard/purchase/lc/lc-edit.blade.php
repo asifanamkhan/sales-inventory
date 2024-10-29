@@ -4,12 +4,13 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa fa-plus"></i>Purchase edit</h3>
+            <i class="fa fa-plus"></i> Edit lc
+        </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
 
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase') }}">Purchase</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('purchase-edit', $purchase_id) }}"
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('lc') }}">LC</a></li>
+                <li class="breadcrumb-item active"><a wire:navigate href="{{ route('lc-edit', $lc_id) }}"
                         style="color: #3C50E0">edit</a></li>
             </ol>
         </nav>
@@ -28,6 +29,7 @@
             {{ session('warning') }}
         </div>
         @endif
-        @livewire('dashboard.purchase.purchase.purchase-form', ['action' => 'updatePurchase', 'purchase_id' => $purchase_id])
+        @livewire('dashboard.purchase.lc.lc-form', ['action' => 'updateLC','lc_id' => $lc_id])
     </div>
 </div>
+
