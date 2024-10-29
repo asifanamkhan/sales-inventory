@@ -99,7 +99,6 @@
                             <td>{!! $lc_mst->goods_description !!}</td>
                         </tr>
 
-
                     </tbody>
 
                 </table>

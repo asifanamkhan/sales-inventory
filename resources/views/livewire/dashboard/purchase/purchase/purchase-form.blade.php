@@ -99,10 +99,35 @@
                 <small class="form-text text-danger">{{ $message }}</small>
                 @enderror
             </div>
-
             <div class="col-md-3">
-                <x-input required_mark='' wire:model='state.lc_no' name='lc_no' type='text' label='LC No.' />
+                <div class="d-flex align-items-center">
+                    <div style="width: 100%">
+                        <div class="form-group mb-3" wire:ignore>
+                            <label for="">Lc</label>
+                            <select class="form-select select2" id='lc'>
+                                <option value="">Select lc</option>
+                                @forelse ($lc_all as $lc)
+                                <option @if ($lc->tran_mst_id == @$edit_select['lc_id'])
+                                    selected
+                                    @endif
+                                    value="{{ $lc->tran_mst_id }}">{{ $lc->lc_no  }} | {{ Carbon\Carbon::parse($lc->issue_date)->format('d-m-Y') }} | {{ $lc->applicant }}</option>
+                                @empty
+                                <option value=""></option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
+                    {{-- <div class="pt-2">
+                        <a class="btn btn-primary">+</a>
+                    </div> --}}
+                </div>
+                @error('p_code')
+                <small class="form-text text-danger">{{ $message }}</small>
+                @enderror
             </div>
+            {{-- <div class="col-md-3">
+                <x-input required_mark='' wire:model='state.lc_no' name='lc_no' type='text' label='LC No.' />
+            </div> --}}
 
             @if (session('status'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -430,6 +455,10 @@
 
     $('#supplier').on('change', function(e){
         @this.set('state.p_code', e.target.value, false);
+    });
+
+    $('#lc').on('change', function(e){
+        @this.set('state.lc_no', e.target.value, false);
     });
 
     $wire.on('set_bank_code_purchase',(event)=>{

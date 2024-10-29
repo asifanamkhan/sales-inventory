@@ -17,7 +17,7 @@ class PurchaseForm extends Component
     public $purchase_id;
     public $document = [];
     public $paymentState = [];
-    public $suppliers, $war_houses, $productsearch, $payment_methods;
+    public $suppliers, $war_houses, $productsearch, $payment_methods, $lc_all;
     public $resultProducts = [];
     public $purchaseCart = [];
     public $purchaseCheck = [];
@@ -30,6 +30,13 @@ class PurchaseForm extends Component
     {
         return $this->suppliers = DB::table('INV_SUPPLIER_INFO')
             ->orderBy('p_code', 'DESC')
+            ->get();
+    }
+
+    public function lcAll()
+    {
+        return $this->lc_all = DB::table('INV_LC_DETAILS')
+            ->orderBy('tran_mst_id', 'DESC')
             ->get();
     }
 
@@ -199,6 +206,7 @@ class PurchaseForm extends Component
 
         $this->suppliersAll();
         $this->wirehouseAll();
+        $this->lcAll();
         $this->paymentMethodAll();
     }
 
