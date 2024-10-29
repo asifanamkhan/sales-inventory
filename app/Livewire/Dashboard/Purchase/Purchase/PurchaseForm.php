@@ -17,19 +17,26 @@ class PurchaseForm extends Component
     public $purchase_id;
     public $document = [];
     public $paymentState = [];
-    public $suppliers, $war_houses, $productsearch, $payment_methods;
+    public $suppliers, $war_houses, $productsearch, $payment_methods, $lc_all;
     public $resultProducts = [];
     public $purchaseCart = [];
     public $purchaseCheck = [];
     public $searchSelect = -1;
     public $countProduct = 0;
-    public $pay_amt, $due_amt;
+    public $pay_amt, $due_amt, $action;
 
 
     public function suppliersAll()
     {
         return $this->suppliers = DB::table('INV_SUPPLIER_INFO')
             ->orderBy('p_code', 'DESC')
+            ->get();
+    }
+
+    public function lcAll()
+    {
+        return $this->lc_all = DB::table('INV_LC_DETAILS')
+            ->orderBy('tran_mst_id', 'DESC')
             ->get();
     }
 
@@ -199,6 +206,7 @@ class PurchaseForm extends Component
 
         $this->suppliersAll();
         $this->wirehouseAll();
+        $this->lcAll();
         $this->paymentMethodAll();
     }
 
@@ -359,168 +367,61 @@ class PurchaseForm extends Component
             //     $this->purchaseCart,
             // );
 
-            DB::beginTransaction();
-            try {
-                $this->state['user_name'] = Auth::user()->id;
-                $this->state['emp_id'] = Auth::user()->id;
-                $this->state['comp_id'] = 1;
-                $this->state['branch_id'] = 1;
-                $this->state['tot_due_amt'] = $this->due_amt;
-                $this->state['tot_paid_amt'] = $this->pay_amt;
-                $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
+            $this->state['user_name'] = Auth::user()->id;
+            $this->state['emp_id'] = Auth::user()->id;
+            $this->state['comp_id'] = 1;
+            $this->state['branch_id'] = 1;
+            $this->state['tot_due_amt'] = $this->due_amt;
+            $this->state['tot_paid_amt'] = $this->pay_amt;
+            $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
 
-                // $this->dispatch($this->action, [
-                //     'name' => $this->name,
-                //     'class' => $this->class,
-                //     'group' => $this->group,
-                //     'photo' => $photoPath,
-                // ]);
+            $payment_info = [];
 
-                if ($this->purchase_id) {
-                    DB::table('INV_PURCHASE_MST')
-                        ->where('tran_mst_id', $this->purchase_id)
-                        ->update($this->state);
+            if ($this->pay_amt && $this->pay_amt > 0) {
 
-                    DB::table('INV_PURCHASE_DTL')
-                        ->where('tran_mst_id', $this->purchase_id)
-                        ->delete();
+                $payment_info = [
+                    'tran_type' => 'PR',
+                    'payment_date' => $this->state['tran_date'],
+                    'p_code' => $this->state['p_code'],
+                    'pay_mode' => $this->paymentState['pay_mode'],
+                    'tot_payable_amt' => $this->state['tot_payable_amt'],
+                    'discount' => $this->state['tot_discount'],
+                    'vat_amt' => $this->state['tot_vat_amt'],
+                    'net_payable_amt' => $this->state['net_payable_amt'],
+                    'tot_paid_amt' => $this->pay_amt ?? 0,
+                    'due_amt' => $this->due_amt,
+                    'user_id' => $this->state['user_name'],
+                    'payment_status' => Payment::PaymentCheck($this->due_amt),
+                ];
 
-                    $tran_mst_id = $this->purchase_id;
-                } else {
+                // dd($payment_info);
 
-                    $tran_mst_id = DB::table('INV_PURCHASE_MST')
-                        ->insertGetId($this->state, 'tran_mst_id');
+                if ($this->paymentState['pay_mode'] == 2) {
+                    $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
+                    $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
+                    $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
+                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
                 }
 
-
-                foreach ($this->purchaseCart as $key => $value) {
-                    DB::table('INV_PURCHASE_DTL')->insert([
-                        'tran_mst_id' => $tran_mst_id,
-                        'item_code' => $value['st_group_item_id'],
-                        'item_qty' => $value['qty'],
-                        'pr_rate' => $value['mrp_rate'],
-                        'vat_amt' => $value['vat_amt'],
-                        'discount' => $value['discount'],
-                        'tot_payble_amt' => $value['line_total'],
-                        'user_name' => $this->state['user_name'],
-                        'expire_date' => @$value['expire_date'],
-                    ]);
+                if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
+                    $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
                 }
 
-                $ref_memo_no = DB::table('INV_PURCHASE_MST')
-                    ->where('tran_mst_id', $tran_mst_id)
-                    ->first();
-                //voucher
-                if ($this->purchase_id) {
-                    DB::table('ACC_VOUCHER_INFO')
-                        ->where('ref_memo_no', $ref_memo_no->memo_no)
-                        ->where('ref_pay_no', null)
-                        ->where('cash_type', null)
-                        ->update([
-                            'amount' => $this->state['tot_payable_amt'],
-                        ]);
-                } else {
-                    DB::table('ACC_VOUCHER_INFO')->insert([
-                        'voucher_date' => $this->state['tran_date'],
-                        'voucher_type' => 'DR',
-                        'narration' => 'purchase vouchar',
-                        'amount' => $this->state['tot_payable_amt'],
-                        'created_by' => $this->state['user_name'],
-                        'tran_type' => 'PR',
-                        'ref_memo_no' => $ref_memo_no->memo_no,
-                        'account_code' => 1030,
-                    ]);
+                if ($this->paymentState['pay_mode'] == 4) {
+                    $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
+                    $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
                 }
-
-                if ($this->pay_amt && $this->pay_amt > 0) {
-
-                    $payment_info = [
-                        'tran_mst_id' => $tran_mst_id,
-                        'tran_type' => 'PR',
-                        'payment_date' => $this->state['tran_date'],
-                        'p_code' => $this->state['p_code'],
-                        'pay_mode' => $this->paymentState['pay_mode'],
-                        'tot_payable_amt' => $this->state['tot_payable_amt'],
-                        'discount' => $this->state['tot_discount'],
-                        'vat_amt' => $this->state['tot_vat_amt'],
-                        'net_payable_amt' => $this->state['net_payable_amt'],
-                        'tot_paid_amt' => $this->pay_amt ?? 0,
-                        'due_amt' => $this->due_amt,
-                        'user_id' => $this->state['user_name'],
-                        'ref_memo_no' => $ref_memo_no->memo_no,
-                        'payment_status' => Payment::PaymentCheck($this->due_amt),
-                    ];
-
-                    if ($this->paymentState['pay_mode'] == 2) {
-                        $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
-                        $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
-                        $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
-                        $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
-                    }
-
-                    if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
-                        $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
-                    }
-
-                    if ($this->paymentState['pay_mode'] == 4) {
-                        $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
-                        $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
-                    }
-                    if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
-                        $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
-                        $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
-                    }
-
-                    $acc_tran = DB::table('ACC_PAYMENT_INFO')
-                        ->where('tran_type', 'PR')
-                        ->where('tran_mst_id', $this->purchase_id)
-                        ->first();
-
-                    if ($this->purchase_id && $acc_tran) {
-
-                        DB::table('ACC_PAYMENT_INFO')
-                            ->where('tran_type', 'PR')
-                            ->where('tran_mst_id', $this->purchase_id)
-                            ->update($payment_info);
-
-                        DB::table('ACC_VOUCHER_INFO')
-                            ->where('ref_pay_no', $acc_tran->memo_no)
-                            ->update([
-                                'amount' => $this->pay_amt,
-                            ]);
-                    } else {
-
-                        $pay_id = DB::table('ACC_PAYMENT_INFO')
-                            ->insertGetId($payment_info, 'payment_no');
-
-                        $pay_memo = DB::table('ACC_PAYMENT_INFO')
-                            ->where('payment_no', $pay_id)
-                            ->first()
-                            ->memo_no;
-
-                        DB::table('ACC_VOUCHER_INFO')->insert([
-                            'voucher_date' => $this->state['tran_date'],
-                            'voucher_type' => 'CR',
-                            'narration' => 'purchase vouchar',
-                            'amount' => $this->pay_amt,
-                            'created_by' => $this->state['user_name'],
-                            'tran_type' => 'PR',
-                            'ref_memo_no' => $ref_memo_no->memo_no,
-                            'account_code' => 1030,
-                            'ref_pay_no' => $pay_memo,
-                            'cash_type' => 'OUT',
-                        ]);
-                    }
+                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+                    $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
+                    $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                 }
-
-                DB::commit();
-
-                session()->flash('status', 'New purchase created successfully');
-                return $this->redirect(route('purchase'), navigate: true);
-            } catch (\Exception $exception) {
-                DB::rollback();
-                session()->flash('error', $exception);
             }
+
+            $this->dispatch($this->action, [
+                'state' => $this->state,
+                'purchaseCart' => $this->purchaseCart,
+                'payment_info' => $payment_info,
+            ]);
         } else {
             session()->flash('error', '*At least one product need to added');
         }
@@ -531,7 +432,5 @@ class PurchaseForm extends Component
         return view('livewire.dashboard.purchase.purchase.purchase-form');
     }
 
-    public function paymentData(){
-
-    }
+    public function paymentData() {}
 }

@@ -121,7 +121,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-4">
+            {{-- <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label for="">County Name</label>
                     <input wire:model='state.county_name' type='text'
@@ -130,7 +130,7 @@
                     <small class="form-text text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <div class="row">
@@ -197,7 +197,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <div class="form-group mb-3">
                     <label for="">Website</label>
                     <input wire:model='state.web' type='text' class="form-control @error('web') is-invalid @enderror">
