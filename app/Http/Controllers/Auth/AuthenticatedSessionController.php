@@ -78,17 +78,15 @@ class AuthenticatedSessionController extends Controller
 
         $data = [
             'user_name' => Auth::user()->name,
-
             'user_id' => Auth::user()->id,
-            'entry_dt' => Carbon::now()->toDateString(),
             'device_type' => $device,
             'browser_info' => $browserName,
             'ip_address' => request()->ip(),
         ];
         if ($params == 'logout') {
-            $data['exit_time'] = Carbon::now();
+            $data['exit_time'] = Carbon::now()->toDateTimeString();
         } else {
-            $data['access_time'] = Carbon::now();
+            $data['access_time'] = Carbon::now()->toDateTimeString();
         }
         DB::table('USR_AUDIT_TRAIL')->insert($data);
     }
