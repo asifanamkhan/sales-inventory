@@ -20,6 +20,8 @@
             justify-content: center;
             min-height: 100vh;
             color: #333;
+            background-image: url("{{ asset('public/img/lg0bc.jpg') }}");
+            background-size: cover;
         }
 
         .container {

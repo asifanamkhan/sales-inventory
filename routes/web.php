@@ -59,9 +59,10 @@ use App\Livewire\Dashboard\Purchase\Lc\Lc;
 use App\Livewire\Dashboard\Purchase\Lc\LcCreate;
 use App\Livewire\Dashboard\Purchase\Lc\LcDetails;
 use App\Livewire\Dashboard\Purchase\Lc\LcEdit;
+use Illuminate\Support\Facades\Auth;
 
 Livewire::setUpdateRoute(function ($handle) {
-    $path = env('LIVEWIRE_UPDATE_PATH').'/livewire/update';
+    $path = env('LIVEWIRE_UPDATE_PATH') . '/livewire/update';
     return Route::post($path, $handle);
 });
 
@@ -167,68 +168,68 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
     Route::get('product-damage/create', ProductDamageCreate::class)->name('product-damage-create');
     Route::get('product-damage/{product_damage_id}/edit', ProductDamageEdit::class)->name('product-damage-edit');
 
-    Route::get('sale-pdf', [SaleController::class,'tcpdPDF'])->name('sale-pdf');
+    Route::get('sale-pdf', [SaleController::class, 'tcpdPDF'])->name('sale-pdf');
 
     // ------------- sale end ----------------
 
     // ------------- reports start ----------------
     Route::get('reports-supplier-info', [SupplierController::class, 'supplierInfo'])->name('supplier-info-reports');
-    Route::get('supplier-ledger',SupplierLedger::class)->name('supplier-ledger');
-    Route::get('supplier-ledger-pdf/{code}',[SupplierController::class, 'supplierLedgerPdf'])->name('supplier-ledger-pdf');
+    Route::get('supplier-ledger', SupplierLedger::class)->name('supplier-ledger');
+    Route::get('supplier-ledger-pdf/{code}', [SupplierController::class, 'supplierLedgerPdf'])->name('supplier-ledger-pdf');
 
     Route::get('reports-customer-info', [CustomerController::class, 'customerInfo'])->name('customer-info-reports');
-    Route::get('customer-ledger',CustomerLedger::class)->name('customer-ledger');
-    Route::get('customer-ledger-pdf/{code}',[CustomerController::class, 'customerLedgerPdf'])->name('customer-ledger-pdf');
+    Route::get('customer-ledger', CustomerLedger::class)->name('customer-ledger');
+    Route::get('customer-ledger-pdf/{code}', [CustomerController::class, 'customerLedgerPdf'])->name('customer-ledger-pdf');
 
     Route::get('reports-product-list', [ProductController::class, 'productList'])->name('product-list-reports');
 
-    Route::get('reports-product-purchase',ProductPurchaseReport::class)->name('reports-product-purchase');
+    Route::get('reports-product-purchase', ProductPurchaseReport::class)->name('reports-product-purchase');
     Route::post('product-purchase-report-pdf', [ProductController::class, 'purchaseReport'])->name('product-purchase-report-pdf');
 
-    Route::get('reports-product-purchase-return',ProductPurchaseReturnReport::class)->name('reports-product-purchase-return');
+    Route::get('reports-product-purchase-return', ProductPurchaseReturnReport::class)->name('reports-product-purchase-return');
     Route::post('product-purchase-return-report-pdf', [ProductController::class, 'purchaseReturnReport'])->name('product-purchase-return-report-pdf');
 
-    Route::get('reports-product-stock',ProductStockReport::class)->name('reports-product-stock');
+    Route::get('reports-product-stock', ProductStockReport::class)->name('reports-product-stock');
     Route::post('product-stock-report-pdf', [ProductController::class, 'purchaseStockReport'])->name('product-stock-report-pdf');
 
-    Route::get('reports-product-stock-out',ProductStockOutReport::class)->name('reports-product-stock-out');
+    Route::get('reports-product-stock-out', ProductStockOutReport::class)->name('reports-product-stock-out');
 
-    Route::get('reports-product-damage',ProductDamageReport::class)->name('reports-product-damage');
+    Route::get('reports-product-damage', ProductDamageReport::class)->name('reports-product-damage');
     Route::post('product-damage-report-pdf', [ProductController::class, 'purchaseDamageReport'])->name('product-damage-report-pdf');
 
-    Route::get('reports-product-expire',ProductExpiryReport::class)->name('reports-product-expire');
+    Route::get('reports-product-expire', ProductExpiryReport::class)->name('reports-product-expire');
     Route::post('product-expire-report-pdf', [ProductController::class, 'purchaseExpireReport'])->name('product-expire-report-pdf');
 
-    Route::get('reports-product-sale',ProductSaleReport::class)->name('reports-product-sale');
+    Route::get('reports-product-sale', ProductSaleReport::class)->name('reports-product-sale');
     Route::post('product-sale-report-pdf', [ProductController::class, 'productSaleReport'])->name('product-sale-report-pdf');
 
-    Route::get('reports-product-sale-return',ProductSaleReturn::class)->name('reports-product-sale-return');
+    Route::get('reports-product-sale-return', ProductSaleReturn::class)->name('reports-product-sale-return');
     Route::post('product-sale-return-report-pdf', [ProductController::class, 'productSaleReturnReport'])->name('product-sale-return-report-pdf');
 
-    Route::get('reports-product-sale/{type}',SaleReport::class)->name('reports-sale');
+    Route::get('reports-product-sale/{type}', SaleReport::class)->name('reports-sale');
 
     // ------------- reports end ----------------
 
     // -------------Account reports start ----------------
-    Route::get('account-transaction',TransactionReport::class)->name('account-transaction');
-    Route::post('account-transaction-pdf',[AccountController::class, 'transactionReport'])->name('account-transaction-pdf');
+    Route::get('account-transaction', TransactionReport::class)->name('account-transaction');
+    Route::post('account-transaction-pdf', [AccountController::class, 'transactionReport'])->name('account-transaction-pdf');
 
-    Route::get('account-payments',PaymentReport::class)->name('account-payments');
-    Route::post('account-payments-pdf',[AccountController::class, 'paymentReport'])->name('account-payments-pdf');
+    Route::get('account-payments', PaymentReport::class)->name('account-payments');
+    Route::post('account-payments-pdf', [AccountController::class, 'paymentReport'])->name('account-payments-pdf');
 
-    Route::get('trial-balance',TrialBalance::class)->name('trial-balance');
-    Route::post('trial-balance-pdf',[AccountController::class, 'trialBalance'])->name('trial-balance-pdf');
+    Route::get('trial-balance', TrialBalance::class)->name('trial-balance');
+    Route::post('trial-balance-pdf', [AccountController::class, 'trialBalance'])->name('trial-balance-pdf');
 
 
     // -------------Account reports end ----------------
 
     // -------------Expense start ----------------
-    Route::get('expense-category',ExpenseCategory::class)->name('expense-category');
+    Route::get('expense-category', ExpenseCategory::class)->name('expense-category');
 
-    Route::get('expense',Expense::class)->name('expense');
-    Route::get('expense/create',ExpenseCreate::class)->name('expense-create');
-    Route::get('expense/{expense_id}/edit',ExpenseEdit::class)->name('expense-edit');
-    Route::get('expense/{expense_id}/details',ExpenseDetails::class)->name('expense-details');
+    Route::get('expense', Expense::class)->name('expense');
+    Route::get('expense/create', ExpenseCreate::class)->name('expense-create');
+    Route::get('expense/{expense_id}/edit', ExpenseEdit::class)->name('expense-edit');
+    Route::get('expense/{expense_id}/details', ExpenseDetails::class)->name('expense-details');
     Route::get('expense-invoice/{expense_id}', [ExpenseController::class, 'invoice'])->name('expense-invoice');
     // Route::post('expense-pdf', [ExpenseController::class, 'expensePDF'])->name('expense-pdf');
 
@@ -240,14 +241,15 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
 
 
 
-// Route::get('test', function () {
-//     $data = DB::select("
-//     SELECT account_code, parent_code, LEVEL as depth
-//     FROM ACC_CHART_OF_ACCOUNTS
-//     START WITH parent_code IS NULL
-//     CONNECT BY PRIOR account_code = parent_code
-//     ORDER SIBLINGS BY parent_code
-//     ");
+Route::get('test', function () {
+    
+    // $data = DB::select("
+    // SELECT account_code, parent_code, LEVEL as depth
+    // FROM ACC_CHART_OF_ACCOUNTS
+    // START WITH parent_code IS NULL
+    // CONNECT BY PRIOR account_code = parent_code
+    // ORDER SIBLINGS BY parent_code
+    // ");
 
-//     dd($data);
-// });
+    // dd($data);
+});
