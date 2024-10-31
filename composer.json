@@ -10,6 +10,7 @@
         "dasundev/livewire-dropzone": "^1.2",
         "dasundev/livewire-quill-text-editor": "^1.0",
         "elibyy/tcpdf-laravel": "^11.1",
+        "jenssegers/agent": "^2.6",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
