@@ -32,24 +32,24 @@
         {{ request()->routeIs('user-create') ? 'show' : ' ' }}
 
         " id="adminSubmenu">
-                @permission(1,'visible_flag')
+                {{-- @permission(1,'visible_flag') --}}
                 <li class="{{ request()->routeIs('company-info') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('company-info') }}"> - Company</a>
                 </li>
-                @endpermission
-                @permission(2,'visible_flag')
+                {{-- @endpermission --}}
+
                 <li class="{{ request()->routeIs('module') ? 'active' : ' ' }} ">
                     <a class="list" wire:navigate href="{{ route('module') }}"> - Module</a>
                 </li>
-                @endpermission
-                @permission(3,'visible_flag')
+
+
                 <li class="
                 {{ request()->routeIs('user') ? 'active' : ' ' }}
                 {{ request()->routeIs('user-create') ? 'active' : ' ' }}
                  ">
                     <a class="list" wire:navigate href="{{ route('user') }}"> - Users</a>
                 </li>
-                @endpermission
+
                 <li class="
                     {{ request()->routeIs('role') ? 'active' : ' ' }}
                     {{ request()->routeIs('role-create') ? 'active' : ' ' }}

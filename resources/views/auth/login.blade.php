@@ -56,7 +56,7 @@
                 <div class="">
                     <div class="card">
                         <div class="p-4">
-                            <h4 style="text-align: center; font-size:2rem; margin-bottom:30px; color: white">Sales
+                            <h4 style="text-align: center; font-size:2.2rem; margin-bottom:30px; color: white">Sales
                                 Inventory</h4>
                             <form method="POST" action="{{ route('login') }}" autocomplete="off">
                                 @csrf
