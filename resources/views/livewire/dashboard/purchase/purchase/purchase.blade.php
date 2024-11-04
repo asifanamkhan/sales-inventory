@@ -82,14 +82,15 @@
             <div class="col-md-2">
 
             </div>
-            @permission(1,'visible_flag')
-            <div class="col-auto">
-                <a wire:navigate href='{{route('purchase-create') }}' type="button" class="btn btn-primary">Create new purchase</a>
-            </div>
-            @endpermission
 
-             {{-- modal --}}
-             <x-large-modal class='payment'>
+            <div class="col-auto">
+                <a wire:navigate href='{{route('purchase-create') }}' type="button" class="btn btn-primary">Create new
+                    purchase</a>
+            </div>
+
+
+            {{-- modal --}}
+            <x-large-modal class='payment'>
                 <livewire:dashboard.purchase.purchase.pay-partial.payment>
             </x-large-modal>
 
@@ -129,7 +130,8 @@
 
                         </td>
                         <td>
-                            <input placeholder="search" wire:model.live.debounce.500ms='searchMemo' type="text" class="form-control">
+                            <input placeholder="search" wire:model.live.debounce.500ms='searchMemo' type="text"
+                                class="form-control">
                         </td>
                         <td>
                             <input placeholder="search" wire:model.live.debounce.500ms='searchSupplier' type="text"
@@ -275,10 +277,12 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="{{ route('purchase-edit', $purchase->tran_mst_id) }}">
+                                    <a class="dropdown-item"
+                                        href="{{ route('purchase-edit', $purchase->tran_mst_id) }}">
                                         <i class="fa fa-edit"></i> <span>Edit</span>
                                     </a>
-                                    <a class="dropdown-item d-flex gap-1" wire:navigate href="{{ route('purchase-details', $purchase->tran_mst_id) }}">
+                                    <a class="dropdown-item d-flex gap-1" wire:navigate
+                                        href="{{ route('purchase-details', $purchase->tran_mst_id) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-binoculars" viewBox="0 0 16 16">
                                             <path
@@ -286,10 +290,12 @@
                                         </svg>
                                         <span>Details</span>
                                     </a>
-                                    <a @click="$dispatch('purchase-payment', {id: {{ $purchase->tran_mst_id }}})" data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
+                                    <a @click="$dispatch('purchase-payment', {id: {{ $purchase->tran_mst_id }}})"
+                                        data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
                                         <i class="fa fa-credit-card"></i> Make payment
                                     </a>
-                                    <a target="_blank" class="dropdown-item" href="{{ route('purchase-invoice', $purchase->tran_mst_id) }}">
+                                    <a target="_blank" class="dropdown-item"
+                                        href="{{ route('purchase-invoice', $purchase->tran_mst_id) }}">
                                         <i class="fas fa-print"></i> Print
                                     </a>
                                     <a class="dropdown-item" href="#">

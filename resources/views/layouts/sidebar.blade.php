@@ -32,11 +32,11 @@
         {{ request()->routeIs('user-create') ? 'show' : ' ' }}
 
         " id="adminSubmenu">
-                {{-- @permission(1,'visible_flag') --}}
+                {{-- --}}
                 <li class="{{ request()->routeIs('company-info') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('company-info') }}"> - Company</a>
                 </li>
-                {{-- @endpermission --}}
+                {{-- --}}
 
                 <li class="{{ request()->routeIs('module') ? 'active' : ' ' }} ">
                     <a class="list" wire:navigate href="{{ route('module') }}"> - Module</a>
@@ -181,7 +181,8 @@
                 <li class="
                 {{ request()->routeIs('product-pricing-list') ? 'active' : ' ' }}
                 ">
-                    <a class="list" wire:navigate href="{{ route('product-pricing-list') }}"> - Pricing/discount list</a>
+                    <a class="list" wire:navigate href="{{ route('product-pricing-list') }}"> - Pricing/discount
+                        list</a>
                 </li>
             </ul>
         </li>
@@ -205,7 +206,7 @@
             {{ request()->routeIs('purchase-return-details') ? 'show' : ' ' }}
 
         " id="purchaseSubmenu">
-            <li class="
+                <li class="
                 {{ request()->routeIs('lc') ? 'active' : ' ' }}
                 {{ request()->routeIs('lc-edit') ? 'active' : ' ' }}
                 {{ request()->routeIs('lc-details') ? 'active' : ' ' }}

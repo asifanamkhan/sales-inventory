@@ -166,12 +166,23 @@
                                         @click="edit = false"
                                         style="@if($searchSelect === $pk) background: #1e418685; @endif">
                                         {{ $resultProduct->item_name }}
-                                        @if (@$resultProduct->item_size_name)
-                                        | {{ $resultProduct->item_size_name }}
-                                        @endif
-                                        @if (@$resultProduct->color_name)
-                                        | {{ $resultProduct->color_name}}
-                                        @endif
+                                        <span style="font-size: 12px; font-style: italic">
+                                                @if (@$resultProduct->item_size_name)
+                                                , {{ $resultProduct->item_size_name }}
+                                                @endif
+                                                @if (@$resultProduct->color_name)
+                                                , {{ $resultProduct->color_name}}
+                                                @endif
+                                            , MRP:
+                                            @if ($resultProduct->mrp_rate)
+                                            {{ $resultProduct->mrp_rate }},
+                                            @else
+                                            -,
+                                            @endif
+
+                                            ({{ $resultProduct->item_code }})
+
+                                            </span>
                                     </p>
                                     @empty
                                     <p>No product</p>
@@ -288,6 +299,7 @@
                 </table>
             </div>
             <div class="col-md-5 mt-4">
+                @if (count($edit_select) == 0)
                 @if (session('payment-error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     {{ session('payment-error') }}
@@ -382,6 +394,7 @@
                         @endif
                     </div>
                 </div>
+                @endif
             </div>
             <div class="col-md-2"> </div>
             <div class="col-md-5 mt-4">
@@ -396,12 +409,13 @@
                             </td>
                         </tr>
                         <tr style="text-align: right">
-                            <td>Net payable</td>
+                            <td>Net amount</td>
                             <td>
                                 <input loading="lazy" style="text-align: right" readonly class="form-control"
                                     wire:model='state.tot_payable_amt'>
                             </td>
                         </tr>
+                        @if (count($edit_select) == 0)
                         <tr style="text-align: right">
                             <td> Payment amount</td>
                             <td>
@@ -420,6 +434,7 @@
                                 <input style="text-align: right;" readonly class="form-control" wire:model='due_amt'>
                             </td>
                         </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>

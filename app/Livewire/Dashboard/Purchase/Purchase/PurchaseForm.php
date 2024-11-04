@@ -57,15 +57,9 @@ class PurchaseForm extends Component
     {
         if ($this->productsearch) {
 
-            $result = DB::table('INV_ST_GROUP_ITEM as p')
-                ->where('barcode', $this->productsearch)
-                ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                    $join->on('s.item_size_code', '=', 'p.item_size');
-                })
-                ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                    $join->on('c.tran_mst_id', '=', 'p.color_code');
-                })
-                ->get(['p.st_group_item_id', 'p.item_name', 'c.color_name', 's.item_size_name'])
+            $result = DB::table('VW_INV_ITEM_DETAILS as p')
+                ->where('p.item_code', $this->productsearch)
+                ->get(['p.st_group_item_id', 'p.item_name', 'p.pr_rate as mrp_rate', 'p.vat_amt', 'p.item_code', 'p.color_name', 'p.item_size_name'])
                 ->toArray();
 
             if ($result) {
@@ -73,15 +67,9 @@ class PurchaseForm extends Component
                 $this->resultAppend(0);
             } else {
 
-                $this->resultProducts = DB::table('INV_ST_GROUP_ITEM as p')
+                $this->resultProducts = DB::table('VW_INV_ITEM_DETAILS as p')
                     ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->productsearch) . '%')
-                    ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                        $join->on('s.item_size_code', '=', 'p.item_size');
-                    })
-                    ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                        $join->on('c.tran_mst_id', '=', 'p.color_code');
-                    })
-                    ->get(['p.st_group_item_id', 'p.item_name', 'c.color_name', 's.item_size_name'])
+                    ->get(['p.st_group_item_id', 'p.item_name', 'p.pr_rate as mrp_rate', 'p.vat_amt', 'p.item_code', 'p.color_name', 'p.item_size_name'])
                     ->toArray();
             }
 
@@ -120,37 +108,6 @@ class PurchaseForm extends Component
             $this->edit_select['supplier_id'] = $tran_mst->p_code;
             $this->edit_select['war_id'] = $tran_mst->war_id;
 
-            $resultPay = DB::table('ACC_PAYMENT_INFO')
-                ->where('tran_mst_id', $purchase_id)
-                ->first();
-            if ($resultPay) {
-                $this->paymentState['pay_mode'] = $resultPay->pay_mode;
-
-                if ($resultPay->pay_mode == 2) {
-                    $this->paymentState['bank_code'] = $resultPay->bank_code;
-                    $this->paymentState['bank_ac_no'] = $resultPay->bank_ac_no;
-                    $this->paymentState['chq_no'] = $resultPay->chq_no;
-                    $this->paymentState['chq_date'] = Carbon::parse($resultPay->chq_date)->toDateString();
-                }
-                if ($resultPay->pay_mode == 3) {
-                    $this->paymentState['card_no'] = $resultPay->card_no;
-                }
-                if ($resultPay->pay_mode == 4) {
-                    $this->paymentState['mfs_id'] = $resultPay->mfs_id;
-                    $this->paymentState['mfs_acc_no'] = $resultPay->mfs_acc_no;
-                }
-
-                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
-                    $this->paymentState['online_trx_id'] = $resultPay->online_trx_id;
-                    $this->paymentState['online_trx_dt'] = Carbon::parse($resultPay->online_trx_dt)->toDateString();
-                }
-            } else {
-                $this->paymentState['pay_mode'] = 1;
-            }
-
-
-            // dd($resultPay);
-
             $resultDtls = DB::table('INV_PURCHASE_DTL as p')
                 ->where('p.tran_mst_id', $purchase_id)
                 ->leftJoin('VW_INV_ITEM_DETAILS as pr', function ($join) {
@@ -188,15 +145,12 @@ class PurchaseForm extends Component
                 ];
             }
 
-
-            // dd($tran_mst->tran_date);
         } else {
             $this->state['net_payable_amt'] = 0;
             $this->state['tot_payable_amt'] = 0;
             $this->state['total_qty'] = 0;
             $this->state['tot_discount'] = 0;
             $this->state['tot_vat_amt'] = 0;
-            // $this->state['pay_amt'] = '';
             $this->state['war_id'] = 1;
             $this->state['status'] = 1;
             $this->state['tran_date'] = Carbon::now()->toDateString();
@@ -240,43 +194,43 @@ class PurchaseForm extends Component
         if ($search) {
             $valid = in_array($search, $this->purchaseCheck);
 
-            if (!$valid) {
-
-                $pricing = DB::table('INV_PRICE_SCHEDULE_MST')
-                    ->where('item_code', $search)
-                    ->first();
-
-                if ($pricing) {
-
-                    $this->purchaseCheck[] = $search;
-
-                    $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
-
-                    $this->purchaseCart[] = [
-                        'item_name' => @$this->resultProducts[$key]->item_name,
-                        'color_name' => @$this->resultProducts[$key]->color_name,
-                        'item_size_name' => @$this->resultProducts[$key]->item_size_name,
-                        'mrp_rate' => $pricing->mrp_rate,
-                        'vat_amt' => $pricing->vat_amt,
-                        'p_vat_amt' => $pricing->vat_amt ?? 0,
-                        'line_total' => $line_total,
-                        'qty' => 1,
-                        'discount' => 0,
-                        'st_group_item_id' => $search,
-                    ];
-
-                    $this->grandCalculation();
-
-                    $this->productsearch = '';
-                    $this->resetProductSearch();
-                } else {
-                    $this->resetProductSearch();
-                    session()->flash('warning', 'Pricing has not added to selected product');
-                }
-            } else {
+            if ($valid) {
                 $this->resetProductSearch();
                 session()->flash('error', 'Product already added to cart');
+                return 0;
             }
+
+            $mrp = @$this->resultProducts[$key]->mrp_rate;
+
+            if (!$mrp) {
+                $this->resetProductSearch();
+                session()->flash('error', 'Pricing has not added to selected product');
+                return 0;
+            }
+
+            $pricing = @$this->resultProducts[$key];
+
+            $this->purchaseCheck[] = $search;
+
+            $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
+
+            $this->purchaseCart[] = [
+                'item_name' => @$this->resultProducts[$key]->item_name,
+                'color_name' => @$this->resultProducts[$key]->color_name,
+                'item_size_name' => @$this->resultProducts[$key]->item_size_name,
+                'mrp_rate' => $pricing->mrp_rate,
+                'vat_amt' => $pricing->vat_amt,
+                'p_vat_amt' => $pricing->vat_amt ?? 0,
+                'line_total' => $line_total,
+                'qty' => 1,
+                'discount' => 0,
+                'st_group_item_id' => $search,
+            ];
+
+            $this->grandCalculation();
+
+            $this->productsearch = '';
+            $this->resetProductSearch();
         }
     }
 
@@ -377,43 +331,44 @@ class PurchaseForm extends Component
 
             $payment_info = [];
 
-            if ($this->pay_amt && $this->pay_amt > 0) {
+            if(!$this->purchase_id){
+                if ($this->pay_amt && $this->pay_amt > 0) {
 
-                $payment_info = [
-                    'tran_type' => 'PR',
-                    'payment_date' => $this->state['tran_date'],
-                    'p_code' => $this->state['p_code'],
-                    'pay_mode' => $this->paymentState['pay_mode'],
-                    'tot_payable_amt' => $this->state['tot_payable_amt'],
-                    'discount' => $this->state['tot_discount'],
-                    'vat_amt' => $this->state['tot_vat_amt'],
-                    'net_payable_amt' => $this->state['net_payable_amt'],
-                    'tot_paid_amt' => $this->pay_amt ?? 0,
-                    'due_amt' => $this->due_amt,
-                    'user_id' => $this->state['user_name'],
-                    'payment_status' => Payment::PaymentCheck($this->due_amt),
-                ];
+                    $payment_info = [
+                        'tran_type' => 'PR',
+                        'payment_date' => $this->state['tran_date'],
+                        'p_code' => $this->state['p_code'],
+                        'pay_mode' => $this->paymentState['pay_mode'],
+                        'tot_payable_amt' => $this->state['tot_payable_amt'],
+                        'discount' => $this->state['tot_discount'],
+                        'vat_amt' => $this->state['tot_vat_amt'],
+                        'net_payable_amt' => $this->state['net_payable_amt'],
+                        'tot_paid_amt' => $this->pay_amt ?? 0,
+                        'due_amt' => $this->due_amt,
+                        'user_id' => $this->state['user_name'],
+                        'payment_status' => Payment::PaymentCheck($this->due_amt),
+                    ];
 
-                // dd($payment_info);
 
-                if ($this->paymentState['pay_mode'] == 2) {
-                    $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
-                    $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
-                    $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
-                    $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
-                }
+                    if ($this->paymentState['pay_mode'] == 2) {
+                        $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
+                        $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
+                        $payment_info['chq_no'] = @$this->paymentState['chq_no'] ?? '';
+                        $payment_info['chq_date'] = @$this->paymentState['chq_date'] ?? '';
+                    }
 
-                if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
-                    $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
-                }
+                    if ($this->paymentState['pay_mode'] == 3 || $this->paymentState['pay_mode'] == 6 || $this->paymentState['pay_mode'] == 7) {
+                        $payment_info['card_no'] = @$this->paymentState['card_no'] ?? '';
+                    }
 
-                if ($this->paymentState['pay_mode'] == 4) {
-                    $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
-                    $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
-                }
-                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
-                    $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
-                    $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
+                    if ($this->paymentState['pay_mode'] == 4) {
+                        $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
+                        $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
+                    }
+                    if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+                        $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
+                        $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
+                    }
                 }
             }
 

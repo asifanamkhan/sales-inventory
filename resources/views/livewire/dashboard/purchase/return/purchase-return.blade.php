@@ -59,17 +59,17 @@
                     <i class="fa-solid fa-search"></i>
                 </button>
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
                 <a wire:navigate href='{{ route('purchase-return-create') }}' type="button"
                     class="btn btn-primary">Create purchase return</a>
             </div>
-            @endpermission
+
             <x-large-modal class='purchase-return-payment'>
                 <livewire:dashboard.purchase.return.pay-partial.payment-return>
             </x-large-modal>
         </div>
-        
+
         <div class="responsive-table">
             <table class="table table-bordered table-hover">
                 <thead>
