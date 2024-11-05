@@ -253,7 +253,8 @@ class PurchaseReturnForm extends Component
                 $this->state['payment_status'] = Payment::ReturnPaymentCheck($this->due_amt);
 
 
-                $tran_mst_id = DB::table('INV_PURCHASE_RET_MST')->insertGetId($this->state, 'tran_mst_id');
+                $tran_mst_id = DB::table('INV_PURCHASE_RET_MST')
+                    ->insertGetId($this->state, 'tran_mst_id');
 
                 foreach ($this->purchaseCart as $key => $value) {
                     if ($value['is_check'] == 1) {

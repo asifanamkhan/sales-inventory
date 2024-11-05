@@ -1,10 +1,11 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" >
+    <div wire:loading class="spinner-border text-primary custom-loading">
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-brands fa-bandcamp"></i> Product brands</h3>
+            <i class="fa-brands fa-bandcamp"></i> Product brands
+        </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Product</a></li>
@@ -29,14 +30,14 @@
                     <option value="100">100</option>
                 </select>
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
                 <button @click="$dispatch('create-product-brand-modal')" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target="#{{ $event }}">
                     Create new product brand
                 </button>
             </div>
-            @endpermission
+
 
             <div wire:ignore.self class="modal fade" id="{{ $event }}" tabindex="-1" role="dialog"
                 aria-labelledby="{{ $event }}" aria-hidden="true">
@@ -55,15 +56,15 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
         <div class="responsive-table">
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td  style="width: 5%">#</td>
-                        <td  >Brand name</td>
-                        <td class="text-center" >Action</td>
+                        <td style="width: 5%">#</td>
+                        <td>Brand name</td>
+                        <td class="text-center">Action</td>
                     </tr>
                 </thead>
                 <tbody>

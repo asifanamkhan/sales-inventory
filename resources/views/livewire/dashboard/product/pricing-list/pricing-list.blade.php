@@ -61,7 +61,7 @@
                 <thead>
                     <tr class="bg-sidebar">
                         <td rowspan="2"  style="width: 5%">#</td>
-                        <td rowspan="2">Product</td>
+                        <td rowspan="2" >Product</td>
                         <td colspan="6" style="text-align: center">Rate</td>
                         <td colspan="2" style="text-align: center">Quantity</td>
                         <td rowspan="2" class="text-center">Action</td>
@@ -84,13 +84,15 @@
                         <td>{{ $this->resultProduct->firstItem() + $key }}</td>
                         <td>
                             {{$product->item_name }}
-
+                            <span style="font-size: 12px; font-style: italic">
                             @if ($product->item_size_name)
-                            {{ $product->item_size_name  }}
+                            , {{ $product->item_size_name  }}
                             @endif
                             @if ($product->color_name)
-                            {{ $product->color_name }}
+                            , {{ $product->color_name }}
                             @endif
+                            ({{$product->item_code }})
+                            </span>
                         </td>
                         <td style="text-align: center">
                             {{ number_format($product->pr_rate, 1, '.', ',') }}

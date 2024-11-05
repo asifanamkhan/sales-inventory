@@ -4,7 +4,8 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-solid fa-paint-roller"></i> Product colors</h3>
+            <i class="fa-solid fa-paint-roller"></i> Product colors
+        </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Product</a></li>
@@ -29,14 +30,14 @@
                     <option value="100">100</option>
                 </select>
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
                 <button @click="$dispatch('create-product-color-modal')" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target="#{{ $event }}">
                     Create new product color
                 </button>
             </div>
-            @endpermission
+
 
             {{-- modal --}}
             <div wire:ignore.self class="modal fade" id="{{ $event }}" tabindex="-1" role="dialog"
@@ -62,8 +63,8 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td  style="width: 5%">#</td>
-                        <td >Color name</td>
+                        <td style="width: 5%">#</td>
+                        <td>Color name</td>
                         <td class="text-center">Action</td>
                     </tr>
                 </thead>

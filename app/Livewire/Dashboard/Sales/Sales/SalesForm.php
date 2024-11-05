@@ -51,15 +51,12 @@ class SalesForm extends Component
     {
         if ($this->productsearch) {
 
-            $result = DB::table('INV_ST_GROUP_ITEM as p')
-                ->where('barcode', $this->productsearch)
-                ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                    $join->on('s.item_size_code', '=', 'p.item_size');
+            $result = DB::table('VW_INV_ITEM_DETAILS as p')
+                ->where('p.item_code', $this->productsearch)
+                ->leftJoin('VW_INV_ITEM_STOCK_QTY as s', function ($join) {
+                    $join->on('s.st_group_item_id', '=', 'p.st_group_item_id');
                 })
-                ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                    $join->on('c.tran_mst_id', '=', 'p.color_code');
-                })
-                ->get(['p.st_group_item_id', 'p.item_name', 'c.color_name', 's.item_size_name'])
+                ->get(['p.st_group_item_id', 'p.item_name', 'p.mrp_rate', 'p.vat_amt', 'p.item_code', 'p.color_name', 'p.item_size_name', 's.stock_qty'])
                 ->toArray();
 
             if ($result) {
@@ -67,16 +64,14 @@ class SalesForm extends Component
                 $this->resultAppend(0);
             } else {
 
-                $this->resultProducts = DB::table('INV_ST_GROUP_ITEM as p')
+                $this->resultProducts = DB::table('VW_INV_ITEM_DETAILS as p')
                     ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->productsearch) . '%')
-                    ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                        $join->on('s.item_size_code', '=', 'p.item_size');
+                    ->leftJoin('VW_INV_ITEM_STOCK_QTY as s', function ($join) {
+                        $join->on('s.st_group_item_id', '=', 'p.st_group_item_id');
                     })
-                    ->leftJoin('INV_COLOR_INFO as c', function ($join) {
-                        $join->on('c.tran_mst_id', '=', 'p.color_code');
-                    })
-                    ->get(['p.st_group_item_id', 'p.item_name', 'c.color_name', 's.item_size_name'])
+                    ->get(['p.st_group_item_id', 'p.item_name', 'p.mrp_rate', 'p.vat_amt', 'p.item_code', 'p.color_name', 'p.item_size_name', 's.stock_qty'])
                     ->toArray();
+                // dd($this->resultProducts, $this->productsearch);
             }
 
             $this->searchSelect = -1;
@@ -88,6 +83,7 @@ class SalesForm extends Component
 
     public function mount($sale_id)
     {
+
         if ($sale_id) {
             $this->sale_id = $sale_id;
             $tran_mst = DB::table('INV_SALES_MST')
@@ -112,42 +108,15 @@ class SalesForm extends Component
             $this->edit_select['customer_id'] = $tran_mst->customer_id;
             $this->edit_select['war_id'] = $tran_mst->war_id;
 
-            $resultPay = DB::table('ACC_PAYMENT_INFO')
-                ->where('ref_memo_no', $tran_mst->memo_no)
-                ->where('tran_mst_id', $sale_id)
-                ->first();
-            if ($resultPay) {
-                $this->paymentState['pay_mode'] = $resultPay->pay_mode;
-
-                if ($resultPay->pay_mode == 2) {
-                    $this->paymentState['bank_code'] = $resultPay->bank_code;
-                    $this->paymentState['bank_ac_no'] = $resultPay->bank_ac_no;
-                    $this->paymentState['chq_no'] = $resultPay->chq_no;
-                    $this->paymentState['chq_date'] = Carbon::parse($resultPay->chq_date)->toDateString();
-                }
-                if ($resultPay->pay_mode == 3) {
-                    $this->paymentState['card_no'] = $resultPay->card_no;
-                }
-                if ($resultPay->pay_mode == 4) {
-                    $this->paymentState['mfs_id'] = $resultPay->mfs_id;
-                    $this->paymentState['mfs_acc_no'] = $resultPay->mfs_acc_no;
-                }
-
-                if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
-                    $this->paymentState['online_trx_id'] = $resultPay->online_trx_id;
-                    $this->paymentState['online_trx_dt'] = Carbon::parse($resultPay->online_trx_dt)->toDateString();
-                }
-            } else {
-                $this->paymentState['pay_mode'] = 1;
-            }
-
-
             // dd($resultPay);
 
             $resultDtls = DB::table('INV_SALES_DTL as p')
                 ->where('p.tran_mst_id', $sale_id)
                 ->leftJoin('VW_INV_ITEM_DETAILS as pr', function ($join) {
                     $join->on('pr.st_group_item_id', '=', 'p.item_code');
+                })
+                ->leftJoin('VW_INV_ITEM_STOCK_QTY as s', function ($join) {
+                    $join->on('s.st_group_item_id', '=', 'p.item_code');
                 })
                 ->get([
                     'p.mrp_rate',
@@ -159,7 +128,8 @@ class SalesForm extends Component
                     'pr.item_name',
                     'pr.color_name',
                     'pr.item_size_name',
-                    'pr.vat_amt as p_vat_amt'
+                    'pr.vat_amt as p_vat_amt',
+                    's.stock_qty'
                 ]);
 
             // dd($resultDtls);
@@ -176,6 +146,7 @@ class SalesForm extends Component
                     'qty' => $resultDtl->item_qty,
                     'discount' => $resultDtl->discount,
                     'st_group_item_id' => $resultDtl->item_code,
+                    'stock_qty' => $resultDtl->stock_qty + $resultDtl->item_qty,
                     // 'expire_date' => $resultDtl->expire_date ? Carbon::parse($resultDtl->expire_date)->toDateString() : ''
                 ];
             }
@@ -187,7 +158,6 @@ class SalesForm extends Component
             $this->state['total_qty'] = 0;
             $this->state['tot_discount'] = 0;
             $this->state['tot_vat_amt'] = 0;
-            // $this->state['pay_amt'] = '';
             $this->state['war_id'] = 1;
             $this->state['status'] = 1;
             $this->state['tran_date'] = Carbon::now()->toDateString();
@@ -224,52 +194,59 @@ class SalesForm extends Component
 
     public function resultAppend($key)
     {
+
         $search = @$this->resultProducts[$key]->st_group_item_id;
 
         if ($search) {
+
+            $mrp = @$this->resultProducts[$key]->mrp_rate;
+
+            if (!$mrp) {
+                $this->resetProductSearch();
+                session()->flash('error', 'Pricing has not added to selected product');
+                return 0;
+            }
+
             $valid = in_array($search, $this->saleCheck);
-            if (!$valid) {
 
-                $pricing = DB::table('INV_PRICE_SCHEDULE_MST')
-                    ->where('item_code', $search)
-                    ->first();
-
-                if ($pricing) {
-
-                    // $stock = DB::table('VW_ITEM_STOCK_QTY')
-                    // ->where('item_code', $search)
-                    // ->first();
-                    // dd($stock);
-
-                    $this->saleCheck[] = $search;
-
-                    $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
-
-                    $this->saleCart[] = [
-                        'item_name' => @$this->resultProducts[$key]->item_name,
-                        'color_name' => @$this->resultProducts[$key]->color_name,
-                        'item_size_name' => @$this->resultProducts[$key]->item_size_name,
-                        'mrp_rate' => $pricing->mrp_rate,
-                        'vat_amt' => $pricing->vat_amt,
-                        'p_vat_amt' => $pricing->vat_amt ?? 0,
-                        'line_total' => $line_total,
-                        'qty' => 1,
-                        'discount' => 0,
-                        'st_group_item_id' => $search,
-                    ];
-
-                    $this->grandCalculation();
-
-                    $this->productsearch = '';
-                    $this->resetProductSearch();
-                } else {
-                    $this->resetProductSearch();
-                    session()->flash('warning', 'Pricing has not added to selected product');
-                }
-            } else {
+            if ($valid) {
                 $this->resetProductSearch();
                 session()->flash('error', 'Product already added to cart');
+                return 0;
             }
+
+            $stock = @$this->resultProducts[$key]->stock_qty;
+
+            if ($stock < 1) {
+                $this->resetProductSearch();
+                session()->flash('error', "You can maximum $stock qty of this item");
+                return 0;
+            }
+
+            $pricing = $this->resultProducts[$key];
+
+            $this->saleCheck[] = $search;
+
+            $line_total = (float)$pricing->mrp_rate + @$pricing->vat_amt ?? 0;
+
+            $this->saleCart[] = [
+                'item_name' => @$this->resultProducts[$key]->item_name,
+                'color_name' => @$this->resultProducts[$key]->color_name,
+                'item_size_name' => @$this->resultProducts[$key]->item_size_name,
+                'mrp_rate' => $pricing->mrp_rate,
+                'vat_amt' => $pricing->vat_amt,
+                'p_vat_amt' => $pricing->vat_amt ?? 0,
+                'line_total' => $line_total,
+                'qty' => 1,
+                'discount' => 0,
+                'st_group_item_id' => $search,
+                'stock_qty' => @$this->resultProducts[$key]->stock_qty,
+            ];
+
+            $this->grandCalculation();
+
+            $this->productsearch = '';
+            $this->resetProductSearch();
         }
     }
 
@@ -335,15 +312,14 @@ class SalesForm extends Component
 
     public function qtyCalculation($product, $key)
     {
-        $stock = DB::table('VW_INV_ITEM_STOCK_QTY')
-            ->where('item_code', $product)
-            ->pluck('stock_qty');
 
-        if ((float)$stock[0] >= $this->saleCart[$key]['qty']) {
+        $stock = $this->saleCart[$key]['stock_qty'];
+
+        if ((float)$this->saleCart[$key]['qty'] <= (float)$stock ) {
             $this->calculation($key);
         } else {
-            session()->flash('error', "You can maximum $stock[0] qty of this item");
-            $this->saleCart[$key]['qty'] = 1;
+            session()->flash('error', "You can maximum $stock qty of this item");
+            $this->saleCart[$key]['qty'] = $stock;
         }
     }
 
@@ -360,79 +336,73 @@ class SalesForm extends Component
 
         ])->validate();
 
-        if (count($this->saleCart) > 0) {
+        if (count($this->saleCart) <= 0) {
+            session()->flash('error', '*At least one product need to added');
+            return 0;
+        }
 
-            // dd(
-            //     $this->state,
-            //     $this->paymentState,
-            //     $this->saleCart,
-            // );
+        // dd(
+        //     $this->state,
+        //     $this->paymentState,
+        //     $this->saleCart,
+        // );
 
-            DB::beginTransaction();
-            try {
-                $this->state['user_name'] = Auth::user()->id;
-                $this->state['emp_id'] = Auth::user()->id;
-                $this->state['comp_id'] = Auth::user()->id;
-                $this->state['branch_id'] = Auth::user()->id;
-                $this->state['tot_due_amt'] = $this->due_amt;
-                $this->state['tot_paid_amt'] = $this->pay_amt;
-                $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
+        DB::beginTransaction();
+        try {
+            $this->state['user_name'] = Auth::user()->id;
+            $this->state['emp_id'] = Auth::user()->id;
+            $this->state['comp_id'] = Auth::user()->id;
+            $this->state['branch_id'] = Auth::user()->id;
+            $this->state['tot_due_amt'] = $this->due_amt;
+            $this->state['tot_paid_amt'] = $this->pay_amt;
+            $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
 
-                if ($this->sale_id) {
-                    DB::table('INV_SALES_MST')
-                        ->where('tran_mst_id', $this->sale_id)
-                        ->update($this->state);
+            if ($this->sale_id) {
+                DB::table('INV_SALES_MST')
+                    ->where('tran_mst_id', $this->sale_id)
+                    ->update($this->state);
 
-                    DB::table('INV_SALES_DTL')
-                        ->where('tran_mst_id', $this->sale_id)
-                        ->delete();
+                DB::table('INV_SALES_DTL')
+                    ->where('tran_mst_id', $this->sale_id)
+                    ->delete();
 
-                    $tran_mst_id = $this->sale_id;
-                } else {
-                    $tran_mst_id = DB::table('INV_SALES_MST')
-                        ->insertGetId($this->state, 'tran_mst_id');
-                }
+                $tran_mst_id = $this->sale_id;
+            } else {
+                $tran_mst_id = DB::table('INV_SALES_MST')
+                    ->insertGetId($this->state, 'tran_mst_id');
+            }
 
-                foreach ($this->saleCart as $key => $value) {
-                    DB::table('INV_SALES_DTL')->insert([
-                        'tran_mst_id' => $tran_mst_id,
-                        'item_code' => $value['st_group_item_id'],
-                        'item_qty' => $value['qty'],
-                        'mrp_rate' => $value['mrp_rate'],
-                        'vat_amt' => $value['vat_amt'],
-                        'discount' => $value['discount'],
-                        'tot_payble_amt' => $value['line_total'],
-                        'user_name' => $this->state['user_name'],
-                    ]);
-                }
+            foreach ($this->saleCart as $key => $value) {
+                DB::table('INV_SALES_DTL')->insert([
+                    'tran_mst_id' => $tran_mst_id,
+                    'item_code' => $value['st_group_item_id'],
+                    'item_qty' => $value['qty'],
+                    'mrp_rate' => $value['mrp_rate'],
+                    'vat_amt' => $value['vat_amt'],
+                    'discount' => $value['discount'],
+                    'tot_payble_amt' => $value['line_total'],
+                    'user_name' => $this->state['user_name'],
+                ]);
+            }
+
+            if (!$this->sale_id) {
 
                 $ref_memo_no = DB::table('INV_SALES_MST')
-                    ->where('tran_mst_id', $tran_mst_id)
-                    ->first();
+                ->where('tran_mst_id', $tran_mst_id)
+                ->first();
 
-                if ($this->sale_id) {
-                    DB::table('ACC_VOUCHER_INFO')
-                        ->where('ref_memo_no', $ref_memo_no->memo_no)
-                        ->where('ref_pay_no', null)
-                        ->where('cash_type', null)
-                        ->update([
-                            'amount' => $this->state['tot_payable_amt'],
-                        ]);
-                } else {
-                    DB::table('ACC_VOUCHER_INFO')->insert([
-                        'voucher_date' => $this->state['tran_date'],
-                        'voucher_type' => 'CR',
-                        'narration' => 'sale vouchar',
-                        'amount' => $this->state['tot_payable_amt'],
-                        'created_by' => $this->state['user_name'],
-                        'tran_type' => 'SL',
-                        'ref_memo_no' => $ref_memo_no->memo_no,
-                        'account_code' => 4010,
-                    ]);
-                }
+                DB::table('ACC_VOUCHER_INFO')->insert([
+                    'voucher_date' => $this->state['tran_date'],
+                    'voucher_type' => 'CR',
+                    'narration' => 'sale vouchar',
+                    'amount' => $this->state['tot_payable_amt'],
+                    'created_by' => $this->state['user_name'],
+                    'tran_type' => 'SL',
+                    'ref_memo_no' => $ref_memo_no->memo_no,
+                    'account_code' => 4010,
+                ]);
 
                 if ($this->pay_amt && $this->pay_amt > 0) {
-
 
                     $payment_info = [
                         'tran_mst_id' => $tran_mst_id,
@@ -470,14 +440,9 @@ class SalesForm extends Component
                         $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                     }
 
-                    if ($this->sale_id) {
-                        DB::table('ACC_PAYMENT_INFO')
-                            ->where('tran_mst_id', $this->sale_id)
-                            ->update($payment_info);
-                    } else {
-
+                    if (!$this->sale_id) {
                         $pay_id = DB::table('ACC_PAYMENT_INFO')
-                            ->insertGetId($payment_info, 'payment_no');
+                        ->insertGetId($payment_info, 'payment_no');
 
                         $pay_memo = DB::table('ACC_PAYMENT_INFO')
                             ->where('payment_no', $pay_id)
@@ -498,26 +463,24 @@ class SalesForm extends Component
                         ]);
                     }
                 }
-
-                DB::commit();
-
-                if ($this->sale_id) {
-                    session()->flash('status', 'Sale updated successfully');
-                } else {
-                    session()->flash('status', 'New sale created successfully');
-                }
-
-                return $this->redirect(route('sale'), navigate: true);
-            } catch (\Exception $exception) {
-                DB::rollback();
-                session()->flash('error', $exception);
             }
-        } else {
-            session()->flash('error', '*At least one product need to added');
+
+            DB::commit();
+
+            if ($this->sale_id) {
+                session()->flash('status', 'Sale updated successfully');
+            } else {
+                session()->flash('status', 'New sale created successfully');
+            }
+
+            return $this->redirect(route('sale'), navigate: true);
+        } catch (\Exception $exception) {
+            DB::rollback();
+            session()->flash('error', $exception);
         }
     }
     public function render()
     {
         return view('livewire.dashboard.sales.sales.sales-form');
-    }
+   }
 }

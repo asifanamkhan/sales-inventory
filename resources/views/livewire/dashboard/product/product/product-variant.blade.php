@@ -1,5 +1,5 @@
-<div class="">
-    <div class="col-md-12">
+<div class="row">
+    <div class="col-md-4">
         @if (session('status'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             {{ session('status') }}
@@ -21,7 +21,7 @@
             </select>
         </div>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-4">
         <div class="form-group mb-3" wire:ignore>
             <label for="">Color </label>
             <select class="form-select select2" id='product_color'>
@@ -34,8 +34,8 @@
             </select>
         </div>
     </div>
-    <div>
-        <a wire:click.prevent='addVariant' class="btn btn-sm btn-success">
+    <div class="col-md-4 d-flex align-items-center">
+        <a wire:click.prevent='addVariant' class="btn btn btn-success">
             <i class="fa fa-plus"></i>
             Add
         </a>

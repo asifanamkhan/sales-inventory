@@ -42,9 +42,6 @@ class Sales extends Component
             ->leftJoin('INV_CUSTOMER_INFO as s', function ($join) {
                 $join->on('s.customer_id', '=', 'p.customer_id');
             })
-            // ->leftJoin('INV_PURCHASE_RET_MST as sr', function ($join) {
-            //     $join->on('sr.ref_memo_no', '=', 'p.memo_no');
-            // })
             ->select(['p.*', 's.customer_name as p_name']);
 
         if ($this->search) {
@@ -74,8 +71,6 @@ class Sales extends Component
         if ($this->lastFilterDate) {
             $sales->where('p.tran_date', '<=', $this->lastFilterDate);
         }
-            // $p =   $sales->get();
-            // dd($p);
 
         return $sales->paginate($this->pagination);
     }
@@ -100,8 +95,8 @@ class Sales extends Component
             $this->selectRows = [];
         }
     }
-    public function mount()
-    {
+    #[On('sale-all')]
+    public function grandCal(){
         $amt = DB::table('INV_SALES_MST as p')
             ->select(
                 DB::raw('SUM(tot_payable_amt) AS tot_payable_amt'),
@@ -115,6 +110,10 @@ class Sales extends Component
         $this->saleGrantAmt = $amt->tot_payable_amt;
         $this->salePaidAmt = $amt->tot_paid_amt;
         $this->saleDueAmt = Payment::dueAmount($this->saleGrantAmt, $this->saleRtAmt, $this->salePaidAmt);
+    }
+    public function mount()
+    {
+        $this->grandCal();
     }
     public function render()
     {

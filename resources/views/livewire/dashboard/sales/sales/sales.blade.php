@@ -69,15 +69,16 @@
                     <i class="fa-solid fa-search"></i>
                 </button>
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto" style="text-align: right">
-                <a wire:navigate href='{{ route('sale-create') }}' type="button" class="btn btn-primary">Create new Sale</a>
+                <a wire:navigate href='{{ route('sale-create') }}' type="button" class="btn btn-primary">Create new
+                    Sale</a>
             </div>
-            @endpermission
-        {{-- modal --}}
-        <x-large-modal class='payment'>
-            <livewire:dashboard.sales.sales.pay-partial.payment>
-        </x-large-modal>
+
+            {{-- modal --}}
+            <x-large-modal class='payment'>
+                <livewire:dashboard.sales.sales.pay-partial.payment>
+            </x-large-modal>
         </div>
         <div class="responsive-table">
             <table class="table table-bordered table-hover">
@@ -113,7 +114,8 @@
 
                         </td>
                         <td>
-                            <input placeholder="search" wire:model.live.debounce.500ms='searchMemo' type="text" class="form-control">
+                            <input placeholder="search" wire:model.live.debounce.500ms='searchMemo' type="text"
+                                class="form-control">
                         </td>
                         <td>
                             <input placeholder="search" wire:model.live.debounce.500ms='searchSupplier' type="text"
@@ -247,7 +249,8 @@
                                     <a class="dropdown-item" href="{{ route('sale-edit', $sale->tran_mst_id) }}">
                                         <i class="fa fa-edit"></i> <span>Edit</span>
                                     </a>
-                                    <a class="dropdown-item d-flex gap-1" wire:navigate href="{{ route('sale-details', $sale->tran_mst_id) }}">
+                                    <a class="dropdown-item d-flex gap-1" wire:navigate
+                                        href="{{ route('sale-details', $sale->tran_mst_id) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             fill="currentColor" class="bi bi-binoculars" viewBox="0 0 16 16">
                                             <path
@@ -255,10 +258,12 @@
                                         </svg>
                                         <span>Details</span>
                                     </a>
-                                    <a @click="$dispatch('sale-payment', {id: {{ $sale->tran_mst_id }}})" data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
+                                    <a @click="$dispatch('sale-payment', {id: {{ $sale->tran_mst_id }}})"
+                                        data-toggle="modal" data-target=".payment" class="dropdown-item" href="#">
                                         <i class="fa fa-credit-card"></i> Make payment
                                     </a>
-                                    <a target="_blank" class="dropdown-item" href="{{ route('sale-invoice', $sale->tran_mst_id) }}">
+                                    <a target="_blank" class="dropdown-item"
+                                        href="{{ route('sale-invoice', $sale->tran_mst_id) }}">
                                         <i class="fas fa-print"></i> Print
                                     </a>
                                     <a class="dropdown-item" href="#">
@@ -274,6 +279,24 @@
                     @endforeach
                     @endif
                 </tbody>
+                <tfoot>
+                    <tr style="text-align: right; font-weight:600">
+                        <td colspan="6">Total</td>
+                        <td>
+                            {{ number_format($grand_total, 2, '.', ',') }}
+                        </td>
+                        <td>
+                            {{ number_format($rt_total, 2, '.', ',') }}
+                        </td>
+                        <td>
+                            {{ number_format($paid_total, 2, '.', ',') }}
+                        </td>
+                        <td>
+                            {{ number_format($due_total, 2, '.', ',') }}
+                        </td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <span>{{ $this->resultSale->links() }}</span>
@@ -292,6 +315,3 @@
     })
 </script>
 @endscript
-
-
-

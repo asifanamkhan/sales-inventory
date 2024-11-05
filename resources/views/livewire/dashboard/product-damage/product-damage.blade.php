@@ -1,5 +1,5 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" >
+    <div wire:loading class="spinner-border text-primary custom-loading">
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
@@ -38,24 +38,25 @@
                     <option value="100">100</option>
                 </select>
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
-                <a href='{{ route('product-damage-create') }}' type="button" class="btn btn-primary">Create new product damage</a>
+                <a href='{{ route('product-damage-create') }}' type="button" class="btn btn-primary">Create new product
+                    damage</a>
             </div>
-            @endpermission
+
 
         </div>
         <div class="responsive-table">
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td  style="width: 5%">#</td>
-                        <td >Date</td>
-                        <td >Memo</td>
+                        <td style="width: 5%">#</td>
+                        <td>Date</td>
+                        <td>Memo</td>
                         <td style="text-align: center">Qty</td>
-                        <td >Amount</td>
-                        <td >Status</td>
-                        <td class="text-center" >Action</td>
+                        <td>Amount</td>
+                        <td>Status</td>
+                        <td class="text-center">Action</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,15 +67,16 @@
                         <td>{{ date('d-M-Y', strtotime($product_damage->tran_date)) }}</td>
                         <td>{{ $product_damage->memo_no }}</td>
                         <td style="text-align: center">
-                            {{ number_format($product_damage->total_qty, 2, '.', '')  }}
+                            {{ number_format($product_damage->total_qty, 2, '.', '') }}
                         </td>
                         <td style="text-align: right">
-                            {{ number_format($product_damage->tot_payable_amt, 2, '.', '')  }}
+                            {{ number_format($product_damage->tot_payable_amt, 2, '.', '') }}
                         </td>
                         <td>{{ $product_damage->status }}</td>
                         <td style="">
                             <div class="d-flex justify-content-center gap-2">
-                                <a wire:navigate href="{{ route('product-damage-edit',$product_damage->tran_mst_id) }}" class="btn btn-sm btn-success">
+                                <a wire:navigate href="{{ route('product-damage-edit',$product_damage->tran_mst_id) }}"
+                                    class="btn btn-sm btn-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
                                         viewBox="0 0 50 50">
                                         <path fill="white"
@@ -105,6 +107,3 @@
 <script>
 
 </script>
-
-
-

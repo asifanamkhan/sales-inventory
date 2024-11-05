@@ -4,7 +4,8 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-brands fa-phabricator"></i> Product categories</h3>
+            <i class="fa-brands fa-phabricator"></i> Product categories
+        </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Product</a></li>
@@ -29,14 +30,14 @@
                     <option value="100">100</option>
                 </select>
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
                 <button @click="$dispatch('create-product-category-modal')" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target=".{{ $event }}">
                     Create new product category
                 </button>
             </div>
-            @endpermission
+
 
             {{-- modal --}}
             <div wire:ignore.self class="modal fade {{ $event }}" tabindex="-1" role="dialog"

@@ -4,7 +4,8 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-brands fa-product-hunt"></i> Product</h3>
+            <i class="fa-brands fa-product-hunt"></i> Product
+        </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Product</a></li>
@@ -29,24 +30,26 @@
                     <option value="100">100</option>
                 </select>
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
-                <a wire:navigate href='{{ route('product-create') }}' type="button" class="btn btn-primary">Create new product</a>
+                <a wire:navigate href='{{ route('product-create') }}' type="button" class="btn btn-primary">Create new
+                    product</a>
             </div>
-            @endpermission
+
 
         </div>
         <div class="responsive-table">
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr class="bg-sidebar">
-                        <td  style="width: 5%">#</td>
+                        <td style="width: 5%">#</td>
                         <td style="width: 7%">Image</td>
-                        <td >Product name</td>
-                        <td >Code</td>
-                        <td >Category name</td>
-                        <td >Brand name</td>
-                        <td class="text-center" >Action</td>
+                        <td>Product name</td>
+                        <td>Group</td>
+                        <td>Type</td>
+                        <td>Category name</td>
+                        <td>Brand name</td>
+                        <td class="text-center">Action</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,25 +61,37 @@
                             <div class="d-flex justify-content-center align-items-center">
                                 @if ($product->photo)
                                 @php
-                                    $photo = json_decode($product->photo)[0];
+                                $photo = json_decode($product->photo)[0];
 
                                 @endphp
                                 <a target='_blank' href="{{ asset('storage/app/upload/product/'.$photo) }}">
-                                    <img class="" style="height: 30px; width:45px" src="{{ asset('storage/app/upload/product/'.$photo) }}" alt="">
+                                    <img class="" style="height: 30px; width:45px"
+                                        src="{{ asset('storage/app/upload/product/'.$photo) }}" alt="">
                                 </a>
                                 @else
-                                    <img class="" style="height: 30px; width:45px" src="{{ asset('public/img/no-img.png') }}" alt="">
+                                <img class="" style="height: 30px; width:45px"
+                                    src="{{ asset('public/img/no-img.png') }}" alt="">
                                 @endif
                             </div>
 
                         </td>
                         <td>{{ $product->item_name }}</td>
-                        <td>{{ $product->item_code }}</td>
+                        <td>{{ $product->group_name }}</td>
+                        <td>
+                            @if ($product->variant_type == 1)
+                            Single
+                            @elseif ($product->variant_type == 2)
+                            Variable
+                            @else
+                            Combo
+                            @endif
+                        </td>
                         <td>{{ $product->catagories_name }}</td>
                         <td>{{ $product->brand_name }}</td>
                         <td style="">
                             <div class="d-flex justify-content-center gap-2">
-                                <a wire:navigate href="{{ route('product-edit',$product->u_code) }}" class="btn btn-sm btn-success">
+                                <a wire:navigate href="{{ route('product-edit',$product->u_code) }}"
+                                    class="btn btn-sm btn-success">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px"
                                         viewBox="0 0 50 50">
                                         <path fill="white"
@@ -107,4 +122,3 @@
 <script>
 
 </script>
-

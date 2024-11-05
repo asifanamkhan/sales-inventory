@@ -134,12 +134,24 @@
                                         @click="edit = false"
                                         style="@if($searchSelect === $pk) background: #1e418685; @endif">
                                         {{ $resultProduct->item_name }}
-                                        @if (@$resultProduct->item_size_name)
-                                        | {{ $resultProduct->item_size_name }}
-                                        @endif
-                                        @if (@$resultProduct->color_name)
-                                        | {{ $resultProduct->color_name}}
-                                        @endif
+                                            <span style="font-size: 12px; font-style: italic">
+                                                @if (@$resultProduct->item_size_name)
+                                                , {{ $resultProduct->item_size_name }}
+                                                @endif
+                                                @if (@$resultProduct->color_name)
+                                                , {{ $resultProduct->color_name}}
+                                                @endif
+                                            , Stock: {{ $resultProduct->stock_qty }},
+                                            , MRP:
+                                            @if ($resultProduct->mrp_rate)
+                                            {{ $resultProduct->mrp_rate }},
+                                            @else
+                                            -,
+                                            @endif
+
+                                            ({{ $resultProduct->item_code }})
+
+                                            </span>
                                     </p>
                                     @empty
                                     <p>No product</p>
@@ -249,7 +261,9 @@
                     </tfoot>
                 </table>
             </div>
+
             <div class="col-md-5 mt-4">
+                @if (count($edit_select) == 0)
                 <div style="border: 1px solid #DEE2E6; padding: 0 !important">
                     <div>
                         <h4 class="h4 text-center pt-2 pb-2" style="background: #0080005c">
@@ -337,7 +351,9 @@
                         @endif
                     </div>
                 </div>
+                @endif
             </div>
+
             <div class="col-md-2"> </div>
             <div class="col-md-5 mt-4">
                 <table class="table table-borderless">
@@ -350,12 +366,13 @@
                             </td>
                         </tr>
                         <tr style="text-align: right">
-                            <td>Net payable</td>
+                            <td>Net amount</td>
                             <td>
                                 <input style="text-align: right" readonly class="form-control"
                                     wire:model='state.tot_payable_amt'>
                             </td>
                         </tr>
+                        @if (count($edit_select) == 0)
                         <tr style="text-align: right">
                             <td> Payment amount</td>
                             <td>
@@ -369,6 +386,7 @@
                                 <input style="text-align: right;" readonly class="form-control" wire:model='due_amt'>
                             </td>
                         </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>

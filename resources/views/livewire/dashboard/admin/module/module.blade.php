@@ -1,5 +1,5 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" >
+    <div wire:loading class="spinner-border text-primary custom-loading">
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
@@ -20,9 +20,10 @@
         <div class="row g-3 mb-3 align-items-center">
             {{-- @permission('25') --}}
             <div class="col-auto">
-                <input type="text" wire:model.live.debounce.300ms='search' class="form-control" placeholder="search here">
+                <input type="text" wire:model.live.debounce.300ms='search' class="form-control"
+                    placeholder="search here">
             </div>
-            {{-- @endpermission --}}
+            {{-- --}}
             <div class="col-auto">
                 <select class="form-select" wire:model.live='pagination' name="" id="">
                     <option value="5">5</option>

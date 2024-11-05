@@ -14,14 +14,14 @@ class ProductForm extends Component
     public $product_groups, $product_group_id,
         $product_categories,
         $product_brands, $product_brand_id,
-        $product_units, $product_unit_id;
+        $product_units, $product_unit_id,$product_u_code;
 
     public $edit_select = [];
+    public $editCategory = 0;
 
     public $photos = [];
     public $editPhotos = [];
-    public $varient = false;
-    public $varientkey;
+    public $variant_type = 1;
     public $description;
     public $variant_cart = [];
     public $state = [];
@@ -57,14 +57,6 @@ class ProductForm extends Component
             ->get();
     }
 
-    public function updatedVarientkey($value){
-        if($value){
-            $this->varient = true;
-            $this->dispatch('refresh-product-varient');
-        }else{
-            $this->varient = false;
-        }
-    }
 
     // ------------- product create end ----------------
 
@@ -75,6 +67,7 @@ class ProductForm extends Component
 
     public function save()
     {
+
         Validator::make($this->state, [
             'group_code' => 'required',
             'catagories_id' => 'required',
@@ -95,17 +88,41 @@ class ProductForm extends Component
         }
 
 
-        $this->state['has_variant'] = $this->varient;
+        if ($this->product_u_code) {
+            $this->state['u_code'] = $this->product_u_code;
+            
+            foreach ($this->variant_cart as $cart) {
+                $cart = (array)$cart;
+                // dd($product_exist);
+                if(@$cart['st_group_item_id']){
+                    $this->state['item_size'] = $cart['item_size'];
+                    $this->state['color_code'] = $cart['color_code'];
+                    $this->state['variant_description'] = $cart['variant_description'];
 
-        if(count($this->variant_cart) > 0){
-            foreach($this->variant_cart as $cart){
-                $this->state['item_size'] = $cart['item_size'];
-                $this->state['color_code'] = $cart['color_code'];
-                DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
+                    DB::table('INV_ST_GROUP_ITEM')
+                        ->where('st_group_item_id', $cart['st_group_item_id'])
+                        ->update($this->state);
+
+                }else{
+                    $this->state['item_size'] = $cart['item_size'];
+                    $this->state['color_code'] = $cart['color_code'];
+                    $this->state['variant_description'] = $cart['variant_description'];
+                    DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
+                }
             }
 
         }else{
-            DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
+            if(count($this->variant_cart) > 0){
+                foreach($this->variant_cart as $cart){
+                    $this->state['item_size'] = $cart['item_size'];
+                    $this->state['color_code'] = $cart['color_code'];
+                    $this->state['variant_description'] = $cart['variant_description'];
+                    DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
+                }
+
+            }else{
+                DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
+            }
         }
 
         session()->flash('status', 'New product create successfully. You can find it at product list');
@@ -132,14 +149,15 @@ class ProductForm extends Component
 
     public function mount($product_u_code){
         if($product_u_code){
+            $this->product_u_code = $product_u_code;
             $product_edit = (array)DB::table('INV_ST_GROUP_ITEM')
                 ->where('u_code', $product_u_code)
                 ->first([
                     'item_name','group_code','unit_id','model',
-                    'catagories_id','description','photo','brand_code','has_variant'
+                    'catagories_id','description','photo','brand_code','variant_type',
                 ]);
 
-           if($product_edit['has_variant']){
+           if($product_edit['variant_type'] == 2){
                 $product_edit_varient = DB::table('INV_ST_GROUP_ITEM as p')
                     ->where('u_code', $product_u_code)
                     ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
@@ -148,12 +166,12 @@ class ProductForm extends Component
                     ->leftJoin('INV_COLOR_INFO as c', function ($join) {
                         $join->on('c.tran_mst_id', '=', 'p.color_code');
                     })
-                    ->get(['p.item_size','p.color_code','c.color_name','s.item_size_name'])
+                    ->get(['p.item_size','p.color_code','p.variant_description','c.color_name','s.item_size_name','p.st_group_item_id'])
                     ->toArray();
 
                 $this->variant_cart = $product_edit_varient;
-                $this->varient = true;
-                $this->varientkey = true;
+                $this->variant_type = 2;
+
            }
 
             if($product_edit['photo']){
@@ -167,7 +185,10 @@ class ProductForm extends Component
             $this->edit_select['edit_category_id'] = $product_edit['catagories_id'];
             $this->edit_select['edit_unit_id'] = $product_edit['unit_id'];
             $this->edit_select['edit_brand_id'] = $product_edit['brand_code'];
+            $this->editCategory = 1;
 
+        }else{
+            $this->editCategory = 0;
         }
 
         $this->productGroup();

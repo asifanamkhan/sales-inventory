@@ -1,5 +1,5 @@
 <div>
-    <div wire:loading class="spinner-border text-primary custom-loading" >
+    <div wire:loading class="spinner-border text-primary custom-loading">
         <span class="sr-only">Loading...</span>
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
@@ -61,13 +61,14 @@
                     <i class="fa-solid fa-search"></i>
                 </button>
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
-                <a wire:navigate href='{{ route('sale-return-create') }}' type="button" class="btn btn-primary">Create new sale return</a>
+                <a wire:navigate href='{{ route('sale-return-create') }}' type="button" class="btn btn-primary">Create
+                    new sale return</a>
             </div>
-            @endpermission
+
             <x-large-modal class='sale-return-payment'>
-                <livewire:dashboard.sales.sales-return.pay-partial.payment >
+                <livewire:dashboard.sales.sales-return.pay-partial.payment>
             </x-large-modal>
         </div>
         <div class="responsive-table">
@@ -202,6 +203,3 @@
         @this.set('searchDate', $('#date-filter').val(), false);
     })
 </script>
-
-
-

@@ -62,11 +62,11 @@
             <div class="col-md-2">
 
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
                 <a wire:navigate href='{{route('lc-create') }}' type="button" class="btn btn-primary">Create new lc</a>
             </div>
-            @endpermission
+
 
             {{-- modal --}}
             {{-- <x-large-modal class='payment'>
@@ -148,7 +148,8 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" wire:navigate href="{{ route('lc-edit', $lc->tran_mst_id) }}">
+                                    <a class="dropdown-item" wire:navigate
+                                        href="{{ route('lc-edit', $lc->tran_mst_id) }}">
                                         <i class="fa fa-edit"></i> <span>Edit</span>
                                     </a>
                                     <a class="dropdown-item d-flex gap-1" wire:navigate

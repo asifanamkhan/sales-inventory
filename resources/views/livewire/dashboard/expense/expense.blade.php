@@ -77,12 +77,12 @@
             <div class="col-md-2">
 
             </div>
-            @permission(1,'visible_flag')
+
             <div class="col-auto">
                 <a wire:navigate href='{{route('expense-create') }}' type="button" class="btn btn-primary">Create new
                     expense</a>
             </div>
-            @endpermission
+
 
             {{-- modal --}}
             <x-large-modal class='payment'>
