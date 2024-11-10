@@ -1,27 +1,21 @@
 <?php
 
-namespace App\Livewire\Dashboard\Hrm\Customer;
+namespace App\Livewire\Dashboard\Sales\Customer;
 
-use Carbon\Carbon;
+use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
 
-class CustomerCreate extends Component
+class CustomerAddForm extends Component
 {
-    use WithFileUploads;
+
 
     public $state = [];
-    public $customer_types,$customer_type, $sale;
+    public $customer_types, $sale;
     public $editForm = '';
 
     public function save()
     {
-        $this->state['customer_type'] = $this->customer_type;
-
         Validator::make($this->state, [
             'customer_name' => 'required',
             'phone_no' => 'required',
@@ -31,19 +25,12 @@ class CustomerCreate extends Component
 
         ])->validate();
 
-
-        if (@$this->state['photo']) {
-            $this->state['photo'] = $this->state['photo']->store('upload/customer');
-        }
-
-        DB::table('INV_CUSTOMER_INFO')->insert($this->state);
-
+        $customer_id = DB::table('INV_CUSTOMER_INFO')->insertGetId($this->state,'customer_id');
         session()->flash('status', 'New customers create successfully. You can find it at customers list');
-
+        $this->dispatch('add-customer-sale', customer_id: $customer_id);
         $this->reset();
-        // $this->resetValidation();
-        $this->state['photo'] = '';
-        $this->state['customer_type'] = '';
+        $this->category_type();
+
     }
 
     public function category_type()
@@ -51,12 +38,14 @@ class CustomerCreate extends Component
         $this->customer_types = DB::table('INV_CUSTOMER_TYPE')
             ->orderBy('customer_type_code', 'DESC')
             ->get();
+
     }
 
-
+    public function mount(){
+        $this->category_type();
+    }
     public function render()
     {
-        $this->category_type();
-        return view('livewire.dashboard.hrm.customer.customer-create')->title('Create customer');
+        return view('livewire.dashboard.sales.customer.customer-add-form');
     }
 }

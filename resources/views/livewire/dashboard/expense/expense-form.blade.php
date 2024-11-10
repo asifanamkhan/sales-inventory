@@ -52,26 +52,24 @@
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="d-flex align-items-center">
-                    <div style="width: 90%">
-                        <div class="form-group mb-3" wire:ignore>
-                            <label for="">Type<span style="color: red"> * </span></label>
-                            <select class="form-select select2" id='type'>
-                                <option value="">Select type</option>
-                                @forelse ($categories as $type)
-                                <option @if ($type->expense_id == @$edit_select['expense_type'])
-                                    selected
-                                    @endif
-                                    value="{{ $type->expense_id }}">{{ $type->expense_type }}</option>
-                                @empty
-                                <option value=""></option>
-                                @endforelse
-                            </select>
-                        </div>
+                <div class="">
+
+                    <div class="form-group mb-3" wire:ignore>
+                        <label for="">Type<span style="color: red"> * </span></label>
+                        <select class="form-select select2" id='type'>
+                            <option value="">Select type</option>
+                            @forelse ($categories as $type)
+                            <option account_code={{ $type->account_code }} @if ($type->expense_id ==
+                                @$edit_select['expense_type'])
+                                selected
+                                @endif
+                                value="{{ $type->expense_id }}">{{ $type->expense_type }}</option>
+                            @empty
+                            <option value=""></option>
+                            @endforelse
+                        </select>
                     </div>
-                    <div class="pt-2">
-                        <a class="btn btn-primary">+</a>
-                    </div>
+
                 </div>
                 @error('expense_id')
                 <small class="form-text text-danger">{{ $message }}</small>
@@ -312,6 +310,8 @@
 
     $('#type').on('change', function(e){
         @this.set('state.expense_type', e.target.value, false);
+        let option = $(this).find('option:selected').attr('account_code');
+        @this.set('account_code', option, false);
     });
 
     $wire.on('set_bank_code_expense',(event)=>{
