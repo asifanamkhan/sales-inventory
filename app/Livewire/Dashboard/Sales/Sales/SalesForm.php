@@ -9,6 +9,7 @@ use Livewire\Component;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Livewire\Attributes\On;
 
 class SalesForm extends Component
 {
@@ -32,6 +33,19 @@ class SalesForm extends Component
         return $this->customers = DB::table('INV_CUSTOMER_INFO')
             ->orderBy('customer_id', 'DESC')
             ->get();
+    }
+
+    #[On('add-customer-sale')]
+    public function customerRedender($customer_id){
+        $this->customers = DB::table('INV_CUSTOMER_INFO')
+            ->orderBy('customer_id', 'DESC')
+            ->get();
+        $data = [
+            'customers' => $this->customers,
+            'customer_id' => $customer_id
+        ];
+
+        $this->dispatch('render-customer-sale', data: $data);
     }
 
     public function wirehouseAll()

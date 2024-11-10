@@ -90,7 +90,7 @@ class ProductForm extends Component
 
         if ($this->product_u_code) {
             $this->state['u_code'] = $this->product_u_code;
-            
+
             foreach ($this->variant_cart as $cart) {
                 $cart = (array)$cart;
                 // dd($product_exist);

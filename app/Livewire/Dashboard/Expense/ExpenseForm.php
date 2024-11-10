@@ -20,7 +20,7 @@ class ExpenseForm extends Component
     public $paymentState = [];
     public $categories, $payment_methods, $payment_info;
     public $expenseCart = [];
-    public $pay_amt, $due_amt;
+    public $pay_amt, $due_amt, $account_code;
 
 
     public function categoriesAll()
@@ -92,7 +92,9 @@ class ExpenseForm extends Component
                 ->where('p.expense_mst_id', $expense_id)
                 ->get();
 
-            // dd($resultDtls);
+            $this->account_code = $resultDtls[0]->account_code;
+
+
 
             foreach ($resultDtls as $resultDtl) {
                 $this->expenseCart[] = [
@@ -111,7 +113,6 @@ class ExpenseForm extends Component
                 'item_amount' => 0,
             ];
         }
-
 
         $this->categoriesAll();
         $this->paymentMethodAll();
@@ -200,7 +201,7 @@ class ExpenseForm extends Component
                         'item_name' => 'item_name',
                         'item_amount' => $value['item_amount'],
                         'description' => $value['description'],
-                        'account_code' => '1000',
+                        'account_code' => $this->account_code,
                         'item_date' => $this->state['expense_date'],
                     ]);
                 }
@@ -226,7 +227,7 @@ class ExpenseForm extends Component
                         'created_by' => $this->state['employee_id'],
                         'tran_type' => 'EXP',
                         'ref_memo_no' => $ref_memo_no->memo_no,
-                        'account_code' => 1030,
+                        'account_code' => $this->account_code,
                     ]);
                 }
 
@@ -286,7 +287,7 @@ class ExpenseForm extends Component
                             'created_by' => Auth::user()->id,
                             'tran_type' => 'EXP',
                             'ref_memo_no' => $ref_memo_no->memo_no,
-                            'account_code' => 1030,
+                            'account_code' => $this->account_code,
                             'ref_pay_no' => $pay_memo,
                             'cash_type' => 'OUT',
                         ]);

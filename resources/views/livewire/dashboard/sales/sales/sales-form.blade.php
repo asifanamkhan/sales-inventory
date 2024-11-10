@@ -30,7 +30,9 @@
     <div wire:loading class="spinner-border text-primary custom-loading">
         <span class="sr-only">Loading...</span>
     </div>
-
+    <x-large-modal class='add-supplier-sale'>
+        <livewire:dashboard.sales.customer.customer-add-form>
+    </x-large-modal>
     <form action="" wire:submit='save'>
         <div class="row" x-data="{edit : false}">
             <div class="col-md-2">
@@ -88,7 +90,10 @@
                         </div>
                     </div>
                     <div class="pt-2">
-                        <a class="btn btn-primary">+</a>
+                        <a @click="$dispatch('add-supplier-sale')" class="btn btn-primary"
+                            data-toggle="modal" data-target=".add-supplier-sale">
+                            <i class="fa fa-plus"></i>
+                        </a>
                     </div>
                 </div>
                 @error('customer_id')
@@ -430,6 +435,24 @@
 
     $wire.on('set_mfs_code_sale',(event)=>{
         @this.set('paymentState.mfs_id', event.id, false);
+    });
+
+
+    $wire.on('render-customer-sale',(event)=>{
+        $('#customer').html('');
+        $('#customer').append(`<option >Select customer</option>`)
+
+        if(event.data.customers.length > 0){
+            event.data.customers.forEach(function(item) {
+                $('#customer').append(
+                    `<option value='${item.customer_id}'>${item.customer_name}</option>`
+                );
+            });
+        }
+
+        $('.add-supplier-sale').modal('hide');
+        @this.set('state.customer_id', event.data.customer_id, false);
+        $('#customer').val(event.data.customer_id).trigger('change')
     });
 </script>
 @endscript

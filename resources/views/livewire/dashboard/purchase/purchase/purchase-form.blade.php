@@ -74,25 +74,20 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="d-flex align-items-center">
-                    <div style="width: 90%">
-                        <div class="form-group mb-3" wire:ignore>
-                            <label for="">Supplier<span style="color: red"> * </span></label>
-                            <select class="form-select select2" id='supplier'>
-                                <option value="">Select supplier</option>
-                                @forelse ($suppliers as $supplier)
-                                <option @if ($supplier->p_code == @$edit_select['supplier_id'])
-                                    selected
-                                    @endif
-                                    value="{{ $supplier->p_code }}">{{ $supplier->p_name }}</option>
-                                @empty
-                                <option value=""></option>
-                                @endforelse
-                            </select>
-                        </div>
-                    </div>
-                    <div class="pt-2">
-                        <a class="btn btn-primary">+</a>
+                <div class="">
+                    <div class="form-group mb-3" wire:ignore>
+                        <label for="">Supplier<span style="color: red"> * </span></label>
+                        <select class="form-select select2" id='supplier'>
+                            <option value="">Select supplier</option>
+                            @forelse ($suppliers as $supplier)
+                            <option @if ($supplier->p_code == @$edit_select['supplier_id'])
+                                selected
+                                @endif
+                                value="{{ $supplier->p_code }}">{{ $supplier->p_name }}</option>
+                            @empty
+                            <option value=""></option>
+                            @endforelse
+                        </select>
                     </div>
                 </div>
                 @error('p_code')
