@@ -64,10 +64,9 @@ class ProductForm extends Component
     public function product_varient_add_to_cart($data){
         $this->variant_cart[] = $data;
     }
-
+    #[On('product_save_form')]
     public function save()
     {
-
         Validator::make($this->state, [
             'group_code' => 'required',
             'catagories_id' => 'required',

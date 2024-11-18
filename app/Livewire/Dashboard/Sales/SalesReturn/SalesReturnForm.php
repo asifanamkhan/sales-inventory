@@ -9,6 +9,7 @@ use Livewire\Component;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Livewire\Attributes\On;
 
 class SalesReturnForm extends Component
 {
@@ -219,6 +220,7 @@ class SalesReturnForm extends Component
         $this->calculation($key);
     }
 
+    #[On('save_form')]
     public function save()
     {
 

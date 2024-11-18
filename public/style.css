@@ -330,6 +330,13 @@ form-check-input:focus {
     background-color: #3C50E0 !important;
 }
 
+.modal-close-icon{
+    font-size: 25px;
+    font-weight: 500;
+    cursor: pointer;
+    color: gray;
+}
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES

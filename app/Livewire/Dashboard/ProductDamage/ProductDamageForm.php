@@ -226,6 +226,7 @@ class ProductDamageForm extends Component
         $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
     }
 
+    #[On('save_form')]
     public function save()
     {
 
@@ -238,11 +239,6 @@ class ProductDamageForm extends Component
 
         if (count($this->damageCart) > 0) {
 
-            // dd(
-            //     $this->state,
-            //     $this->paymentState,
-            //     $this->damageCart,
-            // );
 
             DB::beginTransaction();
             try {

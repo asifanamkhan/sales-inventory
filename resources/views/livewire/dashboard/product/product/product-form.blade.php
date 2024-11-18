@@ -17,7 +17,7 @@
         {{ session('error') }}
     </div>
     @endif
-    <form action="" wire:submit='save'>
+    <form id="confirmationForm" >
         <div class="row">
             <div class="col-md-4">
                 <div class="">
@@ -76,7 +76,7 @@
 
                             </select>
                         </div>
-                    
+
                 </div>
                 @error('brand_code')
                 <small class="form-text text-danger">{{ $message }}</small>
@@ -234,7 +234,7 @@
             @endif
         </div>
         <div class="mt-5 d-flex justify-content-center">
-            <button class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-primary">Save</button>
         </div>
     </form>
 </div>
@@ -246,6 +246,8 @@
                 theme: "bootstrap-5",
             });
         });
+
+
     });
 
     $('#product_group').on('change', function(){
@@ -295,6 +297,25 @@
     $('#product_unit').on('change', function(e){
         @this.set('state.unit_id', e.target.value, false);
     });
+
+    document.getElementById('confirmationForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting automatically
+
+            // Show SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to submit the form?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.dispatch('product_save_form'); // Trigger the Livewire submit function
+                }
+            });
+        });
 
 </script>
 @endscript

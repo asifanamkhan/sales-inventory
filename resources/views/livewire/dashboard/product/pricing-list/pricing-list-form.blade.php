@@ -12,7 +12,7 @@
         {{ session('error') }}
     </div>
     @endif
-    <form wire:submit='save' action="">
+    <form id="confirmationForm" action="">
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group mb-3" wire:ignore>
@@ -114,6 +114,25 @@
     $('#product').on('change', function(e){
         @this.set('state.item_code', e.target.value, false);
     });
+
+    document.getElementById('confirmationForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting automatically
+
+            // Show SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to submit the form?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.dispatch('save_form'); // Trigger the Livewire submit function
+                }
+            });
+        });
 
 </script>
 @endscript
