@@ -26,7 +26,7 @@
         {{ session('warning') }}
     </div>
     @endif
-    <form action="" wire:submit='save'>
+    <form action="" id="confirmationForm">
         <div class="row" x-data="{edit : false}">
             <div class="col-md-4">
                 <x-input required_mark='true' wire:model='state.lc_no' name='lc_no' type='text'
@@ -148,6 +148,25 @@
             });
         });
     });
+
+    document.getElementById('confirmationForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting automatically
+
+            // Show SweetAlert confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to submit the form?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.dispatch('save_form'); // Trigger the Livewire submit function
+                }
+            });
+        });
 
 </script>
 @endscript

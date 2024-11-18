@@ -59,6 +59,7 @@ use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, Sa
 use Illuminate\Support\Facades\DB;
 use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Dashboard\Purchase\Lc\{Lc, LcCreate, LcDetails, LcEdit};
+use App\Livewire\Dashboard\Reports\Expense\ExpenseReport;
 use Illuminate\Support\Facades\Auth;
 
 Livewire::setUpdateRoute(function ($handle) {
@@ -222,6 +223,10 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
     Route::get('reports-product-sale-return', ProductSaleReturn::class)->name('reports-product-sale-return')->middleware('permission:43,visible_flag');
     Route::post('product-sale-return-report-pdf', [ProductController::class, 'productSaleReturnReport'])->name('product-sale-return-report-pdf')->middleware('permission:43,visible_flag');
 
+    Route::get('reports-expense', ExpenseReport::class)->name('reports-expense');
+    // Route::post('expense-report-pdf', [ProductController::class, 'productSaleReturnReport'])->name('expense-report-pdf');
+
+
 
     // ------------- reports end ----------------
 
@@ -249,7 +254,6 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
         Route::get('expense/{expense_id}/details', ExpenseDetails::class)->name('expense-details');
         Route::get('expense-invoice/{expense_id}', [ExpenseController::class, 'invoice'])->name('expense-invoice');
     });
-    // Route::post('expense-pdf', [ExpenseController::class, 'expensePDF'])->name('expense-pdf');
 
     // -------------Expense end ----------------
 

@@ -33,6 +33,7 @@ class PricingListForm extends Component
         }
     }
 
+    #[On('save_form')]
     public function save()
     {
 

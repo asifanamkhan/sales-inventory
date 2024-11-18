@@ -336,7 +336,8 @@ class SalesForm extends Component
             $this->saleCart[$key]['qty'] = $stock;
         }
     }
-
+    
+    #[On('save_form')]
     public function save()
     {
 

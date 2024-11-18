@@ -48,7 +48,7 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
     {{-- Text editor --}}
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- date range --}}
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -59,6 +59,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {{-- date range --}}
     {{-- @vite(['resources/css/app.css']) --}}
+
 
 
     <script type="text/javascript">

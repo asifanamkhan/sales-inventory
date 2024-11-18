@@ -45,7 +45,7 @@
                     <div class="modal-content">
                         <div class="modal-header" style="justify-content: space-between">
                             <h5 class="modal-title" id="exampleModalLabel">{{ $modal_title }}</h5>
-                            <b type="button" class="btn btn-sm btn-danger" class="close" data-dismiss="modal"
+                            <b type="button" class="modal-close-icon" class="close" data-dismiss="modal"
                                 aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </b>

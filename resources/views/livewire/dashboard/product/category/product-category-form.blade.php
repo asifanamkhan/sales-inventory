@@ -1,4 +1,11 @@
 <div class="p-4">
+    <div class="modal-header" style="justify-content: space-between">
+            <h4 class="text-center" style="color: #3C50E0">Product category</h4>
+            <b type="button" class="modal-close-icon" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </b>
+    </div>
     <div wire:loading class="spinner-border text-primary custom-loading" branch="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -9,7 +16,7 @@
     @endif
 
     <form wire:submit="@if($editForm) update @else store @endif" action="">
-        <div class="row">
+        <div class="row mt-2">
 
             <div class="col-md-10 offset-1 form-group mb-3">
                 <div class="text-center mb-3 d-flex justify-content-center">

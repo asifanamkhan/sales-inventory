@@ -10,6 +10,7 @@ use Livewire\Component;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Livewire\Attributes\On;
 
 class ExpenseForm extends Component
 {
@@ -151,6 +152,7 @@ class ExpenseForm extends Component
         }
     }
 
+    #[On('save_form')]
     public function save()
     {
 

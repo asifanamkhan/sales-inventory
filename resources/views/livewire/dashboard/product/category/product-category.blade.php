@@ -40,22 +40,9 @@
 
 
             {{-- modal --}}
-            <div wire:ignore.self class="modal fade {{ $event }}" tabindex="-1" role="dialog"
-                aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-
-                    <div class="modal-content">
-                        <div class="modal-header" style="justify-content: space-between">
-                            <h5 class="modal-title text-center w-100" id="exampleModalLabel">Product category</h5>
-                            <b type="button" class="btn btn-sm btn-danger" class="close" data-dismiss="modal"
-                                aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </b>
-                        </div>
-                        <livewire:dashboard.product.category.product-category-form />
-                    </div>
-                </div>
-            </div>
+            <x-large-modal :class='$event'>
+                <livewire:dashboard.product.category.product-category-form />
+            </x-large-modal>
             {{--end modal --}}
         </div>
         <div class="responsive-table">

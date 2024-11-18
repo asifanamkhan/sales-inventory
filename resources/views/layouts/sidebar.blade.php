@@ -311,6 +311,7 @@
         {{ request()->routeIs('reports-sale') ? 'show' : ' ' }}
         {{ request()->routeIs('reports-product-sale') ? 'show' : ' ' }}
         {{ request()->routeIs('reports-product-sale-return') ? 'show' : ' ' }}
+        {{ request()->routeIs('reports-expense') ? 'show' : ' ' }}
 
         " id="misReportSubmenu">
                 <li class="">
@@ -375,6 +376,9 @@
                 <li class="{{ request()->routeIs('reports-product-sale-return') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('reports-product-sale-return') }}"> - Sells Return
                         Report</a>
+                </li>
+                <li class="{{ request()->routeIs('reports-expense') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-expense') }}"> - Expense Report</a>
                 </li>
 
             </ul>

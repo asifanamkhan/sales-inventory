@@ -5,8 +5,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header" style="justify-content: space-between">
-                <h5 class="modal-title" id="exampleModalLabel">{{ $modalTitle }}</h5>
-                <b type="button" class="btn btn-sm btn-danger" class="close" data-dismiss="modal" aria-label="Close">
+                    <h4 class="text-center" style="color: #3C50E0">{{ $modalTitle }}</h4>
+                    <b type="button" class="modal-close-icon" class="close" data-dismiss="modal"
+                    aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </b>
             </div>

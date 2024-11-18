@@ -3,7 +3,14 @@
         <span class="sr-only">Loading...</span>
     </div>
     @if($pageLoad)
-    <h4 class="text-center pb-4" style="color: #3C50E0">Module: {{ $module_name }}</h4>
+    <div style="display: flex; justify-content: space-between;">
+        <h4 class="text-center pb-4" style="color: #3C50E0">Module: {{ $module_name }}</h4>
+        <b type="button" class="modal-close-icon" class="close" data-dismiss="modal"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </b>
+    </div>
+
     <div>
         <div class="row g-3 mb-3 align-items-center">
             <div class="col-auto">

@@ -9,6 +9,7 @@ use Livewire\Component;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Livewire\Attributes\On;
 
 class LcForm extends Component
 {
@@ -51,6 +52,7 @@ class LcForm extends Component
         $this->lcTypesAll();
     }
 
+    #[On('save_form')]
     public function save()
     {
 
