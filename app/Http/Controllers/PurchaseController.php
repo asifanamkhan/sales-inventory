@@ -36,6 +36,7 @@ class PurchaseController extends Controller
                 'p.item_code',
                 'p.expire_date',
                 'pr.item_name',
+                'pr.unit_name',
                 'pr.color_name',
                 'pr.item_size_name',
                 'pr.vat_amt as p_vat_amt'
@@ -82,6 +83,7 @@ class PurchaseController extends Controller
                 'p.item_code',
                 'p.expire_date',
                 'pr.item_name',
+                'pr.unit_name',
                 'pr.color_name',
                 'pr.item_size_name',
                 'pr.vat_amt as p_vat_amt'
@@ -103,7 +105,7 @@ class PurchaseController extends Controller
         GeneratePdf::generate($pdf_data);
     }
 
-    
+
     public function InvoioceBackup($purchase_id){
         $company = DB::table('HRM_COMPANY_INFO')->first();
         $base64Logo = '';

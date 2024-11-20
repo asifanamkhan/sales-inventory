@@ -234,7 +234,7 @@
                                     wire:model='purchaseCart.{{ $purchase_key }}.qty' class="form-control text-center">
                             </td>
                             <td>
-                                <input tabindex="-1" type="number"
+                                <input wire:input.debounce.500ms='calculation({{ $purchase_key }})' type="number"
                                     wire:model='purchaseCart.{{ $purchase_key }}.mrp_rate'
                                     class="form-control text-center">
                             </td>

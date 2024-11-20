@@ -39,13 +39,13 @@
         <thead>
             <tr>
                 <td class="invoice-items-head" style="width:5%;">#</td>
-                <td class="invoice-items-head" style="width:10%;">RT Date</td>
-                <td class="invoice-items-head" style="width:12%;">RT no</td>
-                <td class="invoice-items-head" style="width:16%;text-align: center">Item</td>
+                <td class="invoice-items-head" style="width:11%;">RT Date</td>
+                <td class="invoice-items-head" style="width:14%;">RT no</td>
+                <td class="invoice-items-head" style="width:14%;text-align: center">Item</td>
                 <td class="invoice-items-head" style="width:10%;text-align: center">Branch</td>
-                <td class="invoice-items-head" style="width:7%;text-align: center">Qty</td>
-                <td class="invoice-items-head" style="width:10%;text-align: center">Rate</td>
-                <td class="invoice-items-head" style="width:10%;text-align: center">Vat</td>
+                <td class="invoice-items-head" style="width:10%;text-align: center">Qty</td>
+                <td class="invoice-items-head" style="width:8%;text-align: center">Rate</td>
+                <td class="invoice-items-head" style="width:8%;text-align: center">Vat</td>
                 <td class="invoice-items-head" style="width:8%;text-align: center">Disc.</td>
                 <td class="invoice-items-head" style="width:12%;text-align: center">Total</td>
             </tr>
@@ -66,9 +66,9 @@
                 $t_total += $ledger->tot_return_amt;
                 @endphp
                 <td style="width:5%">{{ $key+1 }}</td>
-                <td style="width:10%">{{ date('d-M-y', strtotime($ledger->return_date)) }}</td>
-                <td style="width:12%">{{ $ledger->purchase_ret_no }}</td>
-                <td style="width:16%; text-align: left">{{ $ledger->item_name }}
+                <td style="width:11%">{{ date('d-M-y', strtotime($ledger->return_date)) }}</td>
+                <td style="width:14%">{{ $ledger->purchase_ret_no }}</td>
+                <td style="width:14%; text-align: left">{{ $ledger->item_name }}
                     @if ($ledger->item_size_name)
                     | {{ $ledger->item_size_name }}
                     @endif
@@ -77,11 +77,11 @@
                     @endif
                 </td>
                 <td style="width:10%">{{ $ledger->branch_name }}</td>
-                <td style="text-align: right; width:7%;">{{ $ledger->return_qty }}</td>
-                <td style="text-align: right; width: 10%">{{ number_format($ledger->pr_rate, 2, '.', '') }}</td>
-                <td style="text-align: right; width: 10%">{{ number_format($ledger->vat_amt, 2, '.', '') }}</td>
-                <td style="text-align: right; width: 8%">{{ number_format($ledger->discount, 2, '.', '') }}</td>
-                <td style="text-align: right; width: 12%">{{ number_format($ledger->tot_return_amt, 2, '.', '') }}</td>
+                <td style="text-align: right; width:10%;">{{ $ledger->return_qty }}</td>
+                <td style="text-align: right; width: 8%">{{ number_format($ledger->pr_rate, 1, '.', '') }}</td>
+                <td style="text-align: right; width: 8%">{{ number_format($ledger->vat_amt, 1, '.', '') }}</td>
+                <td style="text-align: right; width: 8%">{{ number_format($ledger->discount, 1, '.', '') }}</td>
+                <td style="text-align: right; width: 12%">{{ number_format($ledger->tot_return_amt, 1, '.', '') }}</td>
 
             </tr>
             @empty
@@ -93,9 +93,9 @@
                 <th colspan="5" style="text-align: right; font-weight:bold">Total: </th>
                 <th style="text-align: right; font-weight:bold">{{ $t_qty }}</th>
                 <th style="text-align: right"></th>
-                <th style="text-align: right; font-weight:bold">{{ number_format($t_vat, 2, '.', '') }}</th>
-                <th style="text-align: right; font-weight:bold">{{ number_format($t_discount, 2, '.', '') }}</th>
-                <th style="text-align: right; font-weight:bold">{{ number_format($t_total, 2, '.', '') }}</th>
+                <th style="text-align: right; font-weight:bold">{{ number_format($t_vat, 1, '.', '') }}</th>
+                <th style="text-align: right; font-weight:bold">{{ number_format($t_discount, 1, '.', '') }}</th>
+                <th style="text-align: right; font-weight:bold">{{ number_format($t_total, 1, '.', '') }}</th>
             </tr>
         </tbody>
     </table>

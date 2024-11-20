@@ -113,6 +113,7 @@
                             <td rowspan="2" style="text-align: center">Item</td>
                             <td rowspan="2" style="text-align: center">Category</td>
                             <td rowspan="2" style="text-align: center">Brand</td>
+                            <td rowspan="2" style="text-align: center">Unit</td>
                             <td colspan="7" style="text-align: center">Qty</td>
                         </tr>
                         <tr class="bg-sidebar">
@@ -149,6 +150,7 @@
                             </td>
                             <td>{{ $ledger->catagories_name }}</td>
                             <td>{{ $ledger->brand_name }}</td>
+                            <td>{{ $ledger->unit_name }}</td>
                             <td style="text-align: center">{{ $ledger->op_qty }}</td>
                             <td style="text-align: center">{{ $ledger->rc_qty }}</td>
                             <td style="text-align: center">{{ $ledger->prt_qty }}</td>

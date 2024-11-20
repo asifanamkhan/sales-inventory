@@ -159,10 +159,10 @@
                             </td>
                             <td>{{ $ledger->branch_name }}</td>
                             <td style="text-align: center">{{ $ledger->return_qty }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->pr_rate, 2, '.', '') }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->vat_amt, 2, '.', '') }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->discount, 2, '.', '') }}</td>
-                            <td style="text-align: right">{{ number_format($ledger->tot_return_amt, 2, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->pr_rate, 1, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->vat_amt, 1, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->discount, 1, '.', '') }}</td>
+                            <td style="text-align: right">{{ number_format($ledger->tot_return_amt, 1, '.', '') }}</td>
 
                         </tr>
                         @empty
@@ -174,12 +174,12 @@
                     </tbody>
                     <tfoot>
                         <th colspan="5" style="text-align: right">Total: </th>
-                        <th style="text-align: right">{{ number_format($t_qty, 2, '.', '') }}</th>
+                        <th style="text-align: right">{{ number_format($t_qty, 1, '.', '') }}</th>
                         <th style="text-align: right"></th>
-                        <th style="text-align: right">{{ number_format($t_vat, 2, '.', '') }}</th>
+                        <th style="text-align: right">{{ number_format($t_vat, 1, '.', '') }}</th>
 
-                        <th style="text-align: right">{{ number_format($t_discount, 2, '.', '') }}</th>
-                        <th style="text-align: right">{{ number_format($t_total, 2, '.', '') }}</th>
+                        <th style="text-align: right">{{ number_format($t_discount, 1, '.', '') }}</th>
+                        <th style="text-align: right">{{ number_format($t_total, 1, '.', '') }}</th>
 
                     </tfoot>
 

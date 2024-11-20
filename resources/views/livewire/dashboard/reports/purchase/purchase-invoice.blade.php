@@ -65,8 +65,8 @@
             <tr>
                 <th class="invoice-items-head" style="width: 5%">SL</th>
                 <th class="invoice-items-head" style="width: 25%">Item</th>
-                <th class="invoice-items-head" style="width: 10%; text-align: center">Qty</th>
-                <th class="invoice-items-head" style="width: 15%; text-align: center">Rate</th>
+                <th class="invoice-items-head" style="width: 12%; text-align: center">Qty</th>
+                <th class="invoice-items-head" style="width: 13%; text-align: center">Rate</th>
                 <th class="invoice-items-head" style="width: 10%; text-align: center">Disc</th>
                 <th class="invoice-items-head" style="width: 15%; text-align: center">Tax</th>
                 <th class="invoice-items-head" style="width: 20%; text-align: center">Total</th>
@@ -80,11 +80,11 @@
                     @if($dtl->color_name) | {{ $dtl->color_name }} @endif
                     @if($dtl->item_size_name) | {{ $dtl->item_size_name }} @endif
                 </td>
-                <td style="text-align: center; width: 10%">{{ $dtl->item_qty }}</td>
-                <td style="text-align: right; width: 15%">{{ number_format($dtl->pr_rate, 2, '.', '') }}</td>
-                <td style="text-align: right; width: 10%">{{ number_format($dtl->discount, 2, '.', '') }}</td>
-                <td style="width: 15%; text-align:right">{{ number_format($dtl->vat_amt, 2, '.', '') }}</td>
-                <td style="text-align: right; width: 20%">{{ number_format($dtl->tot_payble_amt, 2, '.', '') }}</td>
+                <td style="text-align: center; width: 12%">{{ $dtl->item_qty }} {{ $dtl->unit_name }}</td>
+                <td style="text-align: right; width: 13%">{{ number_format($dtl->pr_rate, 1, '.', '') }}</td>
+                <td style="text-align: right; width: 10%">{{ number_format($dtl->discount, 1, '.', '') }}</td>
+                <td style="width: 15%; text-align:right">{{ number_format($dtl->vat_amt, 1, '.', '') }}</td>
+                <td style="text-align: right; width: 20%">{{ number_format($dtl->tot_payble_amt, 1, '.', '') }}</td>
             </tr>
             @empty
             <tr>
@@ -99,13 +99,13 @@
                 </td>
                 <td></td>
                 <td style="text-align: right">
-                    <b>{{ number_format($tran_mst->tot_discount, 2, '.', ',') }}</b>
+                    <b>{{ number_format($tran_mst->tot_discount, 1, '.', ',') }}</b>
                 </td>
                 <td style="text-align: right">
-                    <b>{{ number_format($tran_mst->tot_vat_amt, 2, '.', ',') }}</b>
+                    <b>{{ number_format($tran_mst->tot_vat_amt, 1, '.', ',') }}</b>
                 </td>
                 <td style="text-align: right">
-                    <b>{{ number_format($tran_mst->net_payable_amt, 2, '.', ',') }}</b>
+                    <b>{{ number_format($tran_mst->net_payable_amt, 1, '.', ',') }}</b>
                 </td>
             </tr>
             <tr>
@@ -113,19 +113,19 @@
             </tr>
             <tr>
                 <th colspan="6" style="text-align: right; font-weight:bold; border: none">Shipping</th>
-                <td style="text-align: right">{{ number_format($tran_mst->shipping_amt, 2, '.', ',') }}</td>
+                <td style="text-align: right">{{ number_format($tran_mst->shipping_amt, 1, '.', ',') }}</td>
             </tr>
             <tr class="grand-total">
                 <th colspan="6" style="text-align: right; font-weight:bold; border: none">Total</th>
-                <td style="text-align: right">{{ number_format($tran_mst->tot_payable_amt, 2, '.', ',') }}</td>
+                <td style="text-align: right">{{ number_format($tran_mst->tot_payable_amt, 1, '.', ',') }}</td>
             </tr>
             <tr>
                 <th colspan="6" style="text-align: right; font-weight:bold; border: none">Paid amount</th>
-                <td style="text-align: right"><b>{{ number_format($tran_mst->tot_paid_amt, 2, '.', ',') }}</b></td>
+                <td style="text-align: right"><b>{{ number_format($tran_mst->tot_paid_amt, 1, '.', ',') }}</b></td>
             </tr>
             <tr>
                 <th colspan="6" style="text-align: right; font-weight:bold; border: none">Due amount</th>
-                <td style="color: darkred;text-align: right"><b>{{ number_format($tran_mst->tot_due_amt, 2, '.', ',')}}</b></td>
+                <td style="color: darkred;text-align: right"><b>{{ number_format($tran_mst->tot_due_amt, 1, '.', ',')}}</b></td>
             </tr>
         </tbody>
 

@@ -158,7 +158,7 @@
                                 @endif
                             </td>
                             <td>{{ $ledger->branch_name }}</td>
-                            <td style="text-align: center">{{ $ledger->sales_qty }}</td>
+                            <td style="text-align: center">{{ $ledger->sales_qty }} {{ $ledger->unit_name }}</td>
                             <td style="text-align: right">{{ number_format($ledger->mrp_rate, 2, '.', '') }}</td>
                             <td style="text-align: right">{{ number_format($ledger->vat_amt, 2, '.', '') }}</td>
                             <td style="text-align: right">{{ number_format($ledger->discount, 2, '.', '') }}</td>

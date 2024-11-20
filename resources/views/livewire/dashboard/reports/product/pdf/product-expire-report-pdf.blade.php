@@ -57,7 +57,7 @@
             <tr wire:key='{{ $key }}'>
                 @php
                 $t_qty += $ledger->item_qty;
-                
+
                 @endphp
                 <td style="width:5%">{{ $key+1 }}</td>
                 <td style="width:15%">{{ date('d-M-y', strtotime($ledger->tran_date)) }}</td>
@@ -71,7 +71,7 @@
                     @endif
                 </td>
                 <td style="width:15%">{{ $ledger->branch_name }}</td>
-                <td style="text-align: right; width:15%;">{{ $ledger->item_qty }}</td>
+                <td style="text-align: right; width:15%;">{{ $ledger->item_qty }} {{ $ledger->unit_name }}</td>
                 <td style="width:15%">{{ date('d-M-y', strtotime($ledger->expire_date)) }}</td>
 
             </tr>
