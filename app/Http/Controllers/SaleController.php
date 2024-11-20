@@ -41,6 +41,7 @@ class SaleController extends Controller
                 'p.discount',
                 'p.item_code',
                 'pr.item_name',
+                'pr.unit_name',
                 'pr.color_name',
                 'pr.item_size_name',
                 'pr.vat_amt as p_vat_amt'
@@ -92,6 +93,7 @@ class SaleController extends Controller
                 'p.discount',
                 'p.item_code',
                 'pr.item_name',
+                'pr.unit_name',
                 'pr.color_name',
                 'pr.item_size_name',
                 'pr.vat_amt as p_vat_amt'

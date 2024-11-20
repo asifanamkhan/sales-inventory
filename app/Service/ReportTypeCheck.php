@@ -68,6 +68,9 @@ class ReportTypeCheck
         if($route == 'sale-return-invoice'){
             return 'SALE RETURN INVOICE';
         }
+        if($route == 'expense-report-pdf'){
+            return 'EXPENSE REPORT';
+        }
 
     }
 

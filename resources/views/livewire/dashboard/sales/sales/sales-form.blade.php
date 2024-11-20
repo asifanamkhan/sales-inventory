@@ -211,7 +211,7 @@
                                     class="form-control text-center">
                             </td>
                             <td>
-                                <input tabindex="-1" type="number" step="0.01"
+                                <input wire:input.debounce.500ms='calculation({{ $sale_key }})' type="number" step="0.01"
                                     wire:model='saleCart.{{ $sale_key }}.mrp_rate' class="form-control text-center">
                             </td>
                             <td>

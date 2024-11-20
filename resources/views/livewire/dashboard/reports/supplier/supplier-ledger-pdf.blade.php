@@ -77,12 +77,12 @@
                 <td style="width:4%">{{ $key+1 }}</td>
                 <td style="width:10%">{{ date('d-M-y', strtotime($ledger->tran_date)) }}</td>
                 <td style="width:13%">{{ $ledger->memo_no }}</td>
-                <td style="text-align: right;width:15%">{{ number_format($ledger->tot_payable_amt, 2, '.', ',') }}</td>
-                <td style="text-align: right;width:14%">{{ number_format($ledger->total_paid, 2, '.', ',') }}</td>
-                <td style="text-align: right;width:11%">{{ number_format($ledger->return_amt, 2, '.', ',') }}</td>
-                <td style="text-align: right;width:11%">{{ number_format($ledger->return_paid_amt, 2, '.', ',') }}</td>
-                <td style="text-align: right;width:11%">{{ number_format($ledger->receivable_amt, 2, '.', ',') }}</td>
-                <td style="text-align: right;width:11%">{{ number_format($ledger->total_due, 2, '.', ',') }}</td>
+                <td style="text-align: right;width:15%">{{ number_format($ledger->tot_payable_amt, 1, '.', ',') }}</td>
+                <td style="text-align: right;width:14%">{{ number_format($ledger->total_paid, 1, '.', ',') }}</td>
+                <td style="text-align: right;width:11%">{{ number_format($ledger->return_amt, 1, '.', ',') }}</td>
+                <td style="text-align: right;width:11%">{{ number_format($ledger->return_paid_amt, 1, '.', ',') }}</td>
+                <td style="text-align: right;width:11%">{{ number_format($ledger->receivable_amt, 1, '.', ',') }}</td>
+                <td style="text-align: right;width:11%">{{ number_format($ledger->total_due, 1, '.', ',') }}</td>
 
             </tr>
             @empty
@@ -92,12 +92,12 @@
             @endforelse
             <tr>
                 <th colspan="3" style="text-align: right; font-weight: bold">Total: </th>
-                <th style="text-align: right; font-weight: bold">{{ number_format($t_tot_payable_amt, 2, '.', ',') }}</th>
-                <th style="text-align: right; font-weight: bold">{{ number_format($t_total_paid, 2, '.', ',') }}</th>
-                <th style="text-align: right; font-weight: bold">{{ number_format($t_return_amt, 2, '.', ',') }}</th>
-                <th style="text-align: right; font-weight: bold">{{ number_format($t_return_paid_amt, 2, '.', ',') }}</th>
-                <th style="text-align: right; font-weight: bold">{{ number_format($t_receivable_amt, 2, '.', ',') }}</th>
-                <th style="text-align: right; font-weight: bold">{{ number_format($t_total_due, 2, '.', ',') }}</th>
+                <th style="text-align: right; font-weight: bold">{{ number_format($t_tot_payable_amt, 1, '.', ',') }}</th>
+                <th style="text-align: right; font-weight: bold">{{ number_format($t_total_paid, 1, '.', ',') }}</th>
+                <th style="text-align: right; font-weight: bold">{{ number_format($t_return_amt, 1, '.', ',') }}</th>
+                <th style="text-align: right; font-weight: bold">{{ number_format($t_return_paid_amt, 1, '.', ',') }}</th>
+                <th style="text-align: right; font-weight: bold">{{ number_format($t_receivable_amt, 1, '.', ',') }}</th>
+                <th style="text-align: right; font-weight: bold">{{ number_format($t_total_due, 1, '.', ',') }}</th>
             </tr>
         </tbody>
 

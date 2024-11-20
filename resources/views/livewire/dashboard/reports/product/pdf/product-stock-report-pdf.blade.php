@@ -39,9 +39,10 @@
         <thead class="bg-sidebar">
             <tr >
                 <td class="invoice-items-head" rowspan="2" style="width: 4%">#</td>
-                <td class="invoice-items-head" rowspan="2" style="width: 20%;text-align: center">Item</td>
+                <td class="invoice-items-head" rowspan="2" style="width: 12%;text-align: center">Item</td>
                 <td class="invoice-items-head" rowspan="2" style="width: 10%;text-align: center">Category</td>
                 <td class="invoice-items-head" rowspan="2" style="width: 10%;text-align: center">Brand</td>
+                <td class="invoice-items-head" rowspan="2" style="width: 8%;text-align: center">Unit</td>
                 <td class="invoice-items-head" colspan="7" style="width: 56%;text-align: center">Qty</td>
             </tr>
             <tr class="bg-sidebar">
@@ -70,7 +71,7 @@
                 // $t_total += $ledger->tot_payble_amt;
                 @endphp
                 <td style="width:4%">{{ $key+1 }}</td>
-                <td style="width:20%">{{ $ledger->item_name }}
+                <td style="width:12%">{{ $ledger->item_name }}
                     @if ($ledger->item_size_name)
                     | {{ $ledger->item_size_name }}
                     @endif
@@ -80,6 +81,7 @@
                 </td>
                 <td style="width:10%">{{ $ledger->catagories_name }}</td>
                 <td style="width:10%">{{ $ledger->brand_name }}</td>
+                <td style="width:8%; text-align:center">{{ $ledger->unit_name }}</td>
                 <td style="text-align: center; width:8%">{{ $ledger->op_qty }}</td>
                 <td style="text-align: center; width:8%">{{ $ledger->rc_qty }}</td>
                 <td style="text-align: center; width:8%">{{ $ledger->prt_qty }}</td>

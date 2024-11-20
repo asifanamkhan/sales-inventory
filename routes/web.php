@@ -224,7 +224,7 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
     Route::post('product-sale-return-report-pdf', [ProductController::class, 'productSaleReturnReport'])->name('product-sale-return-report-pdf')->middleware('permission:43,visible_flag');
 
     Route::get('reports-expense', ExpenseReport::class)->name('reports-expense');
-    // Route::post('expense-report-pdf', [ProductController::class, 'productSaleReturnReport'])->name('expense-report-pdf');
+    Route::post('expense-report-pdf', [ExpenseController::class, 'expenseReport'])->name('expense-report-pdf');
 
 
 

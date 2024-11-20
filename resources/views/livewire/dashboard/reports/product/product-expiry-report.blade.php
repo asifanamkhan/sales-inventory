@@ -152,7 +152,7 @@
                                 @endif
                             </td>
                             <td>{{ $ledger->branch_name }}</td>
-                            <td style="text-align: center">{{ $ledger->item_qty }}</td>
+                            <td style="text-align: center">{{ $ledger->item_qty }} {{ $ledger->unit_name }}</td>
                             <td>{{ date('d-M-y', strtotime($ledger->expire_date)) }}</td>
                             {{-- <td style="text-align: center">{{ $ledger->stock_qty }}</td> --}}
 
