@@ -71,6 +71,10 @@ class ReportTypeCheck
         if($route == 'expense-report-pdf'){
             return 'EXPENSE REPORT';
         }
+        if($route == 'requisition-invoice'){
+            return 'REQUISITION INVOICE';
+        }
+
 
     }
 
