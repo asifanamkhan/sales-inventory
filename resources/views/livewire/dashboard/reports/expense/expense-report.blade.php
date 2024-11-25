@@ -5,12 +5,12 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-solid fa-cart-shopping"></i> expense_types expire report
+            <i class="fa-solid fa-cart-shopping"></i> expense report
         </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Reports</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="" style="color: #3C50E0">expense_types expire
+                <li class="breadcrumb-item active"><a wire:navigate href="" style="color: #3C50E0">expense
                         report</a></li>
             </ol>
         </nav>

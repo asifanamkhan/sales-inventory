@@ -201,8 +201,7 @@
                         </tr>
                         <tr>
                             <th colspan="8" style="text-align: right">Shipping: </th>
-                            <th style="text-align: right">{{ number_format(($sale_ledger->shipping_amt ?? 0), 2, '.',
-                                '') }}</th>
+                            <th style="text-align: right">{{ number_format(($sale_ledger->shipping_amt ?? 0), 2, '.','') }}</th>
                         </tr>
                         <tr>
                             <th colspan="8" style="text-align: right">Total: </th>
@@ -237,8 +236,5 @@
             });
         });
     });
-
-
-
 </script>
 @endscript

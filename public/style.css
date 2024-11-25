@@ -40,7 +40,7 @@ a:focus {
     border: none;
 }
 
-.dropdown-toggle::after {
+.dropdown-custom-toggle::after {
     display: inline-block; /* Show the arrow icon */
     margin-left: 8px; /* Space between image and arrow */
 }
@@ -166,7 +166,7 @@ a[data-toggle="collapse"] {
     position: relative;
 }
 
-.dropdown-toggle::after {
+.dropdown-custom-toggle::after {
     display: block;
     position: absolute;
     top: 50%;

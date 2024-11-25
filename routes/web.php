@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RequisitionController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
 use App\Livewire\Dashboard\AccountReports\PaymentReport;
@@ -60,6 +61,10 @@ use Illuminate\Support\Facades\DB;
 use App\Livewire\Dashboard\Dashboard;
 use App\Livewire\Dashboard\Purchase\Lc\{Lc, LcCreate, LcDetails, LcEdit};
 use App\Livewire\Dashboard\Reports\Expense\ExpenseReport;
+use App\Livewire\Dashboard\Requisition\RequisitionCreate;
+use App\Livewire\Dashboard\Requisition\RequisitionDetails;
+use App\Livewire\Dashboard\Requisition\RequisitionEdit;
+use App\Livewire\Dashboard\Requisition\RequisitionList;
 use Illuminate\Support\Facades\Auth;
 
 Livewire::setUpdateRoute(function ($handle) {
@@ -257,6 +262,17 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
 
     // -------------Expense end ----------------
 
+
+     // -------------requisitioR start ----------------
+     Route::middleware(['permission:18,visible_flag'])->group(function () {
+        Route::get('requisition', RequisitionList::class)->name('requisition');
+        Route::get('requisition/create', RequisitionCreate::class)->name('requisition-create');
+        Route::get('requisition/{requisition_id}/edit', RequisitionEdit::class)->name('requisition-edit');
+        Route::get('requisition/{requisition_id}/details', RequisitionDetails::class)->name('requisition-details');
+        Route::get('requisition-invoice/{requisition_id}', [RequisitionController::class, 'invoice'])->name('requisition-invoice');
+    });
+
+    // -------------Requisition end ----------------
 
 });
 

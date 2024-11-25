@@ -19,7 +19,7 @@
             <a wire:navigate href="{{ route('dashboard') }}"><i class="fa fa-home"></i> Dashboard</a>
         </li>
         <li>
-            <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+            <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-screwdriver-wrench"></i> Administrator
             </a>
             <ul class="collapse list-unstyled
@@ -64,7 +64,7 @@
         </li>
 
         <li>
-            <a href="#HRMSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+            <a href="#HRMSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-user-gear"></i> HRM settings
             </a>
             <ul class="collapse list-unstyled
@@ -112,7 +112,7 @@
         </li>
 
         <li>
-            <a href="#expenseSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+            <a href="#expenseSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fas fa-donate"></i> Expense
             </a>
             <ul class="collapse list-unstyled
@@ -140,7 +140,7 @@
         </li>
 
         <li>
-            <a href="#productSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+            <a href="#productSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-gear"></i> Product settings
             </a>
             <ul class="collapse list-unstyled
@@ -188,7 +188,31 @@
         </li>
 
         <li>
-            <a href="#purchaseSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+            <a style="" href="#requisitionSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle dropdown-custom-toggle main-list">
+                <i class="fa fa-pencil-square" aria-hidden="true"></i> Requisition settings
+            </a>
+            <ul class="collapse list-unstyled
+        {{ request()->routeIs('requisition') ? 'show' : ' ' }}
+        {{ request()->routeIs('requisition-create') ? 'show' : ' ' }}
+        {{ request()->routeIs('requisition-edit') ? 'show' : ' ' }}
+        {{ request()->routeIs('requisition-details') ? 'show' : ' ' }}
+        " id="requisitionSubmenu">
+                <li class="
+                {{ request()->routeIs('requisition') ? 'active' : ' ' }}
+                {{ request()->routeIs('requisition-edit') ? 'active' : ' ' }}
+                {{ request()->routeIs('requisition-details') ? 'active' : ' ' }}
+                 ">
+                    <a class="list" wire:navigate href="{{ route('requisition') }}"> - Requisition list</a>
+                </li>
+                <li  class="{{ request()->routeIs('requisition-create') ? 'active' : ' ' }}">
+                    <a wire:navigate class="list" href="{{ route('requisition-create') }}"> - Requisition entry</a>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#purchaseSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-cart-shopping"></i> Purchase settings
             </a>
             <ul class="collapse list-unstyled
@@ -239,7 +263,7 @@
 
         <li>
             <a style="" href="#salesSubmenu" data-toggle="collapse" aria-expanded="true"
-                class="dropdown-toggle main-list">
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-scale-balanced"></i> Sales settings
             </a>
             <ul class="collapse list-unstyled
@@ -275,7 +299,7 @@
 
         <li>
             <a href="#productDamageSubmenu" data-toggle="collapse" aria-expanded="true"
-                class="dropdown-toggle main-list">
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa fa-chain-broken" aria-hidden="true"></i> Product damage
             </a>
             <ul class="collapse list-unstyled
@@ -295,7 +319,7 @@
         </li>
 
         <li>
-            <a href="#misReportSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle main-list">
+            <a href="#misReportSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-chart-line"></i> MIS reports
             </a>
             <ul class="collapse list-unstyled
@@ -311,7 +335,7 @@
         {{ request()->routeIs('reports-sale') ? 'show' : ' ' }}
         {{ request()->routeIs('reports-product-sale') ? 'show' : ' ' }}
         {{ request()->routeIs('reports-product-sale-return') ? 'show' : ' ' }}
-        {{ request()->routeIs('reports-expense') ? 'show' : ' ' }}
+
 
         " id="misReportSubmenu">
                 <li class="">
@@ -377,23 +401,21 @@
                     <a class="list" wire:navigate href="{{ route('reports-product-sale-return') }}"> - Sells Return
                         Report</a>
                 </li>
-                <li class="{{ request()->routeIs('reports-expense') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('reports-expense') }}"> - Expense Report</a>
-                </li>
+
 
             </ul>
         </li>
 
         <li>
             <a href="#accountReportSubmenu" data-toggle="collapse" aria-expanded="true"
-                class="dropdown-toggle main-list">
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fas fa-book" aria-hidden="true"></i> Accounts report
             </a>
             <ul class="collapse list-unstyled
             {{ request()->routeIs('account-transaction') ? 'show' : ' ' }}
             {{ request()->routeIs('account-payments') ? 'show' : ' ' }}
             {{ request()->routeIs('trial-balance') ? 'show' : ' ' }}
-
+            {{ request()->routeIs('reports-expense') ? 'show' : ' ' }}
 
         " id="accountReportSubmenu">
                 <li class="{{ request()->routeIs('account-payments') ? 'active' : ' ' }}">
@@ -404,6 +426,9 @@
                 </li>
                 <li class="{{ request()->routeIs('trial-balance') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('trial-balance') }}"> - Trial Balance</a>
+                </li>
+                <li class="{{ request()->routeIs('reports-expense') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('reports-expense') }}"> - Expense Report</a>
                 </li>
             </ul>
         </li>
