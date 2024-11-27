@@ -9,21 +9,28 @@ use Livewire\Component;
 
 class PricingListForm extends Component
 {
-    public $products, $productVarient;
+    public $product, $productVarient;
     public $state = [];
 
-
-    public function productList()
+    #[On('pricing-list-add')]
+    public function productSelect($id)
     {
-        $this->products = DB::table('INV_ST_GROUP_ITEM as p')
-            ->orderBy('p.u_code', 'DESC')
-            ->leftJoin('INV_ST_ITEM_SIZE as s', function ($join) {
-                $join->on('s.item_size_code', '=', 'p.item_size');
-            })
-            ->leftJoin('INV_COLOR_INFO as cl', function ($join) {
-                $join->on('cl.tran_mst_id', '=', 'p.color_code');
-            })
-            ->get(['p.*', 'cl.color_name', 's.item_size_name']);
+        $this->product = DB::table('VW_INV_ITEM_DETAILS as p')
+            ->where('st_group_item_id', $id)
+            ->first();
+
+        $this->state['item_code'] = $this->product->item_code;
+        $this->state['pr_rate'] = $this->product->pr_rate;
+        $this->state['dp_rate'] = $this->product->dp_rate;
+        $this->state['rp_rate'] = $this->product->rp_rate;
+        $this->state['mrp_rate'] = $this->product->mrp_rate;
+        $this->state['vat_rate'] = $this->product->vat_rate;
+        $this->state['vat_amt'] = $this->product->vat_amt;
+        if($this->product->vat_rate){
+            $this->state['vat_apply'] = true;
+        }else{
+            $this->state['vat_apply'] = false;
+        }
     }
 
     public function vat_calculation()
@@ -49,19 +56,25 @@ class PricingListForm extends Component
             ->exists();
 
         if ($item_exist) {
-            session()->flash('error', 'This product alrady has the priceing list. check it form the list');
+
+            DB::table('INV_PRICE_SCHEDULE_MST')
+                ->where('item_code', $this->state['item_code'])
+                ->update($this->state);
+
+            session()->flash('status', 'Pricing list updated successfully');
+            $this->reset();
+            $this->dispatch('refresh-product-varient-list');
+
         } else {
 
-            if ($this->state['mrp_rate'] < $this->state['pr_rate']) {
-                session()->flash('error', 'MRP rate must be grater than priching rate');
-            } else {
-                DB::table('INV_PRICE_SCHEDULE_MST')->insert($this->state);
+            DB::table('INV_PRICE_SCHEDULE_MST')
+                ->insert($this->state);
 
-                session()->flash('status', 'Pricing list added successfully');
+            session()->flash('status', 'Pricing list added successfully');
 
-                $this->reset();
-                $this->dispatch('refresh-product-varient-list');
-            }
+            $this->reset();
+            $this->dispatch('refresh-product-varient-list');
+
         }
     }
 
@@ -85,7 +98,7 @@ class PricingListForm extends Component
 
     public function render()
     {
-        $this->productList();
+        // $this->productList();
         return view('livewire.dashboard.product.pricing-list.pricing-list-form');
     }
 }

@@ -13,32 +13,21 @@
     </div>
     @endif
     <form id="confirmationForm" action="">
+        @if (@$product->item_name)
+        <h4 style="text-align: center; font-size: 20px">
+            {{$product->item_name }}
+            <span style="font-size: 12px; font-style: italic">
+            @if ($product->item_size_name)
+            , {{ $product->item_size_name  }}
+            @endif
+            @if ($product->color_name)
+            , {{ $product->color_name }}
+            @endif
+            ({{$product->item_code }})
+            </span>
+        </h4>
+        @endif
         <div class="row">
-            <div class="col-md-8">
-                <div class="form-group mb-3" wire:ignore>
-                    <label for="">Products <span style="color: red"> * </span></label>
-                    <select class="form-select select2" id='product'>
-                        <option value="">Select product</option>
-                        @forelse ($products as $product)
-                        <option value="{{ $product->st_group_item_id }}">
-                            {{ $product->item_name }}
-                            @if ($product->item_size_name)
-                            | {{ $product->item_size_name }}
-
-                            @endif
-                            @if ($product->color_name)
-                            | {{ $product->color_name }}
-                            @endif
-                        </option>
-                        @empty
-                        <option value=""></option>
-                        @endforelse
-                    </select>
-                </div>
-                @error('item_code')
-                <small class="form-text text-danger">{{ $message }}</small>
-                @enderror
-            </div>
 
             <div class="col-md-4">
                 <x-input required_mark='true' wire:model='state.pr_rate' name='pr_rate' type='number'
@@ -53,6 +42,16 @@
             <div class="col-md-4">
                 <x-input required_mark='true' wire:input.debounce.500ms='vat_calculation' wire:model='state.mrp_rate'
                     name='mrp_rate' type='number' label='MRP rate' />
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="">Stock Alert quantity </label>
+                    <input wire:model='state.max_ch_qty' type='number'
+                        class="form-control @error('max_ch_qty') is-invalid @enderror">
+                    @error('max_ch_qty')
+                    <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
             </div>
             <div class="col-md-3 d-flex align-items-center">
                 <div class="form-group mb-3">
@@ -84,16 +83,7 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group mb-3">
-                    <label for="">Stock Alert quantity </label>
-                    <input wire:model='state.max_ch_qty' type='number'
-                        class="form-control @error('max_ch_qty') is-invalid @enderror">
-                    @error('max_ch_qty')
-                    <small class="form-text text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-            </div>
+
         </div>
         <div class="d-flex justify-content-center">
             <button class="btn btn-primary">Save</button>
@@ -111,9 +101,9 @@
         });
     });
 
-    $('#product').on('change', function(e){
-        @this.set('state.item_code', e.target.value, false);
-    });
+    // $('#product').on('change', function(e){
+    //     @this.set('state.item_code', e.target.value, false);
+    // });
 
     document.getElementById('confirmationForm').addEventListener('submit', function (e) {
             e.preventDefault(); // Prevent the form from submitting automatically
