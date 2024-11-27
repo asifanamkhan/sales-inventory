@@ -41,7 +41,7 @@ class Product extends Component
         if ($this->search) {
             $products
                 ->where(DB::raw('lower(p.item_name)'), 'like', '%' . strtolower($this->search) . '%')
-                ->orWhere(DB::raw('lower(p.group_name)'), 'like', '%' . strtolower($this->search) . '%')
+                ->orWhere(DB::raw('lower(g.group_name)'), 'like', '%' . strtolower($this->search) . '%')
                 ->orWhere(DB::raw('lower(b.brand_name)'), 'like', '%' . strtolower($this->search) . '%')
                 ->orWhere(DB::raw('lower(c.catagories_name)'), 'like', '%' . strtolower($this->search) . '%');
         }
