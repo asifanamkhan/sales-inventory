@@ -54,7 +54,7 @@
                 </div>
                 <table class="table table-bordered table-hover">
                     <thead>
-                        <tr>
+                        <tr class="bg-sidebar">
                             <td  style="">Sub Module</td>
                             <td class="text-center" style="">All</td>
                             <td class="text-center" style="">View</td>

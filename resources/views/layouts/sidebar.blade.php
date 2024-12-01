@@ -19,7 +19,8 @@
             <a wire:navigate href="{{ route('dashboard') }}"><i class="fa fa-home"></i> Dashboard</a>
         </li>
         <li>
-            <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
+            <a href="#adminSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-screwdriver-wrench"></i> Administrator
             </a>
             <ul class="collapse list-unstyled
@@ -34,12 +35,12 @@
         " id="adminSubmenu">
                 {{-- --}}
                 <li class="{{ request()->routeIs('company-info') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('company-info') }}"> - Company</a>
+                    <a class="list" wire:navigate href="{{ route('company-info') }}"> - Company create</a>
                 </li>
                 {{-- --}}
 
                 <li class="{{ request()->routeIs('module') ? 'active' : ' ' }} ">
-                    <a class="list" wire:navigate href="{{ route('module') }}"> - Module</a>
+                    <a class="list" wire:navigate href="{{ route('module') }}"> - Create New Module</a>
                 </li>
 
 
@@ -47,7 +48,7 @@
                 {{ request()->routeIs('user') ? 'active' : ' ' }}
                 {{ request()->routeIs('user-create') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('user') }}"> - Users</a>
+                    <a class="list" wire:navigate href="{{ route('user') }}"> - Create New Users</a>
                 </li>
 
                 <li class="
@@ -55,16 +56,17 @@
                     {{ request()->routeIs('role-create') ? 'active' : ' ' }}
                     {{ request()->routeIs('role-details') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('role') }}"> - Role</a>
+                    <a class="list" wire:navigate href="{{ route('role') }}"> - Role </a>
                 </li>
-                <li class="">
+                {{-- <li class="">
                     <a class="list" wire:navigate href=""> - User role access</a>
-                </li>
+                </li> --}}
             </ul>
         </li>
 
         <li>
-            <a href="#HRMSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
+            <a href="#HRMSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-user-gear"></i> HRM settings
             </a>
             <ul class="collapse list-unstyled
@@ -81,38 +83,39 @@
 
         " id="HRMSubmenu">
                 <li class="{{ request()->routeIs('branch') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('branch') }}"> - Branch</a>
+                    <a class="list" wire:navigate href="{{ route('branch') }}"> - Create New Branch</a>
                 </li>
                 <li class="{{ request()->routeIs('department') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('department') }}"> - Department</a>
+                    <a class="list" wire:navigate href="{{ route('department') }}"> - Create New Department</a>
                 </li>
 
                 <li class="{{ request()->routeIs('designation') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('designation') }}"> - Designation</a>
+                    <a class="list" wire:navigate href="{{ route('designation') }}"> - Create New Designation</a>
                 </li>
                 <li class="{{ request()->routeIs('employee') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('employee') }}"> - Employee</a>
+                    <a class="list" wire:navigate href="{{ route('employee') }}"> - Create New Employee</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('supplier') ? 'active' : ' ' }}
                 {{ request()->routeIs('supplier-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('supplier-edit') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('supplier') }}"> - Supplier</a>
+                    <a class="list" wire:navigate href="{{ route('supplier') }}"> - Create New Supplier</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('customer') ? 'active' : ' ' }}
                 {{ request()->routeIs('customer-create') ? 'active' : ' ' }}
                 {{ request()->routeIs('customer-edit') ? 'active' : ' ' }}
                  ">
-                    <a class="list" wire:navigate href="{{ route('customer') }}"> - Customer</a>
+                    <a class="list" wire:navigate href="{{ route('customer') }}"> - Create New Customer</a>
                 </li>
 
             </ul>
         </li>
 
         <li>
-            <a href="#expenseSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
+            <a href="#expenseSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fas fa-donate"></i> Expense
             </a>
             <ul class="collapse list-unstyled
@@ -125,7 +128,7 @@
         " id="expenseSubmenu">
 
                 <li class="{{ request()->routeIs('expense-category') ? 'active' : ' ' }}">
-                    <a class="list" wire:navigate href="{{ route('expense-category') }}">Category</a>
+                    <a class="list" wire:navigate href="{{ route('expense-category') }}">Expense Type</a>
                 </li>
                 <li class="
                 {{ request()->routeIs('expense') ? 'active' : ' ' }}
@@ -140,7 +143,8 @@
         </li>
 
         <li>
-            <a href="#productSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
+            <a href="#productSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-gear"></i> Product settings
             </a>
             <ul class="collapse list-unstyled
@@ -205,14 +209,15 @@
                  ">
                     <a class="list" wire:navigate href="{{ route('requisition') }}"> - Requisition list</a>
                 </li>
-                <li  class="{{ request()->routeIs('requisition-create') ? 'active' : ' ' }}">
+                <li class="{{ request()->routeIs('requisition-create') ? 'active' : ' ' }}">
                     <a wire:navigate class="list" href="{{ route('requisition-create') }}"> - Requisition entry</a>
                 </li>
             </ul>
         </li>
 
         <li>
-            <a href="#purchaseSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
+            <a href="#purchaseSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-cart-shopping"></i> Purchase settings
             </a>
             <ul class="collapse list-unstyled
@@ -319,7 +324,8 @@
         </li>
 
         <li>
-            <a href="#misReportSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle dropdown-custom-toggle main-list">
+            <a href="#misReportSubmenu" data-toggle="collapse" aria-expanded="true"
+                class="dropdown-toggle dropdown-custom-toggle main-list">
                 <i class="fa-solid fa-chart-line"></i> MIS reports
             </a>
             <ul class="collapse list-unstyled
