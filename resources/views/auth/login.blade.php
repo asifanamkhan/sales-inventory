@@ -13,10 +13,11 @@
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="{{ asset('public/style.css') }}">
     <style>
-        body{
+        body {
             background-image: url("{{ asset('public/img/lg0bc.jpg') }}");
             background-size: cover;
         }
+
         .area {
             margin: 0;
             display: flex;
@@ -25,25 +26,27 @@
             min-height: 100vh;
             color: #333;
             background: #00000075
-
         }
 
         .container {
             width: 100%;
             max-width: 500px;
         }
-        .card{
+
+        .card {
             background: #0000004f;
             color: white
         }
-        .form-control{
+
+        .form-control {
             background: #00000000 !important;
             color: white !important;
             border: none;
             border-bottom: 1px solid white;
             border-radius: inherit;
         }
-        .btn-primary{
+
+        .btn-primary {
             box-shadow: none !important;
         }
     </style>
@@ -56,8 +59,16 @@
                 <div class="">
                     <div class="card">
                         <div class="p-4">
-                            <h4 style="text-align: center; font-size:2.2rem; margin-bottom:30px; color: white">Sales
-                                Inventory</h4>
+                            @php
+                            $name = DB::table('HRM_COMPANY_INFO')->first()
+                            @endphp
+                            <h4 style="text-align: center; font-size:2.2rem; margin-bottom:30px; color: white">
+                                @if (@$name->short_name)
+                                {{ $name->short_name }}
+                                @else
+                                Sales Inventory
+                                @endif
+                            </h4>
                             <form method="POST" action="{{ route('login') }}" autocomplete="off">
                                 @csrf
                                 <div class="form-group mb-3">

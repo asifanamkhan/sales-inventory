@@ -73,6 +73,7 @@ class RoleCreate extends Component
             ->get();
 
         $this->module_dtl_ids = $this->sub_modules->pluck('module_dtl_id')->toArray();
+        // dd($this->module_dtl_ids);
     }
 
     public function save()
