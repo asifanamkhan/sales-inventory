@@ -54,34 +54,36 @@ class UserCreate extends Component
             'password' => 'required|min:4|confirmed'
         ]);
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
-        try {
+        // try {
 
             $user_id = DB::table('USR_USERS_INFO')->insertGetId([
                 'name' => $this->name,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
                 'phone_number' => $this->phone_number,
+                'roles' => json_encode($this->role),
+
                 // 'user_status' => 1,
             ], 'id');
 
-            foreach ($this->role as $key => $value) {
-                DB::table('USR_USER_ROLE')->insert([
-                    'user_id' => $user_id,
-                    'role_id' => $value,
-                ]);
-            }
+            // foreach ($this->role as $key => $value) {
+            //     DB::table('USR_USER_ROLE')->insert([
+            //         'user_id' => $user_id,
+            //         'role_id' => $value,
+            //     ]);
+            // }
 
-            DB::commit();
-            $this->reset();
-            session()->flash('status', 'New user created successfully');
+        //     DB::commit();
+        //     $this->reset();
+        //     session()->flash('status', 'New user created successfully');
 
 
-        } catch (\Exception $exception) {
-            DB::rollback();
-            session()->flash('error', $exception);
-        }
+        // } catch (\Exception $exception) {
+        //     DB::rollback();
+        //     session()->flash('error', $exception);
+        // }
 
     }
 
