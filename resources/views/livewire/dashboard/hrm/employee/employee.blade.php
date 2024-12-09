@@ -27,9 +27,9 @@
                 </select>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-primary">
+                <a wire:navigate href="{{ route('employee-create') }}" type="button" class="btn btn-primary">
                     Create new employee
-                </button>
+                </a>
             </div>
         </div>
         <div class="responsive-table">

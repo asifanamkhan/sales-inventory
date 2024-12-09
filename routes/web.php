@@ -59,6 +59,7 @@ use App\Livewire\Dashboard\Sales\Sales\{SaleDetails, Sales, SalesCreate, SalesEd
 use App\Livewire\Dashboard\Sales\SalesReturn\{SalesReturn, SalesReturnCreate, SalesReturnDetails, SalesReturnEdit};
 use Illuminate\Support\Facades\DB;
 use App\Livewire\Dashboard\Dashboard;
+use App\Livewire\Dashboard\Hrm\Employee\EmployeeCreate;
 use App\Livewire\Dashboard\Purchase\Lc\{Lc, LcCreate, LcDetails, LcEdit};
 use App\Livewire\Dashboard\Reports\Expense\ExpenseReport;
 use App\Livewire\Dashboard\Requisition\RequisitionCreate;
@@ -98,6 +99,7 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
     Route::get('hrm/department', Department::class)->name('department')->middleware('permission:20,visible_flag');
     Route::get('hrm/designation', Designation::class)->name('designation')->middleware('permission:21,visible_flag');
     Route::get('hrm/employee', Employee::class)->name('employee')->middleware('permission:22,visible_flag');
+    Route::get('hrm/employee/create', EmployeeCreate::class)->name('employee-create')->middleware('permission:22,visible_flag');
 
     Route::middleware(['permission:23,visible_flag'])->group(function () {
         Route::get('supplier', Supplier::class)->name('supplier');
