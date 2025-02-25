@@ -18,7 +18,7 @@ class CustomerAddForm extends Component
     {
         Validator::make($this->state, [
             'customer_name' => 'required',
-            'phone_no' => 'required',
+            'phone_no' => 'required|unique:INV_CUSTOMER_INFO,phone_no',
             'email' => 'email|nullable',
             'status' => 'required|numeric',
             'customer_type' => 'required|numeric',
@@ -42,6 +42,8 @@ class CustomerAddForm extends Component
     }
 
     public function mount(){
+        $this->state['customer_name'] = 'Walk In Customer';
+        $this->state['status'] = 1;
         $this->category_type();
     }
     public function render()

@@ -74,6 +74,7 @@ class ProductForm extends Component
         ])->validate();
 
         $this->state['u_code'] = time().'-'.mt_rand(1000,9999);
+        $this->state['variant_type'] = $this->variant_type;
         if(!@$this->state['unit_id']){
             $this->state['unit_id'] = 2;
         }

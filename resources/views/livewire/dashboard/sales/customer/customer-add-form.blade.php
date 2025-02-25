@@ -12,8 +12,8 @@
             @endif
             <div class="col-md-4">
                 <div class="form-group mb-3">
-                    <label for="">Name <span style="color: red"> * </span></label>
-                    <input wire:model='state.customer_name' type='text'
+                    <label for="">Name </label>
+                    <input value="Walk In Customer" wire:model='state.customer_name' type='text'
                         class="form-control @error('customer_name') is-invalid @enderror">
                     @error('customer_name')
                     <small class="form-text text-danger">{{ $message }}</small>
@@ -34,7 +34,7 @@
                     <label for="">Status <span style="color: red"> * </span></label>
                     <select class="form-select @error('status') is-invalid @enderror" wire:model='state.status' name="" id="">
                         <option name="" id="">Select Status</option>
-                        <option value="1">Active</option>
+                        <option selected value="1">Active</option>
                         <option value="0">Inactive</option>
                     </select>
                     @error('status')
@@ -97,14 +97,18 @@
                 theme: "bootstrap-5",
             });
         });
+        
+        $('#customer_type').val(4).trigger('change');
     })
+
+
 
     $('#customer_type').on('change', function(e){
         let data = $(this).val();
         @this.set('state.customer_type', e.target.value, false);
     })
 
-   
+
 
 </script>
 @endscript
