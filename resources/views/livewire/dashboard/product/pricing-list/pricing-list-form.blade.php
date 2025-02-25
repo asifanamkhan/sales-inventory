@@ -45,6 +45,16 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-3">
+                    <label for="">Opening quantity </label>
+                    <input wire:model='productState.opening_qty' type='number'
+                        class="form-control @error('opening_qty') is-invalid @enderror">
+                    @error('opening_qty')
+                    <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
                     <label for="">Stock Alert quantity </label>
                     <input wire:model='state.max_ch_qty' type='number'
                         class="form-control @error('max_ch_qty') is-invalid @enderror">
