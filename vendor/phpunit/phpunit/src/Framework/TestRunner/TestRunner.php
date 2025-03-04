@@ -13,6 +13,7 @@ use const PHP_EOL;
 use function assert;
 use function extension_loaded;
 use function sprintf;
+use function xdebug_is_debugger_active;
 use AssertionError;
 use PHPUnit\Event\Facade;
 use PHPUnit\Metadata\Api\CodeCoverage as CodeCoverageMetadataApi;
@@ -30,6 +31,8 @@ use SebastianBergmann\Invoker\TimeoutException;
 use Throwable;
 
 /**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
 final class TestRunner
@@ -179,6 +182,21 @@ final class TestRunner
 
         ErrorHandler::instance()->disable();
 
+        /**
+         * Workaround for tests that fail due to mock object expectations
+         * that are verified while the test is running and not after the
+         * test has finished running.
+         *
+         * @see https://github.com/sebastianbergmann/phpunit/issues/6138
+         */
+        if ($failure &&
+            !$error &&
+            !$incomplete &&
+            !$skipped &&
+            $test->numberOfAssertionsPerformed() === 0) {
+            $test->addToAssertionCount(1);
+        }
+
         if (!$error &&
             !$incomplete &&
             !$skipped &&
@@ -226,8 +244,8 @@ final class TestRunner
     }
 
     /**
-     * @psalm-param class-string $className
-     * @psalm-param non-empty-string $methodName
+     * @param class-string     $className
+     * @param non-empty-string $methodName
      */
     private function hasCoverageMetadata(string $className, string $methodName): bool
     {

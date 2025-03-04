@@ -253,7 +253,7 @@
                                 {{ $state['total_qty'] }} </td>
                             <td colspan="1" style="text-align: right"></td>
                             <td style="text-align: center">
-                                {{ $state['tot_discount'] }}
+                                {{-- {{ $state['tot_discount'] }} --}}
                             </td>
                             <td style="text-align: center">
                                 {{ $state['tot_vat_amt'] }}
@@ -341,7 +341,7 @@
                             </div>
                         </div>
                         @endif
-                        @if ($paymentState['pay_mode'] == 4 || $paymentState['pay_mode'] == 5)
+                        @if ($paymentState['pay_mode'] == 4 || $paymentState['pay_mode'] == 5 || $paymentState['pay_mode'] == 3)
                         <div class="row">
                             <div class="col-md-6">
                                 <x-input required_mark='' wire:model='paymentState.online_trx_id' name='online_trx_id'
@@ -371,6 +371,13 @@
                             </td>
                         </tr>
                         <tr style="text-align: right">
+                            <td>Discount</td>
+                            <td>
+                                <input wire:input.debounce.1000ms='grandCalculation' style="text-align: right" class="form-control"
+                                    wire:model='state.tot_discount'>
+                            </td>
+                        </tr>
+                        <tr style="text-align: right">
                             <td>Net amount</td>
                             <td>
                                 <input style="text-align: right" readonly class="form-control"
@@ -383,6 +390,12 @@
                             <td>
                                 <input type="number" step="0.01" style="text-align: right" class="form-control" wire:model='pay_amt'
                                     wire:input.debounce.1000ms='grandCalculation'>
+                            </td>
+                        </tr>
+                        <tr style="text-align: right">
+                            <td>Change amount</td>
+                            <td style="text-align:right">
+                                <input style="text-align: right;" readonly class="form-control" wire:model='change_amt'>
                             </td>
                         </tr>
                         <tr style="text-align: right">

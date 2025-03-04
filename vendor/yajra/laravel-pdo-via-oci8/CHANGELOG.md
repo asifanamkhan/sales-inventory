@@ -2,6 +2,23 @@
 
 ## [UNRELEASED]
 
+## v3.7.1 - 2025-01-20
+
+- fix: Silence PHP8.4's deprecation warnings.
+
+## v3.7.0 - 2025-01-04
+
+- feat: Add Support oci_new_connect #150
+- fix: Use oci_new_connect instead oci_connect #137
+
+## v3.6.0 - 2024-12-17
+
+- feat: add support for PHP8.4 #151
+
+## v3.5.0 - 2024-11-28
+
+- feat: Add options to fix ignore "expire within" error #148
+
 ## v3.4.4 - 2024-05-25
 
 - fix: oci_new_collection implementation #139
