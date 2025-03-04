@@ -127,6 +127,12 @@
                                     <option wire:navigate value="{{ route('purchase-return-create') }}">
                                         Add Purchase Return
                                     </option>
+                                    <option wire:navigate value="{{ route('product-create') }}">
+                                        Add Product
+                                    </option>
+                                    <option wire:navigate value="{{ route('product-pricing-list') }}">
+                                        Add Pricing List
+                                    </option>
                                 </select>
                             </li>
 

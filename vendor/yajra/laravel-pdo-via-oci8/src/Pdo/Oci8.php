@@ -100,7 +100,7 @@ class Oci8 extends PDO
         } else {
             $charset = $this->configureCharset($options);
         }
-        $this->connect($dsn, $username, $password, $options, $charset);
+        $this->connectOracle($dsn, $username, $password, $options, $charset);
         // Save the options
         $this->options = $options;
     }
@@ -133,20 +133,35 @@ class Oci8 extends PDO
      *
      * @throws Oci8Exception
      */
-    private function connect(string $dsn, string $username, string $password, array $options, string $charset)
+    private function connectOracle(string $dsn, string $username, string $password, array $options, string $charset)
     {
         $sessionMode = array_key_exists('session_mode', $options) ? $options['session_mode'] : OCI_DEFAULT;
+        $cached = array_key_exists('cached', $options) ? $options['cached'] : true;
 
         if (array_key_exists(PDO::ATTR_PERSISTENT, $options) && $options[PDO::ATTR_PERSISTENT]) {
             $this->dbh = oci_pconnect($username, $password, $dsn, $charset, $sessionMode);
         } else {
-            $this->dbh = oci_connect($username, $password, $dsn, $charset, $sessionMode);
+            if ($cached) {
+                $this->dbh = oci_connect($username, $password, $dsn, $charset, $sessionMode);
+            } else {
+                $this->dbh = oci_new_connect($username, $password, $dsn, $charset, $sessionMode);
+            }
         }
 
         if (! $this->dbh) {
             $e = oci_error();
 
-            if (! str_contains($e['message'], 'the password will expire within')) {
+            $ignoreMessageList = array_key_exists('ignore_error_messages', $options) ? $options['ignore_error_messages'] : ['the password will expire within'];
+
+            $throwError = true;
+
+            foreach ($ignoreMessageList as $str) {
+                if (str_contains($e['message'], $str)) {
+                    $throwError = false;
+                }
+            }
+
+            if ($throwError) {
                 throw new Oci8Exception($e['message'], $e['code']);
             }
         }
@@ -353,7 +368,7 @@ class Oci8 extends PDO
      *
      * @throws \ReflectionException
      */
-    public function lastInsertId(string $name = null): false|string
+    public function lastInsertId(?string $name = null): false|string
     {
         if (! isset($this->table)) {
             return 0;

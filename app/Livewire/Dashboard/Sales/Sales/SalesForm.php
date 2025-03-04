@@ -23,7 +23,7 @@ class SalesForm extends Component
     public $searchSelect = -1;
     public $countProduct = 0;
     public $isCheck = false;
-    public $pay_amt, $due_amt;
+    public $pay_amt, $due_amt, $change_amt;
     public $edit_select = [];
     public $sale_id;
 
@@ -289,7 +289,8 @@ class SalesForm extends Component
     {
         $qty = (float)$this->saleCart[$key]['qty'] ?? 0;
         $mrp_rate = (float)$this->saleCart[$key]['mrp_rate'] ?? 0;
-        $discount = (float)$this->saleCart[$key]['discount'] ?? 0;
+        // $discount = (float)$this->saleCart[$key]['discount'] ?? 0;
+        $discount =  0;
         (float)$this->saleCart[$key]['vat_amt'] = ((float)$this->saleCart[$key]['p_vat_amt'] * $qty) ?? 0;
         $vat = (float)$this->saleCart[$key]['vat_amt'] ?? 0;
 
@@ -313,6 +314,9 @@ class SalesForm extends Component
             $total_discount += (float)$value['discount'] ?? 0;
             $total_vat += (float)$value['vat_amt'] ?? 0;
         }
+        if($this->state['tot_discount'] > 0){
+            $total_discount = $this->state['tot_discount'];
+        }
 
         $this->state['net_payable_amt'] = number_format($sub_total, 2, '.', '') ?? 0;
 
@@ -320,8 +324,23 @@ class SalesForm extends Component
         $this->state['tot_vat_amt'] = $total_vat ?? 0;
         $this->state['tot_discount'] = $total_discount ?? 0;
 
-        $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total), 2, '.', '');
-        $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+        $this->state['tot_payable_amt'] = number_format(((float)$shipping_amt + (float)$sub_total - (float)$this->state['tot_discount']), 2, '.', '');
+
+
+        if(!$this->pay_amt){
+            $this->change_amt = 0;
+            $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+        }else{
+            if( $this->pay_amt > $this->state['tot_payable_amt']){
+                $this->change_amt = $this->pay_amt - $this->state['tot_payable_amt'];
+                $this->due_amt = 0;
+            }else{
+                $this->change_amt = 0;
+                $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+            }
+        }
+
+
     }
 
     public function qtyCalculation($product, $key)
@@ -336,7 +355,7 @@ class SalesForm extends Component
             $this->saleCart[$key]['qty'] = $stock;
         }
     }
-    
+
     #[On('save_form')]
     public function save()
     {
@@ -450,7 +469,7 @@ class SalesForm extends Component
                         $payment_info['mfs_id'] = @$this->paymentState['mfs_id'] ?? '';
                         $payment_info['mfs_acc_no'] = @$this->paymentState['mfs_acc_no'] ?? '';
                     }
-                    if ($this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
+                    if ($this->paymentState['pay_mode'] == 3  || $this->paymentState['pay_mode'] == 4 || $this->paymentState['pay_mode'] == 5) {
                         $payment_info['online_trx_id'] = @$this->paymentState['online_trx_id'] ?? '';
                         $payment_info['online_trx_dt'] = @$this->paymentState['online_trx_dt'] ?? '';
                     }
