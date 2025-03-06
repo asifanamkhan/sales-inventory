@@ -23,7 +23,7 @@ class SalesForm extends Component
     public $searchSelect = -1;
     public $countProduct = 0;
     public $isCheck = false;
-    public $pay_amt, $due_amt, $change_amt;
+    public $pay_amt, $due_amt, $change_amt, $net_pay_amt;
     public $edit_select = [];
     public $sale_id;
 
@@ -334,9 +334,11 @@ class SalesForm extends Component
             if( $this->pay_amt > $this->state['tot_payable_amt']){
                 $this->change_amt = $this->pay_amt - $this->state['tot_payable_amt'];
                 $this->due_amt = 0;
+                $this->net_pay_amt = $this->state['tot_payable_amt'];
             }else{
                 $this->change_amt = 0;
                 $this->due_amt = number_format(((float)$this->state['tot_payable_amt'] - (float)$this->pay_amt), 2, '.', '');
+                $this->net_pay_amt = $this->pay_amt;
             }
         }
 
@@ -388,7 +390,7 @@ class SalesForm extends Component
             $this->state['comp_id'] = Auth::user()->id;
             $this->state['branch_id'] = Auth::user()->id;
             $this->state['tot_due_amt'] = $this->due_amt;
-            $this->state['tot_paid_amt'] = $this->pay_amt;
+            $this->state['tot_paid_amt'] = $this->net_pay_amt;
             $this->state['payment_status'] = Payment::PaymentCheck($this->due_amt);
 
             if ($this->sale_id) {
