@@ -275,8 +275,8 @@
                             Make Payment
                         </h4>
                         <h4 class="h4 text-center pt-2 pb-2" style="color: darkred">
-                            @if ($pay_amt)
-                            Payment amount: {{ number_format($pay_amt, 2, '.', ',') }}
+                            @if ($net_pay_amt)
+                            Payment amount: {{ number_format($net_pay_amt, 2, '.', ',') }}
                             @endif
                         </h4>
                     </div>
