@@ -119,7 +119,7 @@ class Payment extends Component
                     'ref_memo_no' => $this->purchase_mst['memo_no'],
                     'payment_status' => PurchasePayment::PaymentCheck(($due_amt)),
                 ];
-
+                // dd(PurchasePayment::PaymentCheck($due_amt));
                 if ($this->paymentState['pay_mode'] == 2) {
                     $payment_info['bank_code'] = @$this->paymentState['bank_code'] ?? '';
                     $payment_info['bank_ac_no'] = @$this->paymentState['bank_ac_no'] ?? '';
@@ -146,6 +146,12 @@ class Payment extends Component
                     ->where('payment_no', $pay_id)
                     ->first()
                     ->memo_no;
+
+                DB::table('INV_PURCHASE_MST')
+                ->where('tran_mst_id', $this->purchase_id)
+                ->update([
+                        'payment_status' => PurchasePayment::PaymentCheck($due_amt)
+                    ]);
 
                 DB::table('ACC_VOUCHER_INFO')->insert([
                     'voucher_date' => Carbon::now()->toDateString(),

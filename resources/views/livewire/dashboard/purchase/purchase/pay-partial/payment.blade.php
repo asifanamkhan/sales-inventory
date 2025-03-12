@@ -37,9 +37,12 @@
                 </span>
             </p>
             <p class="col-auto">
+                @php
+                    $due = App\Service\Payment::dueAmount($purchase_mst['tot_payable_amt'], $purchase_mst['prt_amt'],$purchase_mst['tot_paid_amt']);
+                @endphp
                 Total due:
                 <span class='badge bg-danger'>
-                    {{ number_format($purchase_mst['tot_due_amt'], 2, '.', ',') }}
+                    {{ number_format($due, 2, '.', '') }}
                 </span>
             </p>
         </div>
