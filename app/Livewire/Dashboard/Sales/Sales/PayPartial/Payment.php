@@ -103,6 +103,7 @@ class Payment extends Component
                         'tot_due_amt' => $due_amt,
                         'tot_paid_amt' => (float)$this->sale_mst['tot_paid_amt'] + (float)$this->paymentState['tot_paid_amt'],
                     ]);
+                    // dd(PurchasePayment::PaymentCheck($due_amt));
                 $payment_info = [
                     'tran_mst_id' => $this->sale_id,
                     'tran_type' => 'PR',
@@ -117,7 +118,7 @@ class Payment extends Component
                     'due_amt' => $due_amt,
                     'user_id' => $this->sale_mst['user_name'],
                     'ref_memo_no' => $this->sale_mst['memo_no'],
-                    'payment_status' => PurchasePayment::PaymentCheck(($due_amt)),
+                    'payment_status' => PurchasePayment::PaymentCheck($due_amt),
                 ];
 
                 if ($this->paymentState['pay_mode'] == 2) {
@@ -146,6 +147,12 @@ class Payment extends Component
                     ->where('payment_no', $pay_id)
                     ->first()
                     ->memo_no;
+
+                DB::table('INV_SALES_MST')
+                    ->where('tran_mst_id', $this->sale_id)
+                    ->update([
+                        'payment_status' => PurchasePayment::PaymentCheck($due_amt)
+                    ]);
 
                 DB::table('ACC_VOUCHER_INFO')->insert([
                     'voucher_date' => Carbon::now()->toDateString(),
