@@ -8,7 +8,9 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RequisitionController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
+use App\Livewire\Dashboard\AccountReports\CashFlow;
 use App\Livewire\Dashboard\AccountReports\PaymentReport;
+use App\Livewire\Dashboard\AccountReports\ProfitLoss;
 use App\Livewire\Dashboard\AccountReports\TransactionReport;
 use App\Livewire\Dashboard\AccountReports\TrialBalance;
 use Illuminate\Support\Facades\Route;
@@ -248,6 +250,12 @@ Route::middleware(['auth', 'verified', 'throttle:60,1'])->group(function () {
 
         Route::get('trial-balance', TrialBalance::class)->name('trial-balance');
         Route::post('trial-balance-pdf', [AccountController::class, 'trialBalance'])->name('trial-balance-pdf');
+
+        Route::get('cash-flow', CashFlow::class)->name('cash-flow');
+        Route::post('cash-flow-pdf', [AccountController::class, 'cashFlow'])->name('cash-flow-pdf');
+
+        Route::get('profit-loss', ProfitLoss::class)->name('profit-loss');
+        Route::post('profit-loss-pdf', [AccountController::class, 'profitLoss'])->name('profit-loss-pdf');
     });
 
     // -------------Account reports end ----------------

@@ -58,7 +58,7 @@
             $t_total = 0;
             @endphp
             @forelse ($ledgers as $key => $ledger)
-            <tr wire:key='{{ $key }}'>
+            <tr wire:key='{{ $key }}'  nobr="true">
                 @php
                 $t_qty += $ledger->sales_qty;
                 $t_vat += $ledger->vat_amt;

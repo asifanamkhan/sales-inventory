@@ -5,12 +5,12 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items:center">
         <h3 style="padding: 0px 5px 10px 5px;">
-            <i class="fa-solid fa-cart-shopping"></i> Trial balance
+            <i class="fa-solid fa-cart-shopping"></i> Cash Flow
         </h3>
         <nav aria-label="breadcrumb" style="padding-right: 5px">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Reports</a></li>
-                <li class="breadcrumb-item active"><a wire:navigate href="" style="color: #3C50E0">Trial balance
+                <li class="breadcrumb-item active"><a wire:navigate href="" style="color: #3C50E0">Cash flow
                         report</a></li>
             </ol>
         </nav>
@@ -94,7 +94,7 @@
             <div style="display: flex; justify-content: space-between" class="p-2">
                 <div></div>
                 <div style="float: right">
-                    <form target="_blank" action="{{route('trial-balance-pdf')}}" method="post">
+                    {{-- <form target="_blank" action="{{route('trial-balance-pdf')}}" method="post">
                         @csrf
                         <input type="hidden" name="start_date" value="{{ $state['start_date'] }}">
                         <input type="hidden" name="end_date" value="{{ $state['end_date'] }}">
@@ -102,7 +102,7 @@
                         <button class="btn btn-sm btn-success">
                             <i class="fa-solid fa-file-pdf"></i> Generate PDF
                         </button>
-                    </form>
+                    </form> --}}
 
                 </div>
             </div>
@@ -116,8 +116,8 @@
                             <td style="">Branch</td>
                             <td style="text-align: center">Tran Type</td>
                             <td style="text-align: center">Pay mode</td>
-                            <td style="text-align: center">Debit</td>
-                            <td style="text-align: center">Credit</td>
+                            <td style="text-align: center">Cash Out</td>
+                            <td style="text-align: center">Cash</td>
                             <td style="text-align: center">Balance</td>
                         </tr>
                     </thead>
@@ -175,7 +175,7 @@
                                        $dr_cr = 'DR';
                                    }
                                 @endphp
-                                {{ number_format( abs($balance), 2, '.', ',') }} {{ $dr_cr }}
+                                {{ number_format( ($balance), 2, '.', ',') }}
                             </td>
 
                         </tr>
@@ -191,8 +191,8 @@
                         <tr>
                             <tr>
                                 <th colspan="6" style="text-align: right">Total  </th>
-                                <th style="text-align: right">{{ number_format($t_cashIn, 2, '.', ',') }} DR</th>
-                                <th style="text-align: right">{{ number_format($t_cashOut, 2, '.', ',') }} CR</th>
+                                <th style="text-align: right">{{ number_format($t_cashIn, 2, '.', ',') }} </th>
+                                <th style="text-align: right">{{ number_format($t_cashOut, 2, '.', ',') }} </th>
                                 <th style="text-align: right">
                                     @php
                                     $dr_cr = '';
@@ -203,7 +203,7 @@
                                         $dr_cr = 'DR';
                                     }
                                 @endphp
-                                {{ number_format( abs($balance), 2, '.', ',') }} {{ $dr_cr }}
+                                {{ number_format( ($balance), 2, '.', ',') }}
                                 </th>
                             </tr>
                         </tr>
