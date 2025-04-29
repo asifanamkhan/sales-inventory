@@ -124,4 +124,12 @@ class AccountController extends Controller
 
         GeneratePdf::generate($pdf_data);
     }
+
+    public function cashFlow(Request $request){
+
+    }
+
+    public function profitLoss(Request $request){
+
+    }
 }

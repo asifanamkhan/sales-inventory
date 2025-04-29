@@ -421,6 +421,8 @@
             {{ request()->routeIs('account-transaction') ? 'show' : ' ' }}
             {{ request()->routeIs('account-payments') ? 'show' : ' ' }}
             {{ request()->routeIs('trial-balance') ? 'show' : ' ' }}
+            {{ request()->routeIs('cash-flow') ? 'show' : ' ' }}
+            {{ request()->routeIs('profit-loss') ? 'show' : ' ' }}
             {{ request()->routeIs('reports-expense') ? 'show' : ' ' }}
 
         " id="accountReportSubmenu">
@@ -432,6 +434,12 @@
                 </li>
                 <li class="{{ request()->routeIs('trial-balance') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('trial-balance') }}"> - Trial Balance</a>
+                </li>
+                <li class="{{ request()->routeIs('cash-flow') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('cash-flow') }}"> - Cash Flow</a>
+                </li>
+                <li class="{{ request()->routeIs('profit-loss') ? 'active' : ' ' }}">
+                    <a class="list" wire:navigate href="{{ route('profit-loss') }}"> - Profit/Loss</a>
                 </li>
                 <li class="{{ request()->routeIs('reports-expense') ? 'active' : ' ' }}">
                     <a class="list" wire:navigate href="{{ route('reports-expense') }}"> - Expense Report</a>
