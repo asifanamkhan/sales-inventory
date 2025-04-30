@@ -390,13 +390,12 @@
                 @if (request()->routeIs('reports-sale') && request()->route('type') == 'daily')
                     active
                 @endif">
-                    <a class="list" wire:navigate href="{{ route('reports-sale','daily') }}"> - Daily Sells Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-sale','daily') }}"> - Daily Sells Summary Report</a>
                 </li>
                 <li class="@if (request()->routeIs('reports-sale') && request()->route('type') == 'monthly')
                     active
                 @endif">
-                    <a class="list" wire:navigate href="{{ route('reports-sale','monthly') }}"> - Monthly Sells
-                        Report</a>
+                    <a class="list" wire:navigate href="{{ route('reports-sale','monthly') }}"> - Challan wise sells report</a>
                 </li>
                 <li class="@if (request()->routeIs('reports-sale') && request()->route('type') == 'custom')
                     active
