@@ -116,8 +116,8 @@
                             <td style="">Branch</td>
                             <td style="text-align: center">Tran Type</td>
                             <td style="text-align: center">Pay mode</td>
+                            <td style="text-align: center">Cash In</td>
                             <td style="text-align: center">Cash Out</td>
-                            <td style="text-align: center">Cash</td>
                             <td style="text-align: center">Balance</td>
                         </tr>
                     </thead>

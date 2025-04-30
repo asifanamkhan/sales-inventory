@@ -90,25 +90,22 @@ class ProductForm extends Component
 
         if ($this->product_u_code) {
             $this->state['u_code'] = $this->product_u_code;
-
-            foreach ($this->variant_cart as $cart) {
-                $cart = (array)$cart;
-                // dd($product_exist);
-                if(@$cart['st_group_item_id']){
-                    $this->state['item_size'] = $cart['item_size'];
-                    $this->state['color_code'] = $cart['color_code'];
-                    $this->state['variant_description'] = $cart['variant_description'];
-
-                    DB::table('INV_ST_GROUP_ITEM')
-                        ->where('st_group_item_id', $cart['st_group_item_id'])
-                        ->update($this->state);
-
-                }else{
-                    $this->state['item_size'] = $cart['item_size'];
-                    $this->state['color_code'] = $cart['color_code'];
-                    $this->state['variant_description'] = $cart['variant_description'];
+            // dd($this->variant_cart);
+            // dd($this->state['variant_type']);
+            DB::table('INV_ST_GROUP_ITEM')
+                        ->where('u_code', $this->product_u_code)
+                        ->delete();
+            if(count($this->variant_cart) > 0){
+                foreach($this->variant_cart as $cart){
+                    $cart = (array) $cart;
+                    $this->state['item_size'] = @$cart['item_size'];
+                    $this->state['color_code'] = @$cart['color_code'];
+                    $this->state['variant_description'] = @$cart['variant_description'];
                     DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
                 }
+
+            }else{
+                DB::table('INV_ST_GROUP_ITEM')->insert($this->state);
             }
 
         }else{

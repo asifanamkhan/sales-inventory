@@ -110,6 +110,10 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div style="margin-left: 10px">
+                            <a href="" class="btn btn-success">POS</a>
+                        </div>
+
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item d-flex align-items-center justify-content-center">
                                 <select onchange="redirectToRoute(this)" name="" id="" class="form-select">
@@ -132,6 +136,12 @@
                                     </option>
                                     <option wire:navigate value="{{ route('product-pricing-list') }}">
                                         Add Pricing List
+                                    </option>
+                                    <option wire:navigate value="{{ route('supplier-create') }}">
+                                        Add Supplier
+                                    </option>
+                                    <option wire:navigate value="{{ route('customer-create') }}">
+                                        Add Customer
                                     </option>
                                 </select>
                             </li>
@@ -158,6 +168,7 @@
 
                         </ul>
                     </div>
+
                 </div>
             </nav>
             @endpersist
