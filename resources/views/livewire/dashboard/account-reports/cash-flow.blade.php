@@ -202,7 +202,7 @@
                                     } else{
                                         $dr_cr = 'DR';
                                     }
-                                @endphp
+                                    @endphp
                                 {{ number_format( ($balance), 2, '.', ',') }}
                                 </th>
                             </tr>
