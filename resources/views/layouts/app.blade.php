@@ -71,7 +71,7 @@
     });
 
     function redirectToRoute(select) {
-            const selectedValue = select.value;
+        const selectedValue = select.value;
             if (selectedValue) {
                 window.open(selectedValue, '_blank'); // Redirect to the selected route
             }
@@ -98,10 +98,8 @@
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-
                     <button type="button" id="sidebarCollapse" class="btn btn-primary">
                         <i class="fas fa-align-left"></i>
-
                     </button>
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -111,7 +109,7 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div style="margin-left: 10px">
-                            <a href="" class="btn btn-success">POS</a>
+                            <a href="{{ route('sale-create') }}" class="btn btn-success">POS</a>
                         </div>
 
                         <ul class="nav navbar-nav ml-auto">
@@ -165,22 +163,15 @@
                                     </form>
                                 </div>
                             </li>
-
                         </ul>
                     </div>
-
                 </div>
             </nav>
             @endpersist
             {{ $slot }}
         </div>
     </div>
-
     @livewireScripts
-
-
-
-
 </body>
 
 </html>
